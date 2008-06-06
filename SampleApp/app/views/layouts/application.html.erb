@@ -1,0 +1,35 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+       "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+  <title>Sample translate routes application</title>
+  <%= stylesheet_link_tag 'scaffold' %>
+</head>
+<body>
+<p>
+	This is a sample application to show how easily you can integrate the translate routes plugin to your Rails applications.
+	The key points are located on:</p>
+	<ul>
+		<li><strong>/config/routes.rb</strong>: you can see how to add translation to your defined routes</li>
+		<li><strong>/app/controllers/application.rb</strong>: it shows an example of how to set the language from the URL. You could also set the language from current user profiles, etc.</li>
+		<li><strong>/app/views/layouts/application.html.erb</strong>: here you can see some routing helpers in action:
+			<ul>
+				<li><%= link_to 'a link based on the current language', users_path %></li>
+				<li><%= link_to 'a link to an english URL', users_en_path %></li>
+				<li><%= link_to 'a link to an spanish URL', users_es_path %></li>
+			</ul>
+		</li>		
+		<li><strong>/test/test_helper.rb</strong>: includes some code to include a default language parameter to your functional and integration tests</li>		
+	</ul>
+<p>The application is a simple users CRUD and includes the gibberish plugin to translate all the user interface strings.</p>	
+
+<p style="color: green"><%= flash[:notice] %></p>
+
+<%= @lang == 'es' ? link_to('English version', :lang => 'en') : link_to('Spanish version', :lang => 'es') %>
+
+<%= yield  %>
+
+</body>
+</html>

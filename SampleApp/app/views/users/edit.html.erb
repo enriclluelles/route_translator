@@ -1,0 +1,22 @@
+<h1><%= 'Editing user'[:Editing_user] %></h1>
+
+<% form_for(@user) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+		<%= 'Name'[:Name] %>
+    <br />
+    <%= f.text_field :name %>
+  </p>
+  <p>
+		<%= 'Last Name'[:Last_Name] %>
+    <br />
+    <%= f.text_field :last_name %>
+  </p>
+  <p>
+    <%= f.submit "Update"[:Update] %>
+  </p>
+<% end %>
+
+<%= link_to 'Show'[:Show], @user %> |
+<%= link_to 'Back'[:Back], users_path %>

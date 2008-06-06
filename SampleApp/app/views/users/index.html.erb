@@ -1,0 +1,22 @@
+<h1><%= 'Listing users'[:Listing_users] %></h1>
+
+<table>
+  <tr>
+    <th><%= 'Name'[:Name] %></th>
+    <th><%= 'Last Name'[:Last_Name] %></th>
+  </tr>
+
+<% for user in @users %>
+  <tr>
+    <td><%=h user.name %></td>
+    <td><%=h user.last_name %></td>
+    <td><%= link_to 'Show'[:Show], user %></td>
+    <td><%= link_to 'Edit'[:Edit], edit_user_path(user) %></td>
+    <td><%= link_to 'Destroy'[:Destroy], user, :confirm => 'Are you sure?'[:Are_you_sure], :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New user'[:New_user], new_user_path %>

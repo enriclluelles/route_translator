@@ -1,0 +1,149 @@
+=TranslateRoutes
+This Rails plugin provides a simple way to translate your URLs to any number of languages.
+All routes automatically add a <tt>:lang</tt> parameter to the request so your controllers can setup an internationalized user experience.
+
+The plugin has been designed to be easy to use and customize. 
+As it works after routing processing, it plays nice with all kind of routing definitions, including RESTful and named routes.
+It also takes care of your current routing helpers by translating them transparently.
+
+==Installation
+Just check it out on your app's <tt>/vendor/plugins</tt> and see the examples below.
+
+==Usage
+Let's start with a tiny example. Of course you need to define your routes first, e.g:
+
+	ActionController::Routing::Routes.draw do |map| 
+	  map.connect 'contact', :controller => 'contact', :action => 'index'
+	end
+
+After that, on the same routes.rb file, you can translate the generated route by doing:
+
+	ActionController::Routing::Translator.translate do |t|
+	  t['es'] = {
+	    'contact' => 'contacto'
+	  }
+	end
+
+This will give you the next routes (check it out by doing 'rake routes'):
+
+	/es/contacto {:lang=>"es", :controller=>"contact", :action=>"index"}
+	/contact     {:lang=>"en", :controller=>"contact", :action=>"index"}
+
+As you can see:
+- a +lang+ param has been added to your routes, with the value of the used language (*)
+- +en+ is the default language (*)
+- the URLs associated with a language are always prefixed with the language code that you provided on the translation.
+- the default language URLs have no language prefix (*)
+(*) You can customize this behaviour, see "Configuration" below.
+
+Let's add some routes and translations to our example:
+
+	ActionController::Routing::Routes.draw do |map| 
+	  map.connect 'contact', :controller => 'contact', :action => 'index'
+	  map.home '', :controller => 'main', :action => 'index'
+	  map.resources :people
+	end
+	
+	ActionController::Routing::Translator.translate do |t|
+
+	  t['es'] = {
+	    'contact' => 'contacto',
+	    'people' => 'gente',
+			'new' => 'crear',
+			'edit' =>'editar'
+		}
+
+	  t['fr'] = {
+			'people' => 'personne',
+			'new' => 'neuf'
+		}
+	end
+
+Again, you can use <tt>rake routes</tt> to see the generated URLs. I'll only talk about some of them:
+
+We didn't give any french translation for +contact+, so the french associated URLs use the untranslated text:
+
+	/fr/contact                   {:lang=>"fr", :controller=>"contact", :action=>"index"}
+	/es/contacto                  {:lang=>"es", :controller=>"contact", :action=>"index"}
+	/contact                      {:lang=>"en", :controller=>"contact", :action=>"index"}
+
+The named routes have generated not only translated URLs but also a helper for each language:
+
+	home_fr        /fr                           {:lang=>"fr", :controller=>"main", :action=>"index"}
+	home_es        /es                           {:lang=>"es", :controller=>"main", :action=>"index"}
+	home_en        /                             {:lang=>"en", :controller=>"main", :action=>"index"}
+
+This means that you can use +home_es_path+ and +home_es_url+ on your controllers and views.
+
+No +home+ named route is shown on the list so it looks like you can't use a simple +home_path+ helper, but relax: you have a +home_path+ helper available for your controllers and views. It looks for the current +lang+ value and redirects to the appropiate helper. This means that if you're rendering the <tt>contact/index</tt> view when visiting <tt>/es/contacto</tt>, the +home_path+ helper will call to +home_es_path+ and return its result. The same applies to +home_url+, obviously.
+
+We can see that resource controllers and actions are translated as well:
+
+	new_person_fr GET   /fr/personne/neuf             {:lang=>"fr", :controller=>"people", :action=>"new"}
+	new_person_es GET   /es/gente/crear               {:lang=>"es", :controller=>"people", :action=>"new"}
+	new_person GET    	/people/new                   {:lang=>"en", :controller=>"people", :action=>"new"}
+
+We can get rid of that verbose translation hashes by using yaml files. Create a file inside your <tt>/config</tt> directory, called <tt>routes_es.yml</tt> and fill it with your desired translations, e.g:
+
+	# /config/routes_es.yml
+	person: persona
+
+and replace all the
+
+	ActionController::Routing::Translator.translate do  
+		... 
+	end
+
+stuff on <tt>routes.rb</tt> with this simple line:
+
+	ActionController::Routing::Translator.translate_from_files
+
+== Integration
+You can find a sample Rails application on the translate_routes repository, designed to show how easy is to setup 
+
+== Configuration
+You can customize some features by adding some lines before your translation code:
+
+- You can change the language param key (<tt>:lang</tt> by default). To change this feature use:
+
+	ActionController::Routing::Translator.lang_param_key = :foo
+
+This key should have the same name that the instance variable which keeps the language code on your controllers and views.
+
+- You can change the default language of your application with:
+
+	ActionController::Routing::Translator.default_lang = 'es'
+
+Of course, you can also translate your default language. If, as I do, all your controllers and actions have english names, you can have an english version on your site for free by doing:
+
+	ActionController::Routing::Translator.default_lang = 'es'
+	ActionController::Routing::Translator.translate do |t|
+	  t['en'] = {}
+	  t['es'] = { # spanish translation	here }
+	end
+
+or adding the equivalent <tt>/config/routes_es.yml</tt> and an empty <tt>/config/routes_en.yml</tt>
+
+- You can add a prefix also on your default language routes by doing:
+
+	ActionController::Routing::Translator.prefix_on_default_lang = true
+
+<b>WARNING!</b> this way you'll disable your root -empty- route: if english is your default language, your empty route will be translated to <tt>/en</tt> so you must manually take care of it.
+
+== Suggestions, bug reports, questions
+Feedback and comments will be always welcome at raul@murciano.net
+
+
+== Credits
+- Raul Murciano [http://raul.murciano.net] - code
+- Domestika INTERNET S.L [http://domestika.org] - incredible support, really nice people to work with!
+
+
+== Rails routing resources
+- David Black's 'Rails Routing' ebook rocks! - 'Ruby for Rails' too, BTW.
+- Obie Fernandez's 'The Rails Way' - the definitive RoR reference, great work Obie!
+
+== License
+Copyright (c) 2007
+Raul Murciano [http://raul.murciano.net]
+Domestika INTERNET S.L. [http://domestika.org], released under the MIT license (see MIT-LICENSE)

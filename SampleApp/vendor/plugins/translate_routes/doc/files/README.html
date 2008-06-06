@@ -1,0 +1,351 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>File: README</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="Content-Script-Type" content="text/javascript" />
+  <link rel="stylesheet" href=".././rdoc-style.css" type="text/css" media="screen" />
+  <script type="text/javascript">
+  // <![CDATA[
+
+  function popupCode( url ) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+
+  function toggleCode( id ) {
+    if ( document.getElementById )
+      elem = document.getElementById( id );
+    else if ( document.all )
+      elem = eval( "document.all." + id );
+    else
+      return false;
+
+    elemStyle = elem.style;
+    
+    if ( elemStyle.display != "block" ) {
+      elemStyle.display = "block"
+    } else {
+      elemStyle.display = "none"
+    }
+
+    return true;
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln( "<style type=\"text/css\">div.method-source-code { display: none }</style>" )
+  
+  // ]]>
+  </script>
+
+</head>
+<body>
+
+
+
+  <div id="fileHeader">
+    <h1>README</h1>
+    <table class="header-table">
+    <tr class="top-aligned-row">
+      <td><strong>Path:</strong></td>
+      <td>README
+      </td>
+    </tr>
+    <tr class="top-aligned-row">
+      <td><strong>Last Update:</strong></td>
+      <td>Fri Jun 06 11:05:04 +0200 2008</td>
+    </tr>
+    </table>
+  </div>
+  <!-- banner header -->
+
+  <div id="bodyContent">
+
+
+
+  <div id="contextContent">
+
+    <div id="description">
+      <h1>TranslateRoutes</h1>
+<p>
+This Rails plugin provides a simple way to translate your URLs to any
+number of languages.
+</p>
+<p>
+It&#8216;s designed to be extremely and easy to use and customize. As it
+works after routing processing, it plays nice with all kind of routing
+definitions, including RESTful and named routes. It also takes care of your
+current routing helpers by translating them transparently.
+</p>
+<h2>Installation</h2>
+<p>
+Just check it out on your app&#8216;s <tt>/vendor/plugins</tt> and see the
+examples below.
+</p>
+<h2>Usage</h2>
+<p>
+Let&#8216;s start with a tiny example. Of course you need to define your
+routes first, e.g:
+</p>
+<pre>
+        ActionController::Routing::Routes.draw do |map|
+          map.connect 'contact', :controller =&gt; 'contact', :action =&gt; 'index'
+        end
+</pre>
+<p>
+After that, on the same routes.rb file, you can translate the generated
+route by doing:
+</p>
+<pre>
+        ActionController::Routing::Translator.translate do |t|
+          t['es'] = {
+            'contact' =&gt; 'contacto'
+          }
+        end
+</pre>
+<p>
+This will give you the next routes (check it out by doing &#8216;rake
+routes&#8217;):
+</p>
+<pre>
+        /es/contacto {:lang=&gt;&quot;es&quot;, :controller=&gt;&quot;contact&quot;, :action=&gt;&quot;index&quot;}
+        /contact     {:lang=&gt;&quot;en&quot;, :controller=&gt;&quot;contact&quot;, :action=&gt;&quot;index&quot;}
+</pre>
+<p>
+As you can see:
+</p>
+<ul>
+<li>a <tt>lang</tt> param has been added to your routes, with the value of the
+used language (*)
+
+</li>
+<li><tt>en</tt> is the default language (*)
+
+</li>
+<li>the URLs associated with a language are always prefixed with the language
+code that you provided on the translation.
+
+</li>
+<li>the default language URLs have no language prefix (*)
+
+</li>
+</ul>
+<p>
+(*) You can customize this behaviour, see &quot;Configuration&quot; below.
+</p>
+<p>
+Let&#8216;s add some routes and translations to our example:
+</p>
+<pre>
+        ActionController::Routing::Routes.draw do |map|
+          map.connect 'contact', :controller =&gt; 'contact', :action =&gt; 'index'
+          map.home '', :controller =&gt; 'main', :action =&gt; 'index'
+          map.resources :people
+        end
+
+        ActionController::Routing::Translator.translate do |t|
+
+          t['es'] = {
+            'contact' =&gt; 'contacto',
+            'people' =&gt; 'gente',
+                        'new' =&gt; 'crear',
+                        'edit' =&gt;'editar'
+                }
+
+          t['fr'] = {
+                        'people' =&gt; 'personne',
+                        'new' =&gt; 'neuf'
+                }
+        end
+</pre>
+<p>
+Again, you can use <tt>rake routes</tt> to see the generated URLs.
+I&#8216;ll only talk about some of them:
+</p>
+<p>
+We didn&#8216;t give any french translation for <tt>contact</tt>, so the
+french associated URLs use the untranslated text:
+</p>
+<pre>
+        /fr/contact                   {:lang=&gt;&quot;fr&quot;, :controller=&gt;&quot;contact&quot;, :action=&gt;&quot;index&quot;}
+        /es/contacto                  {:lang=&gt;&quot;es&quot;, :controller=&gt;&quot;contact&quot;, :action=&gt;&quot;index&quot;}
+        /contact                      {:lang=&gt;&quot;en&quot;, :controller=&gt;&quot;contact&quot;, :action=&gt;&quot;index&quot;}
+</pre>
+<p>
+The named routes have generated not only translated URLs but also a helper
+for each language:
+</p>
+<pre>
+        home_fr        /fr                           {:lang=&gt;&quot;fr&quot;, :controller=&gt;&quot;main&quot;, :action=&gt;&quot;index&quot;}
+        home_es        /es                           {:lang=&gt;&quot;es&quot;, :controller=&gt;&quot;main&quot;, :action=&gt;&quot;index&quot;}
+        home_en        /                             {:lang=&gt;&quot;en&quot;, :controller=&gt;&quot;main&quot;, :action=&gt;&quot;index&quot;}
+</pre>
+<p>
+This means that you can use <tt>home_es_path</tt> and <tt>home_es_url</tt>
+on your controllers and views.
+</p>
+<p>
+No <tt>home</tt> named route is shown on the list so it looks like you
+can&#8216;t use a simple <tt>home_path</tt> helper, but relax: you have a
+<tt>home_path</tt> helper available for your controllers and views. It
+looks for the current <tt>lang</tt> value and redirects to the appropiate
+helper. This means that if you&#8216;re rendering the
+<tt>contact/index</tt> view when visiting <tt>/es/contacto</tt>, the
+<tt>home_path</tt> helper will call to <tt>home_es_path</tt> and return its
+result. The same applies to <tt>home_url</tt>, obviously.
+</p>
+<p>
+We can see that resource controllers and actions are translated as well:
+</p>
+<pre>
+        new_person_fr GET   /fr/personne/neuf             {:lang=&gt;&quot;fr&quot;, :controller=&gt;&quot;people&quot;, :action=&gt;&quot;new&quot;}
+        new_person_es GET   /es/gente/crear               {:lang=&gt;&quot;es&quot;, :controller=&gt;&quot;people&quot;, :action=&gt;&quot;new&quot;}
+        new_person GET         /people/new                   {:lang=&gt;&quot;en&quot;, :controller=&gt;&quot;people&quot;, :action=&gt;&quot;new&quot;}
+</pre>
+<p>
+Finally, we can get rid of that verbose translation hashes by using yaml
+files. Create a file inside your <tt>/config</tt> directory, called
+<tt>routes_es.yml</tt> and fill it with your desired translations, e.g:
+</p>
+<pre>
+        # /config/routes_es.yml
+        person: persona
+</pre>
+<p>
+and replace all the
+</p>
+<pre>
+        ActionController::Routing::Translator.translate do
+                ...
+        end
+</pre>
+<p>
+stuff on <tt>routes.rb</tt> with this simple line:
+</p>
+<pre>
+        ActionController::Routing::Translator.translate_from_files
+</pre>
+<h2>Configuration</h2>
+<p>
+You can customize some features by adding some lines before your
+translation code:
+</p>
+<ul>
+<li>You can change the language param key (<tt>:lang</tt> by default). To
+change this feature use:
+
+<pre>
+      ActionController::Routing::Translator.lang_param_key = :foo
+</pre>
+</li>
+</ul>
+<p>
+This key should have the same name that the instance variable which keeps
+the language code on your controllers and views.
+</p>
+<ul>
+<li>You can change the default language of your application with:
+
+<pre>
+      ActionController::Routing::Translator.default_lang = 'es'
+</pre>
+</li>
+</ul>
+<p>
+Of course, you can also translate your default language. If, as I do, all
+your controllers and actions have english names, you can have an english
+version on your site for free by doing:
+</p>
+<pre>
+        ActionController::Routing::Translator.default_lang = 'es'
+        ActionController::Routing::Translator.translate do |t|
+          t['en'] = {}
+          t['es'] = { # spanish translation    here }
+        end
+</pre>
+<p>
+or adding the equivalent <tt>/config/routes_es.yml</tt> and an empty
+<tt>/config/routes_en.yml</tt>
+</p>
+<ul>
+<li>You can add a prefix also on your default language routes by doing:
+
+<pre>
+      ActionController::Routing::Translator.prefix_on_default_lang = true
+</pre>
+</li>
+</ul>
+<p>
+<b>WARNING!</b> this way you&#8216;ll disable your root -empty- route: if
+english is your default language, your empty route will be translated to
+<tt>/en</tt> so you must manually take care of it.
+</p>
+<h2>Suggestions, bug reports, questions</h2>
+<p>
+Feedback and comments will be always welcome at raul@murciano.net
+</p>
+<h2>Credits</h2>
+<ul>
+<li>Raul Murciano [<a href="http://raul.murciano.net">raul.murciano.net</a>] -
+code
+
+</li>
+<li>Domestika INTERNET S.L [<a href="http://domestika.org">domestika.org</a>] -
+incredible support, really nice people to work with!
+
+</li>
+</ul>
+<h2>Rails routing resources</h2>
+<ul>
+<li>David Black&#8216;s &#8216;Rails Routing&#8217; ebook rocks! - &#8216;Ruby
+for Rails&#8217; too, BTW.
+
+</li>
+<li>Obie Fernandez&#8216;s &#8216;The Rails Way&#8217; - the definitive RoR
+reference, great work Obie!
+
+</li>
+</ul>
+<h2>License</h2>
+<p>
+Copyright (c) 2007 Raul Murciano [<a
+href="http://raul.murciano.net">raul.murciano.net</a>] Domestika INTERNET
+S.L. [<a href="http://domestika.org">domestika.org</a>], released under the
+MIT license (see MIT-LICENSE)
+</p>
+
+    </div>
+
+
+   </div>
+
+
+  </div>
+
+
+    <!-- if includes -->
+
+    <div id="section">
+
+
+
+
+
+      
+
+
+    <!-- if method_list -->
+
+
+  </div>
+
+
+<div id="validator-badges">
+  <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+</div>
+
+</body>
+</html>
