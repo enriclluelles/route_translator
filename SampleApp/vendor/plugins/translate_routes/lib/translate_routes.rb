@@ -15,6 +15,8 @@ module ActionController
       mattr_accessor :lang_param_key
       @@lang_param_key = :lang        # e.g: :lang generates params[:lang] and @lang controller variable
 
+      mattr_accessor :original_routes
+
       def self.translate
         dictionaries = Hash.new
         yield dictionaries    
@@ -34,11 +36,22 @@ module ActionController
         Translator.translate_current_routes dictionaries
       end
 
+      def self.original_static_segments
+        static_segments = []
+        (@@original_routes || Routes.routes).each do |r|
+          r.segments.select do |s| 
+            static_segments << s.value if s.instance_of?(ActionController::Routing::StaticSegment)
+          end
+        end
+        static_segments.uniq.sort
+      end
+
       private
 
         def self.translate_current_routes(dictionaries)
 
           # reset routes
+          @@original_routes ||= Routes.routes.dup
           old_routes = Routes.routes.dup # Array [routeA, routeB, ...]
           old_names = Routes.named_routes.routes.dup # Hash {:name => :route}    
           Routes.clear!
@@ -51,11 +64,11 @@ module ActionController
           old_routes.each do |old_route|
 
             old_name = old_names.index(old_route)
-                
+              
             # process and add the translated ones
             trans_routes, trans_named_routes = translate_route(old_route, dictionaries, old_name)
             new_routes.concat(trans_routes)
-        
+      
             # process the old route:
             new_old_route = clone_with_deeply_copied_static_segments(old_route) # we need a fresh route to apply requirements
 
@@ -63,10 +76,10 @@ module ActionController
             add_language_requirements(new_old_route, default_lang)
             add_language_segment(new_old_route, default_lang) if prefix_on_default_lang
             new_routes << new_old_route
-              
+            
             # if it's a named one we append the lang suffix and replace the old helper by a language-based call
             if old_name
-  
+
               trans_named_routes["#{old_name}_#{default_lang}"] = new_old_route
               trans_named_routes[old_name] = new_old_route # keep the old name to use the helper on integration tests
 
@@ -83,19 +96,19 @@ module ActionController
                     end
                   end
                 DEF_NEW_HELPER
-                
+              
                 [ActionController::Base, ActionView::Base].each { |d| d.module_eval(def_new_helper) }
                 ActionController::Routing::Routes.named_routes.helpers << new_helper_name.to_sym
               end
 
             end                      
-            
-          end
           
+          end
+        
           # apply all new routes
           Routes.routes = new_routes
           new_named_routes.each { |name, r| Routes.named_routes.add name, r }
-
+          
         end
 
         def self.clone_with_deeply_copied_static_segments(route)

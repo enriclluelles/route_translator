@@ -1,0 +1,4 @@
+.DS_Store
+SampleApp/log/*.log
+SampleApp/tmp/**/*
+SampleApp/db/test.sqlite3

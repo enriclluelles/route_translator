@@ -56,7 +56,7 @@
     </tr>
     <tr class="top-aligned-row">
       <td><strong>Last Update:</strong></td>
-      <td>Fri Jun 06 16:25:58 +0200 2008</td>
+      <td>Tue Jun 10 09:26:30 +0200 2008</td>
     </tr>
     </table>
   </div>
@@ -208,9 +208,20 @@ We can see that resource controllers and actions are translated as well:
         new_person GET         /people/new                   {:lang=&gt;&quot;en&quot;, :controller=&gt;&quot;people&quot;, :action=&gt;&quot;new&quot;}
 </pre>
 <p>
-We can get rid of that verbose translation hashes by using yaml files.
-Create a file inside your <tt>/config</tt> directory, called
-<tt>routes_es.yml</tt> and fill it with your desired translations, e.g:
+We can get rid of that verbose translation hashes by using yaml files,
+which can be generated/updated with the
+<tt>translate_routes:update_yaml</tt> rake task. Let&#8216;s create a
+spanish and french translation files with
+<tt>translate_routes:update_yaml[&quot;es fr&quot;]</tt>
+</p>
+<p>
+If it&#8216;s the first time that we run the task, the files will contain a
+yaml skeleton with the strings to translate. If we already have translated
+some strings they will remain on the file after executing the task, so you
+can run it after any <tt>routes.rb</tt> edition.
+</p>
+<p>
+We can now translate the strings for any language
 </p>
 <pre>
         # /config/routes_es.yml

@@ -1,3 +1,6 @@
+-- 0.96 (Jun 10th 2008)
+  * Added update_yaml task, suggested by Francesc Esplugas
+
 -- 0.95 (Jan 21st 2008)
   * Still beta version
   * Added yaml files support for dictionaries

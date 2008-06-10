@@ -83,7 +83,13 @@ We can see that resource controllers and actions are translated as well:
 	new_person_es GET   /es/gente/crear               {:lang=>"es", :controller=>"people", :action=>"new"}
 	new_person GET    	/people/new                   {:lang=>"en", :controller=>"people", :action=>"new"}
 
-We can get rid of that verbose translation hashes by using yaml files. Create a file inside your <tt>/config</tt> directory, called <tt>routes_es.yml</tt> and fill it with your desired translations, e.g:
+We can get rid of that verbose translation hashes by using yaml files, which can be generated/updated with the <tt>translate_routes:update_yaml</tt> rake task.
+Let's create a spanish and french translation files with <tt>translate_routes:update_yaml["es fr"]</tt>
+
+If it's the first time that we run the task, the files will contain a yaml skeleton with the strings to translate. 
+If we already have translated some strings they will remain on the file after executing the task, so you can run it after any <tt>routes.rb</tt> edition.
+
+We can now translate the strings for any language
 
 	# /config/routes_es.yml
 	person: persona
