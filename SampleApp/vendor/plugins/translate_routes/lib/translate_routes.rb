@@ -92,7 +92,7 @@ module ActionController
                     if defined? @#{lang_param_key}
                       send("#{old_name}_\#{@#{lang_param_key}}_#{suffix}", *args)
                     else
-                      send("#{old_name}_\#{@#{default_lang}}_#{suffix}", *args)
+                      send("#{old_name}_#{default_lang}_#{suffix}", *args)
                     end
                   end
                 DEF_NEW_HELPER

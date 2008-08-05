@@ -1,3 +1,6 @@
+-- 0.96.1 (Aug 5th 2008)
+  * Fixed by Mathieu Fosse: helpers didn't worked as expected when lang_param_key is undefined
+
 -- 0.96 (Jun 10th 2008)
   * Added update_yaml task, suggested by Francesc Esplugas
 
