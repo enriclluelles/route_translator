@@ -117,9 +117,8 @@ module ActionController
           segments = []
           route.segments.each do |s|
             if s.instance_of?(StaticSegment)
-              new_segment = StaticSegment.new
-              new_segment.value = dictionary[s.value] || s.value.dup
-              new_segment.is_optional = s.is_optional
+              value = dictionary[s.value] || s.value.dup
+              new_segment = StaticSegment.new(value, :raw => s.raw, :optional => s.optional?)
             else
               new_segment = s.dup # just reference the original
             end
@@ -132,14 +131,10 @@ module ActionController
           return translate_static_segments(orig, dictionary) unless add_prefix?(lang)
 
           # divider ('/')
-          divider = DividerSegment.new
-          divider.value = orig.segments.first.value
-          divider.is_optional = false # la prueba
+          divider = DividerSegment.new(orig.segments.first.value, :optionals => false)
           
           # static ('es')
-          static = StaticSegment.new
-          static.value = lang
-          static.is_optional = false
+          static = StaticSegment.new(lang, :optional => false)
           
           [divider, static] + translate_static_segments(orig, dictionary)
         end
@@ -153,11 +148,7 @@ module ActionController
           requirements = lang_requirements(orig, lang)
           conditions = orig.conditions
           
-          r = Route.new
-          r.segments = segments
-          r.requirements = requirements
-          r.conditions = conditions
-          r
+          Route.new(segments, requirements, conditions).freeze
         end
 
         def self.translate_route(route, dictionaries, route_name = nil)
