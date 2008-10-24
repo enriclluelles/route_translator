@@ -1,3 +1,4 @@
+(Note: this is a VERSION UNDER DEVELOPMENT and it's NOT PRODUCTION-READY)
 =TranslateRoutes
 This Rails plugin provides a simple way to translate your URLs to any number of languages.
 All routes automatically add a <tt>:lang</tt> parameter to the request so your controllers can setup an internationalized user experience.
