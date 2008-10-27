@@ -1,0 +1,22 @@
+<h2><%= I18n.t 'listing_users' %></h2>
+
+<table>
+  <tr>
+    <th><%= I18n.t 'first_name' %></th>
+    <th><%= I18n.t 'last_name' %></th>
+  </tr>
+
+<% for user in @users %>
+  <tr>
+    <td><%=h user.first_name %></td>
+    <td><%=h user.last_name %></td>
+    <td><%= link_to I18n.t('show'), user %></td>
+    <td><%= link_to I18n.t('edit'), edit_user_path(user) %></td>
+    <td><%= link_to I18n.t('destroy'), user, :confirm => I18n.t('are_you_sure'), :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to I18n.t('new_user'), new_user_path %>

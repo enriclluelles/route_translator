@@ -1,0 +1,15 @@
+-- branch rails2.2 v0.9 (Oct 27th 2008)
+  * Developed after Rails2.2rc1 release, with i18n support. Beta, not backward compatible with Rails < 2.2
+
+-- 0.96.1 (Aug 5th 2008)
+  * Fixed by Mathieu Fosse: helpers didn't worked as expected when locale_param_key is undefined
+
+-- 0.96 (Jun 10th 2008)
+  * Added update_yaml task, suggested by Francesc Esplugas
+
+-- 0.95 (Jan 21st 2008)
+  * Still beta version
+  * Added yaml files support for dictionaries
+
+-- 0.9 (Dec 27th 2007)
+  * Beta version

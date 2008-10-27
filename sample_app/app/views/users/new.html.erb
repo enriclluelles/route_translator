@@ -1,0 +1,17 @@
+<h2><%= I18n.t 'new_user' %></h2>
+
+<% form_for(@user) do |f| %>
+
+  <p>
+    <%= f.label :first_name, I18n.t('first_name') %><br />
+    <%= f.text_field :first_name %>
+  </p>
+  <p>
+    <%= f.label :last_name, I18n.t('last_name') %><br />
+    <%= f.text_field :last_name %>
+  </p>  <p>
+    <%= f.submit I18n.t('create') %>
+  </p>
+<% end %>
+
+<%= link_to I18n.t('back'), users_path %>

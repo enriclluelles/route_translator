@@ -1,0 +1,99 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+       "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+  <title><%= I18n.t 'title' %></title>
+  <%= stylesheet_link_tag 'scaffold' %>
+  <%= javascript_include_tag :defaults %>
+</head>
+<body onLoad="$$('.toggle-me').each(Element.hide);">
+
+<div id="header">
+  <div id="locale-switch">
+    <strong><%= I18n.t 'current_locale' %>: <%= I18n.locale.to_s %></strong> |
+    <%= I18n.locale == 'es-ES' ? link_to('en-US', :locale => 'en-US') : link_to('es-ES', :locale => 'es-ES') %>
+  </div>
+  <div id="about">
+    <a href="#" onclick="$('howto').toggle();"><%= I18n.t 'about_integration' %></a>
+  </div>
+</div>
+<hr />
+<div id="howto" class="toggle-me">
+  <p>
+    <%= I18n.t 'description' %><br />
+  	<%= I18n.t 'key_files' %>:
+  </p>
+  <ul>
+  	<li>
+  	  <a href="#" onclick="$('routes_file').toggle();" >/config/routes.rb</a>: <%= I18n.t 'routes_file' %>
+  	  <pre id="routes_file" class="code toggle-me">    ActionController::Routing::Translator.i18n</pre>
+  	</li>
+  	<li>
+  	  <a href="#" onclick="$('app_controller').toggle();" >/app/controllers/application.rb</a>: <%= I18n.t 'app_controller' %>
+      <pre id="app_controller" class="code toggle-me">    before_filter :set_locale_from_url</pre>
+  	</li>
+  	<li>
+  	  <a href="#" onclick="$('routes_yml').toggle();" >/locales/routes.yml</a>: <%= I18n.t 'routes_yml' %>
+      <pre id="routes_yml" class="code toggle-me">
+      "es-ES":
+        edit: editar
+        new: crear
+        users: usuarios</pre>
+    </li>
+  	<li>
+  	  <a href="#" onclick="$('initializer').toggle();" >/config/initializers/i18n.rb</a>: <%= I18n.t 'initializer' %>
+      <pre id="initializer" class="code toggle-me">
+      # monkeypatch I18n to get the available locales
+      # (not strictly needed to use translate_routes, but recommended anyway)
+      module I18n
+        class << self
+          def available_locales
+            backend.available_locales
+          end
+        end
+
+        module Backend
+          class Simple
+            def available_locales
+              init_translations unless initialized?
+              translations.keys
+            end
+          end
+        end
+      end
+
+      # load translation files from RAILS_ROOT/locales
+      [:rb, :yml].each do |format|
+        I18n.load_path = Dir[File.join(RAILS_ROOT, 'locales', '*.{rb,yml}') ]
+      end</pre>
+  	</li>
+  	<li>
+  	  <a href="#" onclick="$('test_helper').toggle();" >/test/test_helper.rb</a>: <%= I18n.t 'test_helper' %>
+  	  <pre id="test_helper" class="code toggle-me">
+        # include default lang on your test requests (test requests doesn't support default_url_options):
+        module ActionController
+          module TestProcess
+            unless method_defined?(:process_without_default_locale)
+              def process_with_default_locale(action, parameters = nil, session = nil, flash = nil)
+                lang_pair = {ActionController::Routing::Translator.locale_param_key => ActionController::Routing::Translator.default_locale}
+                parameters = lang_pair.merge(parameters) rescue lang_pair
+                process_without_default_locale(action, parameters, session, flash)
+              end
+
+              alias :process_without_default_locale :process
+              alias :process :process_with_default_locale
+            end
+          end
+        end</pre>
+  	</li>
+  </ul>
+</div>
+<h1><%= I18n.t('the_sample_app') %></h1>
+<p style="color: green"><%= flash[:notice] %></p>
+
+<%= yield  %>
+
+</body>
+</html>
