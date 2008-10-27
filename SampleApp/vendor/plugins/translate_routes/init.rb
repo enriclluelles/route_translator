@@ -1,1 +1,0 @@
-require 'translate_routes'
