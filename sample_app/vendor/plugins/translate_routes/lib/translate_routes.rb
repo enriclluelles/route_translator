@@ -112,8 +112,9 @@ module ActionController
           
           end
         
-          # apply all new routes
-          Routes.routes = new_routes
+          # apply new routes, giving preference to the default locale
+          default_locale_routes = new_routes.select{ |r| r.requirements[:locale] == default_locale }
+          Routes.routes = (default_locale_routes + new_routes).uniq!
           new_named_routes.each { |name, r| Routes.named_routes.add name, r }
           
           add_locale_suffix_helper
