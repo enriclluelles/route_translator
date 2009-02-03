@@ -4,8 +4,13 @@ TranslateRoutes
 This Rails plugin provides a simple way to translate your URLs to any number of languages, even on a fully working application.  
 
 It works fine with all kind of routing definitions, including RESTful and named routes.  
-**Your current code will remain untouched**: your current routing code, helpers and links will be translated transparently.  
+**Your current code will remain untouched**: your current routing code, helpers and links will be translated transparently - even in your tests.
 (Un)installing it is a very clean and simple process, so why don't you give it a chance? ;)
+
+Sample application
+------------------
+There is a [sample application](http://github.com/raul/translate_routes_demo/tree/master) which can be very useful to see how to integrate this plugin on your Rails application. The application itself includes all the required steps: 3 lines, an optional filter and a yaml translations file were used.
+
 
 Quick start
 -----------
@@ -20,7 +25,7 @@ Let's start with a tiny example. Of course you need to define your routes first,
 
 2) Write your translations on a standard YAML file (e.g: i18n-routes.yml), including the locales and it translations pairs:
 
-    es-ES:
+    es:
       contact: contacto
 
 
@@ -36,7 +41,7 @@ and if you want to keep the file separated (e.g: config/i18n-routes.yml), the li
 You can see it working by executing `rake routes` on the shell:
 
 
-    contact_es_es_path /es-ES/contacto {:locale=>"es-ES", :controller=>"contact", :action=>"index"}
+    contact_es_es_path /es-ES/contacto {:locale=>"es", :controller=>"contact", :action=>"index"}
     contact_en_us_path /contact        {:locale=>"'en'", :controller=>"contact", :action=>"index"}
 
 
@@ -60,55 +65,12 @@ Of course, your functional and integration testing involves some requests.
 The plugin includes some code to add a default locale parameter so they can remain untouched.
 Append it to your `test_helper` and it will be applied.
 
-An special case: root route ("/") with `prefix_on_default_locale`
------------------------------------------------------------------
+Documentation
+-------------
+You can find additional information in [the translate_routes' wiki](http://wiki.github.com/raul/translate_routes).
 
-The root route ("/" route) is handled differently depending on the `prefix_on_default_locale` configuration option. If `prefix_on_default_locale` is set to true, the root route remains untouched and all localized versions of this root route are generated.
-
-This is better explained with an example.  Given the following single route definition on config/routes.rb:
-
-    map.root :controller => "home", :action => "index"
-
-Without translate_routes the generated routes are:
-
-    root  / {:controller=>"home", :action=>"index"}
-
-With translate_routes and `prefix_on_default_locale` set to `false` the routes are:
-
-    root_es  /   {:action=>"index", :controller=>"home", :locale=>"es"}
-    root_en  /en {:action=>"index", :controller=>"home", :locale=>"en"}
-
-And finally with translate_routes and `prefix_on_default_locale` set to `true` the routes are:
-
-    root     /   {:action=>"index", :controller=>"home"}
-    root_es  /es {:action=>"index", :controller=>"home", :locale=>"es"}
-    root_en  /en {:action=>"index", :controller=>"home", :locale=>"en"}
-
-It's important to note that in this last case the original root route does not set the `locale` param.  This allows controller code to distinguish the "unlocalized root" path ("/") from the "localized root" paths ("/es", "/en") and to redirect the user to a suitable default locale from the unlocalized root.  The following example shows how to do it with the excellent [`http_accept_language` plugin](http://github.com/iain/http_accept_language):
-
-    def index
-      available_locales = [ "es", "en"]
-      unless params[ :locale]
-        # if the locale is not specified in the URL we are in the unlocalized root path
-        # we find the first available locale from the user agent's Accept-Language header
-        request.user_preferred_languages.each do |locale|
-          if available_locales.include?( locale)
-            redirect_to :locale => locale   # we found one, redirect and finish
-            return
-          end
-        end
-
-        # no suitable locale found, redirect to the default one
-        redirect_to :locale => I18n.default_locale
-        return
-      end
-
-      # locale is set, handle the action as usual
-      ...
-    end
-
-Suggestions, bug reports, questions
------------------------------------
+Questions, suggestions, bug reports...
+--------------------------------------
 Feedback, questions and comments will be always welcome at raul@murciano.net
 
 Credits
