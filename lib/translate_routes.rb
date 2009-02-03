@@ -13,9 +13,7 @@ module ActionController
       mattr_accessor :locale_param_key
       @@locale_param_key = :locale  # set to :locale for params[:locale]
 
-      mattr_accessor :original_routes
-
-      mattr_accessor :dictionaries
+      mattr_accessor :original_routes, :original_named_routes, :original_names, :dictionaries
 
       def self.translate
         init_dictionaries
@@ -72,40 +70,31 @@ module ActionController
           'locale.to_s.underscore'
         end
 
-        def self.add_locale_suffix_helper
-          helper_code = <<-HELPER_CODE
-          def locale_suffix(locale)
-            #{locale_suffix_code}
-          end
-          HELPER_CODE
-          [ActionController::Base, ActionView::Base].each { |d| d.module_eval(helper_code) }
-        end
-        
         class_eval <<-FOO
            def self.locale_suffix(locale)
              #{self.locale_suffix_code}
            end
         FOO
-
         def self.translate_current_routes
-
-          # reset routes
-          @@original_routes ||= Routes.routes.dup
-          old_routes = Routes.routes.dup # Array [routeA, routeB, ...]
-          old_names = Routes.named_routes.routes.dup # Hash {:name => :route}    
+          
+          RAILS_DEFAULT_LOGGER.info "Translating routes (default locale: #{default_locale})" if defined? RAILS_DEFAULT_LOGGER
+          
+          @@original_routes = Routes.routes.dup                     # Array [routeA, routeB, ...]
+          @@original_named_routes = Routes.named_routes.routes.dup  # Hash {:name => :route}
+          @@original_names = @@original_named_routes.keys
+          
           Routes.clear!
           new_routes = []
           new_named_routes = {}
 
-          old_routes.each do |old_route|
+          @@original_routes.each do |old_route|
 
-            old_name = old_names.index(old_route)
+            old_name = @@original_named_routes.index(old_route)
             # process and add the translated ones
             trans_routes, trans_named_routes = translate_route(old_route, old_name)
 
             if old_name
               new_named_routes.merge! trans_named_routes
-              generate_helpers(old_name)
             end
 
             new_routes.concat(trans_routes)
@@ -115,15 +104,16 @@ module ActionController
           Routes.routes = new_routes
           new_named_routes.each { |name, r| Routes.named_routes.add name, r }
           
-          add_locale_suffix_helper
-          
+          @@original_names.each{ |old_name| add_untranslated_helpers_to_controllers_and_views(old_name) }
         end
 
-        def self.generate_helpers(old_name)
+        # The untranslated helper (root_path instead root_en_path) redirects according to the current locale
+        def self.add_untranslated_helpers_to_controllers_and_views(old_name)
+          
           ['path', 'url'].each do |suffix|
             new_helper_name = "#{old_name}_#{suffix}"
             def_new_helper = <<-DEF_NEW_HELPER
-              def #{new_helper_name}(*args)                      
+              def #{new_helper_name}(*args)
                 send("#{old_name}_\#{locale_suffix(I18n.locale)}_#{suffix}", *args)
               end
             DEF_NEW_HELPER
@@ -209,20 +199,39 @@ module ActionController
   end
 end
 
-
-# Add set_locale_from_url to controllers
+# Add set_locale_from_url and locale_suffix to controllers
 module ActionController
 
   class Base
 
     private
-  
-    def set_locale_from_url
-      I18n.locale = params[ActionController::Routing::Translator.locale_param_key]
-      default_url_options({ActionController::Routing::Translator => I18n.locale })
-    end
+
+      def set_locale_from_url
+        I18n.locale = params[ActionController::Routing::Translator.locale_param_key]
+        default_url_options({ActionController::Routing::Translator => I18n.locale })
+      end
+
+      def locale_suffix(locale)
+        eval ActionController::Routing::Translator.locale_suffix_code
+      end
     
   end
 
 end
+
+# Add locale_suffix to views
+module ActionView
+  
+  class Base
+    
+    private
+    
+      def locale_suffix(locale)
+        eval ActionController::Routing::Translator.locale_suffix_code
+      end
+    
+  end
+  
+end
+
 

@@ -27,7 +27,7 @@ Let's start with a tiny example. Of course you need to define your routes first,
 3) Append a line to your routes.rb file to activate the translations. If you loaded the translations file with
 your other I18n translations files, the line will be:
 
-    ActionController::Routing::Translator.i18n('es-ES')
+    ActionController::Routing::Translator.i18n('es')
   
 and if you want to keep the file separated (e.g: config/i18n-routes.yml), the line to append is:
 
@@ -37,7 +37,7 @@ You can see it working by executing `rake routes` on the shell:
 
 
     contact_es_es_path /es-ES/contacto {:locale=>"es-ES", :controller=>"contact", :action=>"index"}
-    contact_en_us_path /contact        {:locale=>"en-US", :controller=>"contact", :action=>"index"}
+    contact_en_us_path /contact        {:locale=>"'en'", :controller=>"contact", :action=>"index"}
 
 
 As we can see, a new spanish route has been setted up and a `locale` parameter has been added to the routes.
