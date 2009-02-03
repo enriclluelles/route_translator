@@ -1,3 +1,5 @@
+-- 0.98
+  Accepted patch from hoelmer: Updated rake task to use I18n yaml format.
 -- 0.97
   Accepted patch from Aitor Garay-Romero: root routes with prefix now doesn't set the locale parameter.
 
