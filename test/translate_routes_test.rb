@@ -1,14 +1,10 @@
-plugin_root = File.join(File.dirname(__FILE__), '..')
-app_root = plugin_root + '/../../..'
-
 require 'test/unit'
-
-ENV['RAILS_ENV'] = 'test'
-require File.expand_path(app_root + '/config/boot')
+require 'rubygems'
 require 'action_controller'
 require 'action_controller/test_process'
 require 'active_support'
 
+plugin_root = File.join(File.dirname(__FILE__), '..')
 require "#{plugin_root}/lib/translate_routes"
 RAILS_ROOT = plugin_root
 
@@ -21,13 +17,24 @@ class TranslateRoutesTest < Test::Unit::TestCase
     @view = ActionView::Base.new
   end
 
-  # Unnamed routes, prefix
+
+  # Unnamed routes with prefix on default locale:
 
   def test_unnamed_empty_route_with_prefix
     ActionController::Routing::Routes.draw { |map| map.connect '', :controller => 'people', :action => 'index' }
     config_default_locale_settings('en-US', true)
     ActionController::Routing::Translator.translate { |t| t['en-US'] = {}; t['es-ES'] = {'people' => 'gente'} }
   
+    assert_routing '/es-ES', :controller => 'people', :action => 'index', :locale => 'es-ES'
+    assert_routing '/en-US', :controller => 'people', :action => 'index', :locale => 'en-US'
+  end
+
+  def test_unnamed_root_route_with_prefix
+    ActionController::Routing::Routes.draw { |map| map.connect '/', :controller => 'people', :action => 'index'}
+    config_default_locale_settings('es-ES', true)
+    ActionController::Routing::Translator.translate_from_file 'test', 'locales', 'routes.yml'
+
+    assert_routing '/', :controller => 'people', :action => 'index'
     assert_routing '/es-ES', :controller => 'people', :action => 'index', :locale => 'es-ES'
     assert_routing '/en-US', :controller => 'people', :action => 'index', :locale => 'en-US'
   end
@@ -59,7 +66,7 @@ class TranslateRoutesTest < Test::Unit::TestCase
   end
 
 
-  # Unnamed routes, non-prefix
+  # Unnamed routes without prefix on default locale:
 
   def test_unnamed_empty_route_without_prefix
     ActionController::Routing::Routes.draw { |map| map.connect '', :controller => 'people', :action => 'index' }
@@ -68,6 +75,16 @@ class TranslateRoutesTest < Test::Unit::TestCase
   
     assert_routing '/es-ES', :controller => 'people', :action => 'index', :locale => 'es-ES'
     assert_routing '/', :controller => 'people', :action => 'index', :locale => 'en-US'
+  end
+
+  def test_unnamed_root_route_without_prefix
+    ActionController::Routing::Routes.draw { |map| map.connect '/', :controller => 'people', :action => 'index'}
+    config_default_locale_settings('es-ES', false)
+    ActionController::Routing::Translator.translate_from_file 'test', 'locales', 'routes.yml'
+
+    assert_routing '/', :controller => 'people', :action => 'index', :locale => 'es-ES'
+    assert_routing '/en-US', :controller => 'people', :action => 'index', :locale => 'en-US'
+    assert_unrecognized_route '/es-ES', :controller => 'people', :action => 'index', :locale => 'es-ES'
   end
   
   def test_unnamed_untranslated_route_without_prefix
@@ -97,7 +114,8 @@ class TranslateRoutesTest < Test::Unit::TestCase
     assert_routing '/people', :controller => 'people', :action => 'index', :locale => 'en-US'
   end
 
-  # Named routes, prefix
+
+  # Named routes with prefix on default locale:
 
   def test_named_empty_route_with_prefix
     ActionController::Routing::Routes.draw { |map| map.people '', :controller => 'people', :action => 'index' }
@@ -107,6 +125,16 @@ class TranslateRoutesTest < Test::Unit::TestCase
     assert_routing '/es-ES', :controller => 'people', :action => 'index', :locale => 'es-ES'
     assert_routing '/en-US', :controller => 'people', :action => 'index', :locale => 'en-US'
     assert_helpers_include :people_en_us, :people_es_es, :people
+  end
+
+  def test_named_root_route_with_prefix
+    ActionController::Routing::Routes.draw { |map| map.root :controller => 'people', :action => 'index'}
+    config_default_locale_settings('es-ES', true)
+    ActionController::Routing::Translator.translate_from_file 'test', 'locales', 'routes.yml'
+
+    assert_routing '/', :controller => 'people', :action => 'index'
+    assert_routing '/es-ES', :controller => 'people', :action => 'index', :locale => 'es-ES'
+    assert_routing '/en-US', :controller => 'people', :action => 'index', :locale => 'en-US'
   end
   
   def test_named_untranslated_route_with_prefix
@@ -139,7 +167,7 @@ class TranslateRoutesTest < Test::Unit::TestCase
     assert_helpers_include :people_en_us, :people_es_es, :people
   end
   
-  # Named routes, non-prefix
+  # Named routes without prefix on default locale:
 
   def test_named_empty_route_without_prefix
     ActionController::Routing::Routes.draw { |map| map.people '', :controller => 'people', :action => 'index'}
@@ -150,7 +178,17 @@ class TranslateRoutesTest < Test::Unit::TestCase
     assert_routing '/', :controller => 'people', :action => 'index', :locale => 'es-ES'
     assert_routing '', :controller => 'people', :action => 'index', :locale => 'es-ES'
   end
-  
+
+  def test_named_root_route_without_prefix
+    ActionController::Routing::Routes.draw { |map| map.root :controller => 'people', :action => 'index'}
+    config_default_locale_settings('es-ES', false)
+    ActionController::Routing::Translator.translate_from_file 'test', 'locales', 'routes.yml'
+
+    assert_routing '/', :controller => 'people', :action => 'index', :locale => 'es-ES'
+    assert_routing '/en-US', :controller => 'people', :action => 'index', :locale => 'en-US'
+    assert_unrecognized_route '/es-ES', :controller => 'people', :action => 'index', :locale => 'es-ES'
+  end
+
   def test_named_untranslated_route_without_prefix
     ActionController::Routing::Routes.draw { |map| map.people 'foo', :controller => 'people', :action => 'index'}
     config_default_locale_settings('es-ES', false)
@@ -246,7 +284,12 @@ class TranslateRoutesTest < Test::Unit::TestCase
         [@controller, @view].each { |obj| assert_respond_to obj, "#{helper}#{suffix}".to_sym }
       end
     end
-    
+  end
+  
+  def assert_unrecognized_route(route_path, options)
+    assert_raise ActionController::RoutingError do
+      assert_routing route_path, options
+    end
   end
 
   def config_default_locale_settings(locale, with_prefix)
