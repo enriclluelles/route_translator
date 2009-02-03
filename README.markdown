@@ -119,6 +119,7 @@ Credits
 
 * Contributors:
   * Aitor Garay-Romero
+  * hoelmer (sorry mate, I can't find your real name)
 
 Rails routing resources
 -----------------------
