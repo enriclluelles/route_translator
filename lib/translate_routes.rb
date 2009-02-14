@@ -118,7 +118,7 @@ module ActionController
               end
             DEF_NEW_HELPER
 
-            [ActionController::Base, ActionView::Base].each { |d| d.module_eval(def_new_helper) }
+            [ActionController::Base, ActionView::Base, ActionMailer::Base].each { |d| d.module_eval(def_new_helper) }
             ActionController::Routing::Routes.named_routes.helpers << new_helper_name.to_sym
           end
         end
@@ -199,39 +199,21 @@ module ActionController
   end
 end
 
-# Add set_locale_from_url and locale_suffix to controllers
-module ActionController
+# Add set_locale_from_url to controllers
+ActionController::Base.class_eval do 
+  private
+    def set_locale_from_url
+      I18n.locale = params[ActionController::Routing::Translator.locale_param_key]
+      default_url_options({ActionController::Routing::Translator => I18n.locale })
+    end
+end
 
-  class Base
-
+# Add locale_suffix to controllers, views and mailers
+[ActionController::Base, ActionView::Base, ActionMailer::Base].map do |klass|
+  klass.class_eval do
     private
-
-      def set_locale_from_url
-        I18n.locale = params[ActionController::Routing::Translator.locale_param_key]
-        default_url_options({ActionController::Routing::Translator => I18n.locale })
-      end
-
       def locale_suffix(locale)
         eval ActionController::Routing::Translator.locale_suffix_code
       end
-    
   end
-
 end
-
-# Add locale_suffix to views
-module ActionView
-  
-  class Base
-    
-    private
-    
-      def locale_suffix(locale)
-        eval ActionController::Routing::Translator.locale_suffix_code
-      end
-    
-  end
-  
-end
-
-

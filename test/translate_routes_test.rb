@@ -3,6 +3,7 @@ require 'rubygems'
 require 'action_controller'
 require 'action_controller/test_process'
 require 'active_support'
+require 'action_mailer'
 
 plugin_root = File.join(File.dirname(__FILE__), '..')
 require "#{plugin_root}/lib/translate_routes"
