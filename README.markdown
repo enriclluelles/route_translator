@@ -7,7 +7,7 @@ It works fine with all kind of routing definitions, including RESTful and named 
 **Your current code will remain untouched**: your current routing code, helpers and links will be translated transparently - even in your tests.
 (Un)installing it is a very clean and simple process, so why don't you give it a chance? ;)
 
-This version works only with Rails 2.3.x. You can find all available versions in [the wiki](wiki.github.com/raul/translate_routes).
+This version works only with Rails 2.3.x. You can find all available versions in [the wiki](http://wiki.github.com/raul/translate_routes).
 
 Sample application
 ------------------
