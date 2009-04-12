@@ -1,9 +1,10 @@
 require 'test/unit'
 require 'rubygems'
-require 'action_controller'
-require 'action_controller/test_process'
-require 'active_support'
-require 'action_mailer'
+
+%w(actionpack activesupport actionmailer).each{ |gem_lib| gem gem_lib, '2.2.2' }
+%w( activesupport actionpack actionmailer action_controller action_controller/test_case 
+    action_controller/test_process action_controller/assertions 
+  ).each{ |lib| require lib }
 
 plugin_root = File.join(File.dirname(__FILE__), '..')
 require "#{plugin_root}/lib/translate_routes"
