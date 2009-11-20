@@ -6,7 +6,10 @@ module ActionController
   module Routing
 
     module Translator
-      
+
+      mattr_accessor :prefix
+      @@prefix = true
+
       mattr_accessor :prefix_on_default_locale
       @@prefix_on_default_locale = false
 
@@ -124,7 +127,7 @@ module ActionController
         end
 
         def self.add_prefix?(lang)
-          @@prefix_on_default_locale || lang != default_locale
+          @@prefix && (@@prefix_on_default_locale || lang != default_locale)
         end
 
         def self.translate_static_segment(segment, locale)
