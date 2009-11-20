@@ -7,6 +7,9 @@ module ActionController
 
     module Translator
 
+      mattr_accessor :translation_scope
+      @@translation_scope = ""
+
       mattr_accessor :prefix
       @@prefix = true
 
@@ -134,7 +137,7 @@ module ActionController
           if @using_i18n
             tmp = I18n.locale
             I18n.locale = locale
-            value = I18n.t segment.value, :default => segment.value.dup
+            value = I18n.t segment.value, :default => segment.value.dup, :scope => @@translation_scope
             I18n.locale = tmp
           else
             value = @@dictionaries[locale][segment.value] || segment.value.dup
