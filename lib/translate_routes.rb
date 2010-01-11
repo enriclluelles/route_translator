@@ -124,7 +124,7 @@ module ActionController
               end
             DEF_NEW_HELPER
 
-            [ActionController::Base, ActionView::Base, ActionMailer::Base].each { |d| d.module_eval(def_new_helper) }
+            [ActionController::Base, ActionView::Base, ActionMailer::Base, ActionController::UrlWriter].each { |d| d.module_eval(def_new_helper) }
             ActionController::Routing::Routes.named_routes.helpers << new_helper_name.to_sym
           end
         end
@@ -215,7 +215,7 @@ ActionController::Base.class_eval do
 end
 
 # Add locale_suffix to controllers, views and mailers
-[ActionController::Base, ActionView::Base, ActionMailer::Base].map do |klass|
+[ActionController::Base, ActionView::Base, ActionMailer::Base, ActionController::UrlWriter].map do |klass|
   klass.class_eval do
     private
       def locale_suffix(locale)
