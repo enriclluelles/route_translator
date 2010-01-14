@@ -89,7 +89,8 @@ module ActionController
           @@original_named_routes = Routes.named_routes.routes.dup  # Hash {:name => :route}
           @@original_names = @@original_named_routes.keys
           
-          Routes.clear!
+          #don't delete original routes
+          #Routes.clear!
           new_routes = []
           new_named_routes = {}
 
@@ -106,8 +107,8 @@ module ActionController
             new_routes.concat(trans_routes)
           
           end
-        
-          Routes.routes = new_routes
+          #merge old routes with new ones
+          Routes.routes |= new_routes
           new_named_routes.each { |name, r| Routes.named_routes.add name, r }
           
           @@original_names.each{ |old_name| add_untranslated_helpers_to_controllers_and_views(old_name) }
