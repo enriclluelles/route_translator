@@ -16,6 +16,9 @@ module ActionController
       mattr_accessor :prefix_on_default_locale
       @@prefix_on_default_locale = false
 
+      mattr_accessor :locale_param
+      @@locale_param = true
+
       mattr_accessor :locale_param_key
       @@locale_param_key = :locale  # set to :locale for params[:locale]
 
@@ -167,7 +170,11 @@ module ActionController
         end
 
         def self.locale_requirements(orig, locale)
-          orig.requirements.merge(@@locale_param_key => locale)
+          if @@locale_param
+            orig.requirements.merge(@@locale_param_key => locale)
+          else
+            orig.requirements
+          end
         end
 
         def self.translate_route_by_locale(orig, locale, orig_name=nil)
@@ -185,12 +192,10 @@ module ActionController
         def self.translate_route(route, route_name = nil)
           new_routes = []
           new_named_routes = {}
-          
-          if root_route?(route) && prefix_on_default_locale
-            # add the root route "as is" in addition to the translated versions
-            new_routes << route
-            new_named_routes[route_name] = route
-          end
+
+          # add original route "as is" in addition to the translated versions
+          new_routes << route
+          new_named_routes[route_name.to_sym] = route if route_name
 
           available_locales.each do |locale|
             translated = translate_route_by_locale(route, locale, route_name)
@@ -198,6 +203,7 @@ module ActionController
             locale_suffix = locale_suffix(locale)
             new_named_routes["#{route_name}_#{locale_suffix}".to_sym] = translated if route_name
           end
+
           [new_routes, new_named_routes]
         end
       
