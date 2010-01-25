@@ -16,9 +16,6 @@ module ActionController
       mattr_accessor :prefix_on_default_locale
       @@prefix_on_default_locale = false
 
-      mattr_accessor :locale_param
-      @@locale_param = true
-
       mattr_accessor :locale_param_key
       @@locale_param_key = :locale  # set to :locale for params[:locale]
 
@@ -110,8 +107,8 @@ module ActionController
             new_routes.concat(trans_routes)
           
           end
-          #merge old routes with new ones
-          Routes.routes = new_routes | @@original_routes
+
+          Routes.routes = new_routes
           new_named_routes.merge(@@original_named_routes).each { |name, r| Routes.named_routes.add name, r }
           
           @@original_names.each{ |old_name| add_untranslated_helpers_to_controllers_and_views(old_name) }
@@ -170,11 +167,7 @@ module ActionController
         end
 
         def self.locale_requirements(orig, locale)
-          if @@locale_param
-            orig.requirements.merge(@@locale_param_key => locale)
-          else
-            orig.requirements
-          end
+          orig.requirements.merge(@@locale_param_key => locale)
         end
 
         def self.translate_route_by_locale(orig, locale, orig_name=nil)
@@ -193,16 +186,16 @@ module ActionController
           new_routes = []
           new_named_routes = {}
 
-          # add original route "as is" in addition to the translated versions
-          new_routes << route
-          new_named_routes[route_name.to_sym] = route if route_name
-
           available_locales.each do |locale|
             translated = translate_route_by_locale(route, locale, route_name)
             new_routes << translated          
             locale_suffix = locale_suffix(locale)
             new_named_routes["#{route_name}_#{locale_suffix}".to_sym] = translated if route_name
           end
+
+          # add original route "as is" in addition to the translated versions
+          new_routes << route
+          new_named_routes[route_name.to_sym] = route if route_name
 
           [new_routes, new_named_routes]
         end
