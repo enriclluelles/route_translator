@@ -19,5 +19,5 @@ end
 
 # load translation files from RAILS_ROOT/locales
 [:rb, :yml].each do |format|
-  I18n.load_path = Dir[File.join(RAILS_ROOT, 'locales', '*.{rb,yml}') ]
+  I18n.load_path = Dir[File.join(Rails.root, 'locales', '*.{rb,yml}') ]
 end

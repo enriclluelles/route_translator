@@ -1,7 +1,7 @@
 # Author: Raul Murciano [http://raul.murciano.net] for Domestika [http://domestika.org]
 # Copyright (c) 2007, Released under the MIT license (see MIT-LICENSE)
 
-module ActionController
+module ActionDispatch
 
   module Routing
 
@@ -39,7 +39,7 @@ module ActionController
       def self.translate_from_file(*path)
         init_dictionaries
         path = %w(locales routes.yml) if path.blank?
-        file_path =  File.join(RAILS_ROOT, path)
+        file_path =  File.join(Rails.root, path)
         yaml = YAML.load_file(file_path)
         # yaml.each_pair{ |k,v| @@dictionaries[k.to_s] = v || {} }  
         yaml.each_pair{ |k,v| @@dictionaries[k.to_s] = (v|| {})['routes'] || {} }        
@@ -71,9 +71,10 @@ module ActionController
 
         def self.original_static_segments
           static_segments = []
-          (@@original_routes || Routes.routes).each do |r|
-            r.segments.select do |s| 
-              static_segments << s.value if s.instance_of?(ActionController::Routing::StaticSegment)
+          (@@original_routes || RouteSet.routes).each do |r|
+            # now has segment_keys method
+            r.segment_keys do |key|                       
+              static_segments << key.to_s
             end
           end
           static_segments.uniq.sort
@@ -81,7 +82,8 @@ module ActionController
 
         def self.ignore?( route )
           original_name = @@original_named_routes.index( route )
-          ignore_route?( original_name ) || ignore_segments?( route.segments )
+            # now has segment_keys method          
+          ignore_route?( original_name ) || ignore_segments?( route.segment_keys )
         end
 
         def self.ignore_route?(name)
@@ -99,10 +101,10 @@ module ActionController
           false
         end
 
-        def self.ignore_segments?( segments )
-          return false if segments.nil? || segments.empty?
+        def self.ignore_segments?( segment_keys )
+          return false if segment_keys.nil? || segment_keys.empty?
           
-          segment = segments.join(&:value)
+          segment = segment_keys.join(" ")
           ignore_route_segments.each do |filter|
             case filter
               when Regexp then return true if segment =~ filter
@@ -125,15 +127,16 @@ module ActionController
            end
         FOO
         def self.translate_current_routes
+
+          # rails 3 default logger
+          Rails.logger.info "Translating routes (default locale: #{default_locale})" defined?(Rails.logger)
           
-          RAILS_DEFAULT_LOGGER.info "Translating routes (default locale: #{default_locale})" if defined? RAILS_DEFAULT_LOGGER
-          
-          @@original_routes = Routes.routes.dup                     # Array [routeA, routeB, ...]
-          @@original_named_routes = Routes.named_routes.routes.dup  # Hash {:name => :route}
+          @@original_routes = RouteSet.routes.dup                     # Array [routeA, routeB, ...]
+          @@original_named_routes = RouteSet.named_routes.routes.dup  # Hash {:name => :route}
           @@original_names = @@original_named_routes.keys
           
           
-          Routes.clear!
+          RouteSet.clear!
           new_routes = []
           new_named_routes = {}
 
@@ -151,8 +154,8 @@ module ActionController
           
           end
 
-          Routes.routes = new_routes
-          new_named_routes.merge(@@original_named_routes).each { |name, r| Routes.named_routes.add name, r }
+          RouteSet.routes = new_routes
+          new_named_routes.merge(@@original_named_routes).each { |name, r| RouteSet.named_routes.add name, r }
           
           @@original_named_routes.each { |old_name, old_route| add_untranslated_helpers_to_controllers_and_views( old_name ) unless ignore?( old_route ) }
         end
@@ -164,49 +167,51 @@ module ActionController
             new_helper_name = "#{old_name}_#{suffix}"
             def_new_helper = <<-DEF_NEW_HELPER
               def #{new_helper_name}(*args)
-                send("#{old_name}_\#{locale_suffix(I18n.locale)}_#{suffix}", *args)
+                send("#{old_name}_\#{locale_suffix(I18n.default_locale)}_#{suffix}", *args)
               end
             DEF_NEW_HELPER
 
+            # use ActionDispatch in Rails 3
+            # use RouteSet, named_routes has :routes and :helpers 
             [ActionController::Base, ActionView::Base, ActionMailer::Base, ActionController::UrlWriter].each { |d| d.module_eval(def_new_helper) }
-            ActionController::Routing::Routes.named_routes.helpers << new_helper_name.to_sym
+            ActionDispatch::Routing::RouteSet.named_routes.helpers << new_helper_name.to_sym
           end
         end
 
         def self.add_prefix?(lang)
           @@prefix && (@@prefix_on_default_locale || lang != default_locale)
         end
-
-        def self.translate_static_segment(segment, locale)
+                                      
+        # assumes segment has been converted to string 
+        # I18n.translate(locale, key, options = {})
+        def self.translate_segment_key(segment, locale)
           if @using_i18n
-            tmp = I18n.locale
-            I18n.locale = locale
-            value = I18n.t segment.value, :default => segment.value.dup, :scope => @@translation_scope
-            I18n.locale = tmp
+            # tmp = I18n.locale
+            # I18n.default_locale = locale
+            value = I18n.translate locale, segment, {:default => segment.dup, :scope => @@translation_scope}
+            # I18n.default_locale = tmp
           else
-            value = @@dictionaries[locale][segment.value] || segment.value.dup
+            value = @@dictionaries[locale][segment] || segment.dup
           end
-          StaticSegment.new(value, :raw => segment.raw, :optional => segment.optional?)
+          value
         end
 
+        # in rails 3, static segments are just keys/strings!
         def self.locale_segments(orig, locale)
           segments = []
           
           if add_prefix?(locale) # initial prefix i.e: /en-US
-            divider = DividerSegment.new(orig.segments.first.value, :optional => false) # divider ('/')
-            static = StaticSegment.new(locale, :optional => false) # static ('en-US')
-            segments += [divider, static]
+            segments << "#{locale}_#{orig}"
           end
-          
-          orig.segments.each do |s|
-            if s.instance_of?(StaticSegment)
-              new_segment = translate_static_segment(s, locale)
-            else
-              new_segment = s.dup # just reference the original
-            end
+
+          # use segment keys
+          orig.segment_keys.each do |s|               
+            # convert segment symbol to string
+            new_segment = translate_segment_key(s.to_s, locale)
             segments << new_segment
           end
-          segments
+          # should segments be joined like this!? or with a / ?
+          segments.join(" ")
         end
 
         def self.locale_requirements(orig, locale)
@@ -217,8 +222,8 @@ module ActionController
           segments = locale_segments(orig, locale)
           requirements = locale_requirements(orig, locale)
           conditions = orig.conditions
-          
-          Route.new(segments, requirements, conditions).freeze
+
+          Route.new(Rails.application, conditions, requirements, segments).freeze
         end
 
         def self.root_route?(route)
@@ -249,20 +254,25 @@ module ActionController
 end
 
 # Add set_locale_from_url to controllers
+# also works in Rails 3
 ActionController::Base.class_eval do 
   private
-    def set_locale_from_url
-      I18n.locale = params[ActionController::Routing::Translator.locale_param_key]
-      default_url_options({ActionController::Routing::Translator => I18n.locale })
+    # called by before_filter
+    def set_locale_from_url            
+      # use ActionDispatch in Rails 3, I18n.locale now default_locale      
+      I18n.default_locale = params[ActionDispatch::Routing::Translator.locale_param_key]
+      default_url_options({ActionDispatch::Routing::Translator => I18n.locale })
     end
 end
 
-# Add locale_suffix to controllers, views and mailers
+# Add locale_suffix to controllers, views and mailers   
+# also works in Rails 3
 [ActionController::Base, ActionView::Base, ActionMailer::Base, ActionController::UrlWriter].map do |klass|
   klass.class_eval do
     private
       def locale_suffix(locale)
-        eval ActionController::Routing::Translator.locale_suffix_code
+        # use ActionDispatch in Rails 3
+        eval ActionDispatch::Routing::Translator.locale_suffix_code
       end
   end
 end
