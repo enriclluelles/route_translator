@@ -19,6 +19,14 @@ module ActionController
       mattr_accessor :locale_param_key
       @@locale_param_key = :locale  # set to :locale for params[:locale]
 
+      # rudionrails
+      mattr_accessor :ignore_routes # regex for/or route symbols that should not be translated
+      @@ignore_routes = []
+
+      mattr_accessor :ignore_route_segments # regex for urls that should not be translated
+      @@ignore_route_segments = []
+      # end: rudionrails
+
       mattr_accessor :original_routes, :original_named_routes, :original_names, :dictionaries
 
       def self.translate
@@ -33,7 +41,8 @@ module ActionController
         path = %w(locales routes.yml) if path.blank?
         file_path =  File.join(RAILS_ROOT, path)
         yaml = YAML.load_file(file_path)
-        yaml.each_pair{ |k,v| @@dictionaries[k.to_s] = v || {} }
+        # yaml.each_pair{ |k,v| @@dictionaries[k.to_s] = v || {} }  
+        yaml.each_pair{ |k,v| @@dictionaries[k.to_s] = (v|| {})['routes'] || {} }        
         @using_i18n = false
         Translator.translate_current_routes
       end
@@ -68,6 +77,40 @@ module ActionController
             end
           end
           static_segments.uniq.sort
+        end
+
+        def self.ignore?( route )
+          original_name = @@original_named_routes.index( route )
+          ignore_route?( original_name ) || ignore_segments?( route.segments )
+        end
+
+        def self.ignore_route?(name)
+          return false if name.nil?
+          ignore_routes.each do |filter|
+            case filter
+              when Regexp:
+                return true if name.to_s =~ filter
+              when String:
+                return true if name.to_s == filter
+              when Symbol:
+                return true if name == filter
+            end
+          end          
+          false
+        end
+
+        def self.ignore_segments?( segments )
+          return false if segments.nil? || segments.empty?
+          
+          segment = segments.join(&:value)
+          ignore_route_segments.each do |filter|
+            case filter
+              when Regexp then return true if segment =~ filter
+              when String then return true if segment == filter
+              when Symbol then return true if segment.to_sym == filter
+            end
+          end
+          false
         end
 
         # code shared by translation and application helpers,
@@ -111,7 +154,7 @@ module ActionController
           Routes.routes = new_routes
           new_named_routes.merge(@@original_named_routes).each { |name, r| Routes.named_routes.add name, r }
           
-          @@original_names.each{ |old_name| add_untranslated_helpers_to_controllers_and_views(old_name) }
+          @@original_named_routes.each { |old_name, old_route| add_untranslated_helpers_to_controllers_and_views( old_name ) unless ignore?( old_route ) }
         end
 
         # The untranslated helper (root_path instead root_en_path) redirects according to the current locale

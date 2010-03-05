@@ -1,7 +1,10 @@
-config_path = File.expand_path(File.join(RAILS_ROOT, 'config'))
-require File.join(config_path, 'environment')
+# config_path = File.expand_path(File.join(RAILS_ROOT, 'config'))
+# require File.join(config_path, 'environment')
 
-namespace :translate_routes do
+# namespace :translate_routes do              
+
+# http://github.com/thecocktail/translate_routes/commit/222190a039ad26f4d3ab5e5c8a8a410f9687be68
+namespace :translate_routes => :environment do
 
   desc "Updates yaml translation files for the given languages"
   task :update_yaml, :langs do |task, args|

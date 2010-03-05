@@ -1,5 +1,10 @@
+# es:
+#   people: gente
+#   
+# en:
+
 es:
-  people: gente
-  
-en:
-  
+  routes:
+    people: gente
+
+en:  
