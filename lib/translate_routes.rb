@@ -167,7 +167,7 @@ module ActionDispatch
             new_helper_name = "#{old_name}_#{suffix}"
             def_new_helper = <<-DEF_NEW_HELPER
               def #{new_helper_name}(*args)
-                send("#{old_name}_\#{locale_suffix(I18n.default_locale)}_#{suffix}", *args)
+                send("#{old_name}_\#{locale_suffix(I18n.locale)}_#{suffix}", *args)
               end
             DEF_NEW_HELPER
 
@@ -187,9 +187,8 @@ module ActionDispatch
         def self.translate_segment_key(segment, locale)
           if @using_i18n
             # tmp = I18n.locale
-            # I18n.default_locale = locale
             value = I18n.translate locale, segment, {:default => segment.dup, :scope => @@translation_scope}
-            # I18n.default_locale = tmp
+            # I18n.locale = tmp
           else
             value = @@dictionaries[locale][segment] || segment.dup
           end
@@ -197,6 +196,16 @@ module ActionDispatch
         end
 
         # in rails 3, static segments are just keys/strings!
+        # we should also handle optional segments: “/:controller(/:action(/:id))(.:format)” 
+        # def segment_keys
+        #   @segment_keys ||= conditions[:path_info].names.compact.map { |key| key.to_sym }
+        # end 
+        # class NamedRouteCollection
+        # :routes               
+        # def names
+        #   routes.keys
+        # end        
+        
         def self.locale_segments(orig, locale)
           segments = []
           
@@ -211,7 +220,7 @@ module ActionDispatch
             segments << new_segment
           end
           # should segments be joined like this!? or with a / ?
-          segments.join(" ")
+          segments.join("/")
         end
 
         def self.locale_requirements(orig, locale)
@@ -259,8 +268,8 @@ ActionController::Base.class_eval do
   private
     # called by before_filter
     def set_locale_from_url            
-      # use ActionDispatch in Rails 3, I18n.locale now default_locale      
-      I18n.default_locale = params[ActionDispatch::Routing::Translator.locale_param_key]
+      # use ActionDispatch in Rails 3
+      I18n.locale = params[ActionDispatch::Routing::Translator.locale_param_key]
       default_url_options({ActionDispatch::Routing::Translator => I18n.locale })
     end
 end

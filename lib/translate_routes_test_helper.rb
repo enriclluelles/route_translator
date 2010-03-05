@@ -24,7 +24,7 @@ ActionController::Integration::Session.class_eval do
       new_helper_name = "#{old_name}_#{suffix}"
       def_new_helper = <<-DEF_NEW_HELPER
         def #{new_helper_name}(*args)                      
-          send("#{old_name}_#{ActionDispatch::Routing::Translator.locale_suffix(I18n.default_locale)}_#{suffix}", *args)
+          send("#{old_name}_#{ActionDispatch::Routing::Translator.locale_suffix(I18n.locale)}_#{suffix}", *args)
         end
       DEF_NEW_HELPER
       eval def_new_helper
