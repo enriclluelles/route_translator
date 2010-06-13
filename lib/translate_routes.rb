@@ -137,7 +137,7 @@ module ActionDispatch
           end
           path = segments.join("/")
           if prefix and (!default_locale?(locale) or prefix_on_default_locale)
-            path = "/#{locale_suffix(locale)}#{path}"
+            path = "/:#{@@locale_param_key}#{path}"
           end
           path = "/" if path.blank?
           path
@@ -147,7 +147,7 @@ module ActionDispatch
           requirements = locale_requirements(orig, locale)
           conditions = {:path_info => locale_path(orig, locale)}
           conditions[:request_method] = orig.conditions[:request_method].source.upcase if orig.conditions[:request_method]
-          defaults = orig.defaults
+          defaults = orig.defaults.merge(@@locale_param_key => locale)
           new_name = "#{orig_name}_#{locale_suffix(locale)}" if orig_name
           [orig.app, conditions, requirements, defaults, new_name, {}]
         end
