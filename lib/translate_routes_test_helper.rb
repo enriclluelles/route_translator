@@ -1,10 +1,10 @@
 # Author: Raul Murciano [http://raul.murciano.net] for Domestika [http://domestika.org]
 # Copyright (c) 2007, Released under the MIT license (see MIT-LICENSE)
 
-require 'test_help'
+require 'rails/test_help'
 
 # Include default lang on your test requests (test requests doesn't support default_url_options):
-ActionController::TestProcess.class_eval do
+ActionController::TestCase.class_eval do
   unless method_defined?(:process_without_default_language)
     def process_with_default_language(action, parameters = nil, session = nil, flash = nil, http_method = 'GET')
       lang_pair = {:locale, I18n.default_locale.to_s}

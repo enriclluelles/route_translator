@@ -1,39 +1,45 @@
 require 'test/unit'
 require 'rubygems'
 
-%w(actionpack activesupport actionmailer).each{ |gem_lib| gem gem_lib, '2.3.2' }
-%w(activesupport actionpack actionmailer action_controller).each{ |lib| require lib }
+%w(actionpack activesupport actionmailer).each{ |gem_lib| gem gem_lib, '3.0.0' }
+%w(active_support action_pack action_mailer action_controller action_dispatch).each{ |lib| require lib }
 
 plugin_root = File.join(File.dirname(__FILE__), '..')
 require "#{plugin_root}/lib/translate_routes"
-RAILS_ROOT = plugin_root
+
+require 'rails'
+module Rails ; mattr_accessor :root; end
+class TestApp < Rails::Application ; end
+
+Rails.root = plugin_root
+Rails.logger = Logger.new(STDOUT)
 
 class PeopleController < ActionController::Base;  end
 
 class TranslateRoutesTest < ActionController::TestCase
 
-  include ActionController::Assertions::RoutingAssertions
+  include ActionDispatch::Assertions::RoutingAssertions
 
   def setup
     @controller = ActionController::Base.new
     @view = ActionView::Base.new
-    ActionController::Routing::Routes.clear!
+    @routes = ActionDispatch::Routing::RouteSet.new
   end
 
 
   # Unnamed routes with prefix on default locale:
 
   def test_unnamed_empty_route_with_prefix
-    ActionController::Routing::Routes.draw { |map| map.connect '', :controller => 'people', :action => 'index' }
+    @routes.draw { |map| map.connect '', :controller => 'people', :action => 'index' }
     config_default_locale_settings('en', true)
-    ActionController::Routing::Translator.translate { |t| t['en'] = {}; t['es'] = {'people' => 'gente'} }
+    ActionDispatch::Routing::Translator.translate { |t| t['en'] = {}; t['es'] = {'people' => 'gente'} }
   
     assert_routing '/es', :controller => 'people', :action => 'index', :locale => 'es'
     assert_routing '/en', :controller => 'people', :action => 'index', :locale => 'en'
   end
   
   def test_unnamed_root_route_with_prefix
-    ActionController::Routing::Routes.draw { |map| map.connect '/', :controller => 'people', :action => 'index'}
+    @routes.draw { |map| map.connect '/', :controller => 'people', :action => 'index'}
     config_default_locale_settings('es', true)
     ActionController::Routing::Translator.translate_from_file 'test', 'locales', 'routes.yml'
   
@@ -43,7 +49,7 @@ class TranslateRoutesTest < ActionController::TestCase
   end
   
   def test_unnamed_untranslated_route_with_prefix
-    ActionController::Routing::Routes.draw { |map| map.connect 'foo', :controller => 'people', :action => 'index' }
+    @routes.draw { |map| map.connect 'foo', :controller => 'people', :action => 'index' }
     config_default_locale_settings('en', true)
     ActionController::Routing::Translator.translate { |t| t['en'] = {}; t['es'] = {'people' => 'gente'} }
   
@@ -52,7 +58,7 @@ class TranslateRoutesTest < ActionController::TestCase
   end
   
   def test_unnamed_translated_route_on_default_locale_with_prefix
-    ActionController::Routing::Routes.draw { |map| map.people 'people', :controller => 'people', :action => 'index'}
+    @routes.draw { |map| map.people 'people', :controller => 'people', :action => 'index'}
     config_default_locale_settings('es', true)
     ActionController::Routing::Translator.translate { |t| t['en'] = {}; t['es'] = {'people' => 'gente'} }
   
@@ -60,7 +66,7 @@ class TranslateRoutesTest < ActionController::TestCase
   end
     
   def test_unnamed_translated_route_on_non_default_locale_with_prefix
-    ActionController::Routing::Routes.draw { |map| map.connect 'people', :controller => 'people', :action => 'index' }
+    @routes.draw { |map| map.connect 'people', :controller => 'people', :action => 'index' }
     config_default_locale_settings('en', true)
     ActionController::Routing::Translator.translate { |t| t['en'] = {}; t['es'] = {'people' => 'gente'} }
   
@@ -72,7 +78,7 @@ class TranslateRoutesTest < ActionController::TestCase
   # Unnamed routes without prefix on default locale:
   
   def test_unnamed_empty_route_without_prefix
-    ActionController::Routing::Routes.draw { |map| map.connect '', :controller => 'people', :action => 'index' }
+    @routes.draw { |map| map.connect '', :controller => 'people', :action => 'index' }
     config_default_locale_settings('en', false)
     ActionController::Routing::Translator.translate { |t| t['en'] = {}; t['es'] = {'people' => 'gente'} }
   
@@ -81,7 +87,7 @@ class TranslateRoutesTest < ActionController::TestCase
   end
   
   def test_unnamed_root_route_without_prefix
-    ActionController::Routing::Routes.draw { |map| map.connect '/', :controller => 'people', :action => 'index'}
+    @routes.draw { |map| map.connect '/', :controller => 'people', :action => 'index'}
     config_default_locale_settings('es', false)
     ActionController::Routing::Translator.translate_from_file 'test', 'locales', 'routes.yml'
   
@@ -91,7 +97,7 @@ class TranslateRoutesTest < ActionController::TestCase
   end
   
   def test_unnamed_untranslated_route_without_prefix
-    ActionController::Routing::Routes.draw { |map| map.connect 'foo', :controller => 'people', :action => 'index'}
+    @routes.draw { |map| map.connect 'foo', :controller => 'people', :action => 'index'}
     config_default_locale_settings('en', false)
     ActionController::Routing::Translator.translate { |t| t['en'] = {}; t['es'] = {'people' => 'gente'} }
     
@@ -100,7 +106,7 @@ class TranslateRoutesTest < ActionController::TestCase
   end
   
   def test_unnamed_translated_route_on_default_locale_without_prefix
-    ActionController::Routing::Routes.draw { |map| map.people 'people', :controller => 'people', :action => 'index'}
+    @routes.draw { |map| map.people 'people', :controller => 'people', :action => 'index'}
     config_default_locale_settings('es', false)
     ActionController::Routing::Translator.translate { |t| t['en'] = {}; t['es'] = {'people' => 'gente'} }
   
@@ -109,7 +115,7 @@ class TranslateRoutesTest < ActionController::TestCase
   end
   
   def test_unnamed_translated_route_on_non_default_locale_without_prefix
-    ActionController::Routing::Routes.draw { |map| map.people 'people', :controller => 'people', :action => 'index'}
+    @routes.draw { |map| map.people 'people', :controller => 'people', :action => 'index'}
     config_default_locale_settings('en', false)
     ActionController::Routing::Translator.translate { |t| t['en'] = {}; t['es'] = {'people' => 'gente'} }
   
@@ -121,7 +127,7 @@ class TranslateRoutesTest < ActionController::TestCase
   # Named routes with prefix on default locale:
   
   def test_named_empty_route_with_prefix
-    ActionController::Routing::Routes.draw { |map| map.people '', :controller => 'people', :action => 'index' }
+    @routes.draw { |map| map.people '', :controller => 'people', :action => 'index' }
     config_default_locale_settings('en', true)
     ActionController::Routing::Translator.translate { |t| t['en'] = {}; t['es'] = {'people' => 'gente'} }
   
@@ -131,7 +137,7 @@ class TranslateRoutesTest < ActionController::TestCase
   end
   
   def test_named_root_route_with_prefix
-    ActionController::Routing::Routes.draw { |map| map.root :controller => 'people', :action => 'index'}
+    @routes.draw { |map| map.root :controller => 'people', :action => 'index'}
     config_default_locale_settings('es', true)
     ActionController::Routing::Translator.translate_from_file 'test', 'locales', 'routes.yml'
   
@@ -141,7 +147,7 @@ class TranslateRoutesTest < ActionController::TestCase
   end
   
   def test_named_untranslated_route_with_prefix
-    ActionController::Routing::Routes.draw { |map| map.people 'foo', :controller => 'people', :action => 'index'}
+    @routes.draw { |map| map.people 'foo', :controller => 'people', :action => 'index'}
     config_default_locale_settings('en', true)
     ActionController::Routing::Translator.translate { |t| t['en'] = {}; t['es'] = {'people' => 'gente'} }
   
@@ -151,7 +157,7 @@ class TranslateRoutesTest < ActionController::TestCase
   end
   
   def test_named_translated_route_on_default_locale_with_prefix
-    ActionController::Routing::Routes.draw { |map| map.people 'people', :controller => 'people', :action => 'index'}
+    @routes.draw { |map| map.people 'people', :controller => 'people', :action => 'index'}
     config_default_locale_settings('es', true)
     ActionController::Routing::Translator.translate { |t| t['en'] = {}; t['es'] = {'people' => 'gente'} }
   
@@ -161,7 +167,7 @@ class TranslateRoutesTest < ActionController::TestCase
   end
   
   def test_named_translated_route_on_non_default_locale_with_prefix
-    ActionController::Routing::Routes.draw { |map| map.people 'people', :controller => 'people', :action => 'index' }
+    @routes.draw { |map| map.people 'people', :controller => 'people', :action => 'index' }
     config_default_locale_settings('en', true)
     ActionController::Routing::Translator.translate { |t| t['en'] = {}; t['es'] = {'people' => 'gente'} }
   
@@ -173,7 +179,7 @@ class TranslateRoutesTest < ActionController::TestCase
   # Named routes without prefix on default locale:
   
   def test_named_empty_route_without_prefix
-    ActionController::Routing::Routes.draw { |map| map.people '', :controller => 'people', :action => 'index'}
+    @routes.draw { |map| map.people '', :controller => 'people', :action => 'index'}
     config_default_locale_settings('es', false)
     ActionController::Routing::Translator.translate { |t|  t['es'] = {};  t['en'] = {'people' => 'gente'}; }
   
@@ -183,7 +189,7 @@ class TranslateRoutesTest < ActionController::TestCase
   end
   
   def test_named_root_route_without_prefix
-    ActionController::Routing::Routes.draw { |map| map.root :controller => 'people', :action => 'index'}
+    @routes.draw { |map| map.root :controller => 'people', :action => 'index'}
     config_default_locale_settings('es', false)
     ActionController::Routing::Translator.translate_from_file 'test', 'locales', 'routes.yml'
   
@@ -193,7 +199,7 @@ class TranslateRoutesTest < ActionController::TestCase
   end
   
   def test_named_untranslated_route_without_prefix
-    ActionController::Routing::Routes.draw { |map| map.people 'foo', :controller => 'people', :action => 'index'}
+    @routes.draw { |map| map.people 'foo', :controller => 'people', :action => 'index'}
     config_default_locale_settings('es', false)
     ActionController::Routing::Translator.translate { |t| t['en'] = {}; t['es'] = {'people' => 'gente'} }
   
@@ -203,7 +209,7 @@ class TranslateRoutesTest < ActionController::TestCase
   end
   
   def test_named_translated_route_on_default_locale_without_prefix
-    ActionController::Routing::Routes.draw { |map| map.people 'people', :controller => 'people', :action => 'index'}
+    @routes.draw { |map| map.people 'people', :controller => 'people', :action => 'index'}
     config_default_locale_settings('es', false)
     ActionController::Routing::Translator.translate { |t| t['en'] = {}; t['es'] = {'people' => 'gente'} }
   
@@ -213,7 +219,7 @@ class TranslateRoutesTest < ActionController::TestCase
   end
   
   def test_named_translated_route_on_non_default_locale_without_prefix
-    ActionController::Routing::Routes.draw { |map| map.people 'people', :controller => 'people', :action => 'index'}
+    @routes.draw { |map| map.people 'people', :controller => 'people', :action => 'index'}
     config_default_locale_settings('en', false)
     ActionController::Routing::Translator.translate { |t| t['en'] = {}; t['es'] = {'people' => 'gente'} }
   
@@ -223,7 +229,7 @@ class TranslateRoutesTest < ActionController::TestCase
   end
   
   def test_languages_load_from_file
-    ActionController::Routing::Routes.draw { |map| map.people 'people', :controller => 'people', :action => 'index'}
+    @routes.draw { |map| map.people 'people', :controller => 'people', :action => 'index'}
     config_default_locale_settings('en', false)
     ActionController::Routing::Translator.translate_from_file 'test', 'locales', 'routes.yml'
     
@@ -233,7 +239,7 @@ class TranslateRoutesTest < ActionController::TestCase
   end
   
   def test_languages_load_from_file_without_dictionary_for_default_locale
-    ActionController::Routing::Routes.draw { |map| map.people 'people', :controller => 'people', :action => 'index'}
+    @routes.draw { |map| map.people 'people', :controller => 'people', :action => 'index'}
     config_default_locale_settings('fr', false)
     ActionController::Routing::Translator.translate_from_file 'test', 'locales', 'routes.yml'
     
@@ -244,7 +250,7 @@ class TranslateRoutesTest < ActionController::TestCase
   end
   
   def test_i18n_based_translations_setting_locales
-    ActionController::Routing::Routes.draw { |map| map.people 'people', :controller => 'people', :action => 'index'}
+    @routes.draw { |map| map.people 'people', :controller => 'people', :action => 'index'}
     config_default_locale_settings('en', false)
     I18n.backend = StubbedI18nBackend
     ActionController::Routing::Translator.i18n('es')
@@ -255,7 +261,7 @@ class TranslateRoutesTest < ActionController::TestCase
   end
   
   def test_i18n_based_translations_taking_i18n_available_locales
-    ActionController::Routing::Routes.draw { |map| map.people 'people', :controller => 'people', :action => 'index'}
+    @routes.draw { |map| map.people 'people', :controller => 'people', :action => 'index'}
     config_default_locale_settings('en', false)
     I18n.stubs(:available_locales).at_least_once.returns StubbedI18nBackend.available_locales
     I18n.backend = StubbedI18nBackend

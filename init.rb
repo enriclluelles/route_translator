@@ -1,1 +1,1 @@
-require 'translate_routes'
+require 'route_translator'
