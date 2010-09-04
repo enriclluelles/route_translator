@@ -7,14 +7,6 @@ require 'rubygems'
 plugin_root = File.join(File.dirname(__FILE__), '..')
 require "#{plugin_root}/lib/route_translator"
 
-require 'ruby-debug'
-
-# require 'rails'
-# module Rails ; mattr_accessor :root; end
-# class TestApp < Rails::Application ; end
-#
-# Rails.root = plugin_root
-# Rails.logger = Logger.new(STDOUT)
 
 class PeopleController < ActionController::Base;  end
 
