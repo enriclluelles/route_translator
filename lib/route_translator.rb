@@ -1,8 +1,9 @@
 class RouteTranslator
-  attr_writer :default_locale, :available_locales, :dictionary
-  attr_accessor :prefix, :prefix_on_default_locale
+  attr_writer :default_locale, :dictionary
+  attr_accessor :prefix_on_default_locale
   
-  TRANSLATABLE_SEGMENT = /^(\w+)\(?/.freeze
+  
+  TRANSLATABLE_SEGMENT = /^(\w+)(\()?/.freeze
   LOCALE_PARAM_KEY = :locale.freeze
   ROUTE_HELPER_CONTAINER = [
     ActionController::Base, 
@@ -14,7 +15,7 @@ class RouteTranslator
     
   class << self
     # Default locale suffix generator
-    def locale_suffixer locale
+    def locale_suffix locale
       locale.to_s.underscore
     end
     
@@ -26,9 +27,7 @@ class RouteTranslator
     
     def init_with_yield &block
       new.tap do |t|
-        t.dictionary = { t.default_locale => {}}
-        yield t.dictionary
-        t.available_locales = t.dictionary.keys
+        t.yield_dictionary &block
       end
     end
     
@@ -38,6 +37,16 @@ class RouteTranslator
         t.load_dictionary_from_file file_path
       end
     end
+  end
+  
+  def initialize
+    @prefix_on_default_locale = false
+  end
+  
+  def yield_dictionary
+    @dictionary = { default_locale => {}}
+    yield @dictionary
+    @available_locales = @dictionary.keys.map &:to_s
   end
   
   def load_dictionary_from_file file_path
@@ -50,28 +59,32 @@ class RouteTranslator
     yaml.each_pair do |locale, translations|
       merge_translations locale, translations    
     end    
+    @available_locales = @dictionary.keys.map &:to_s
   end
   
   def merge_translations locale, translations
     locale = locale.to_s
-    @dictionary[locale] ||= {} && return if translations.blank?
+    if translations.blank?
+      @dictionary[locale] ||= {}
+      return
+    end
     @dictionary[locale] = (@dictionary[locale] || {}).merge(translations)
   end
   
   def set_options options
-    @prefix = options[:prefix] || true
     @prefix_on_default_locale = options[:prefix_on_default_locale] || false
     @default_locale = options[:default_locale] || I18n.default_locale
   end
   
   def init_i18n_dictionary *wanted_locales
     wanted_locales = available_locales if wanted_locales.blank?
-    @dictionary = {}
+    @dictionary = { default_locale => {}}
     wanted_locales.each do |locale|
       @dictionary[locale] = Hash.new do |hsh, key|
         hsh[key] = I18n.translate key, :locale => locale
       end
     end
+    @available_locales = @dictionary.keys.map &:to_s
   end
   
   # Translate a specific RouteSet, usually Rails.application.routes
@@ -82,8 +95,12 @@ class RouteTranslator
     original_routes = route_set.routes.dup                     # Array [routeA, routeB, ...]
     original_named_routes = route_set.named_routes.routes.dup  # Hash {:name => :route}
     
-    reset_route_set route_set
-    
+    reset_route_set route_set        
+        
+    if root_route = original_named_routes[:root]
+      add_root_route root_route, route_set
+    end    
+
     original_routes.each do |original_route|
       translations_for(original_route).each do |translated_route_args|
         route_set.add_route *translated_route_args
@@ -91,8 +108,16 @@ class RouteTranslator
     end
     
     original_named_routes.each_key do |route_name|
-      route_set.named_routes.helpers += add_untranslated_helpers_to_controllers_and_views(route_name)
+      route_set.named_routes.helpers.concat add_untranslated_helpers_to_controllers_and_views(route_name)
     end
+  end
+  
+  def add_root_route root_route, route_set
+    defaults = root_route.defaults.dup
+    conditions = root_route.conditions.merge :path_info => "/"
+    defaults.merge! LOCALE_PARAM_KEY => default_locale unless prefix_on_default_locale
+    
+    route_set.add_route root_route.app, conditions, root_route.requirements.dup, defaults, :root    
   end
   
   # Add standard route helpers for default locale e.g.
@@ -103,7 +128,7 @@ class RouteTranslator
   def add_untranslated_helpers_to_controllers_and_views old_name
     ['path', 'url'].map do |suffix|
       new_helper_name = "#{old_name}_#{suffix}"
-
+      
       ROUTE_HELPER_CONTAINER.each do |helper_container|
         helper_container.send :define_method, new_helper_name do |*args|
           send "#{old_name}_#{locale_suffix(I18n.locale)}_#{suffix}", *args
@@ -127,20 +152,32 @@ class RouteTranslator
     conditions[:request_method] = route.conditions[:request_method].source.upcase if route.conditions.has_key? :request_method
     requirements = route.requirements.merge LOCALE_PARAM_KEY => locale
     defaults = route.defaults.merge LOCALE_PARAM_KEY => locale
-    new_name = "#{route.name}_#{locale_suffix(I18n.locale)}" if route.name
+    new_name = "#{route.name}_#{locale_suffix(locale)}" if route.name
     
-    [route.app, conditions, requirements, defaults, new_name, {}]
+    [route.app, conditions, requirements, defaults, new_name]
+  end
+  
+  def add_prefix? locale
+    @prefix_on_default_locale || !default_locale?(locale)
+  end
+  
+  def root_route? route
+    route.name == :root
   end
   
   def translate_path path, locale
-    segments = path.split("/").map do |path_segment|
-      translate_path_segment path_segment
+    new_path = if path == "/(.:format)"
+      ""
+    else      
+      segments = path.split("/").map do |path_segment|
+        translate_path_segment(path_segment, locale)
+      end
+    
+      segments.join "/"
     end
     
-    new_path = segments.join "/"
-    
-    if prefix and (!default_locale?(locale) or prefix_on_default_locale)
-      new_path = "/:#{@@locale_param_key}" + new_path
+    if add_prefix? locale
+      new_path = "/:#{LOCALE_PARAM_KEY}" + new_path
     end
     return "/" if new_path.blank?
     
@@ -150,20 +187,25 @@ class RouteTranslator
   def translate_path_segment segment, locale
     return segment if segment.blank? or segment.starts_with?(":")
     
-    translatable = TRANSLATABLE_SEGMENT.match(segment)[1]
-    translate_string(translatable, locale) || segment
+    match = TRANSLATABLE_SEGMENT.match(segment)[1] rescue nil
+
+    translate_string(match, locale) || segment
   end
   
   def available_locales
-    @available_locales ||= I18n.available_locales
+    @available_locales ||= I18n.available_locales.map(&:to_s)
+  end
+  
+  def available_locales= locales
+    @available_locales = locales.map(&:to_s)
   end
   
   def default_locale
-    @default_locale ||= I18n.locale
+    @default_locale ||= I18n.default_locale.to_s
   end
   
   def default_locale? locale
-    @default_locale.to_s == locale.to_s
+    default_locale == locale.to_s
   end
   
   def dictionary
@@ -172,6 +214,10 @@ class RouteTranslator
   
   def translate_string str, locale
     dictionary[locale.to_s][str.to_s]
+  end
+  
+  def locale_suffix locale
+    self.class.locale_suffix locale
   end
   
   private
@@ -205,8 +251,8 @@ module ActionDispatch
           RouteTranslator.init_with_yield(&block).translate Rails.application.routes
         end
         
-        def translate_from_file file_path, options = {}
-          RouteTranslator.init_from_file(file_path, options).translate Rails.application.routes
+        def translate_from_file *file_path
+          RouteTranslator.init_from_file(File.join(file_path)).translate Rails.application.routes
         end
         
         def i18n *locales
@@ -236,7 +282,7 @@ RouteTranslator::ROUTE_HELPER_CONTAINER.each do |klass|
     private
     def locale_suffix locale
       # use ActionDispatch in Rails 3
-      RouteTranslator.locale_suffixer locale
+      RouteTranslator.locale_suffix locale
     end
   end
 end
