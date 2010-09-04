@@ -95,11 +95,7 @@ class RouteTranslator
     original_routes = route_set.routes.dup                     # Array [routeA, routeB, ...]
     original_named_routes = route_set.named_routes.routes.dup  # Hash {:name => :route}
     
-    reset_route_set route_set        
-        
-    if root_route = original_named_routes[:root]
-      add_root_route root_route, route_set
-    end    
+    reset_route_set route_set     
 
     original_routes.each do |original_route|
       translations_for(original_route).each do |translated_route_args|
@@ -107,17 +103,26 @@ class RouteTranslator
       end
     end
     
+    if root_route = original_named_routes[:root]
+      add_root_route root_route, route_set
+    end    
+    
     original_named_routes.each_key do |route_name|
       route_set.named_routes.helpers.concat add_untranslated_helpers_to_controllers_and_views(route_name)
     end
   end
   
   def add_root_route root_route, route_set
-    defaults = root_route.defaults.dup
-    conditions = root_route.conditions.merge :path_info => "/"
-    defaults.merge! LOCALE_PARAM_KEY => default_locale unless prefix_on_default_locale
+    root_route.conditions[:path_info] = root_route.conditions[:path_info].dup
+    route_set.set.add_route *root_route
+    route_set.named_routes[root_route.name] = root_route
+    route_set.routes << root_route
     
-    route_set.add_route root_route.app, conditions, root_route.requirements.dup, defaults, :root    
+    # defaults = root_route.defaults.dup
+    # conditions = root_route.conditions.merge :path_info => "/"
+    # defaults.merge! LOCALE_PARAM_KEY => default_locale unless prefix_on_default_locale
+    # 
+    # route_set.add_route root_route.app, conditions, root_route.requirements.dup, defaults, :root    
   end
   
   # Add standard route helpers for default locale e.g.
@@ -220,8 +225,7 @@ class RouteTranslator
     self.class.locale_suffix locale
   end
   
-  private
-  
+  private  
   def init_dictionary
     @dictionary = {}
     available_locales.each do |locale|
@@ -243,6 +247,8 @@ class RouteTranslator
   end
 end
 
+
+# Adapter for Rails.application.routes
 module ActionDispatch
   module Routing
     module Translator
