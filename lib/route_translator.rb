@@ -1,6 +1,10 @@
+# This is my attempt at a restructured TranslateRoutes.
+# I packed everything into a class, which manages the dictionary,
+# and can operate on a specific RouteSet. This class knows nothing
+# about Rails.root or Rails.application.routes, and therefor is easier to
+# test without an Rails App.
 class RouteTranslator
-  attr_writer :default_locale, :dictionary
-  attr_accessor :prefix_on_default_locale
+  attr_accessor :prefix_on_default_locale, :dictionary
   
   
   TRANSLATABLE_SEGMENT = /^(\w+)(\()?/.freeze
@@ -19,21 +23,26 @@ class RouteTranslator
       locale.to_s.underscore
     end
     
+    # Creates a RouteTranslator instance, using I18n dictionaries of
+    # your app
     def init_with_i18n *wanted_locales
       new.tap do |t|
         t.init_i18n_dictionary *wanted_locales
       end      
     end
     
+    # Creates a RouteTranslator instance and evaluates given block
+    # with an empty dictionary
     def init_with_yield &block
       new.tap do |t|
         t.yield_dictionary &block
       end
     end
     
-    def init_from_file file_path, options = {}
+    # Creates a RouteTranslator instance and reads the translations
+    # from a specified file
+    def init_from_file file_path
       new.tap do |t|
-        t.set_options options
         t.load_dictionary_from_file file_path
       end
     end
@@ -43,25 +52,45 @@ class RouteTranslator
     @prefix_on_default_locale = false
   end
   
-  def yield_dictionary
-    @dictionary = { default_locale => {}}
+  # Resets dictionary and yields the block wich can be used to manually fill the dictionary
+  # with translations e.g.
+  #   route_translator = RouteTranslator.new
+  #   route_translator.yield_dictionary do |dict|
+  #     dict['en'] = { 'people' => 'people' }
+  #     dict['de'] = { 'people' => 'personen' }
+  #   end
+  def yield_dictionary &block
+    reset_dictionary
     yield @dictionary
-    @available_locales = @dictionary.keys.map &:to_s
+    set_available_locales_from_dictionary
   end
   
+  # Resets dictionary and loads translations from specified file
+  # config/locales/routes.yml:
+  #   en:
+  #     people: people
+  #   de:
+  #     people: personen
+  # routes.rb:
+  #   ... your routes ...
+  #   ActionDispatch::Routing::Translator.translate_from_file 
+  # or, to specify a custom file
+  #   ActionDispatch::Routing::Translator.translate_from_file 'config', 'locales', 'routes.yml'
   def load_dictionary_from_file file_path
-    @dictionary = { default_locale => {}}
+    reset_dictionary
     add_dictionary_from_file file_path
   end
   
+  # Add translations from another file to the dictionary. 
   def add_dictionary_from_file file_path    
     yaml = YAML.load_file(file_path)
     yaml.each_pair do |locale, translations|
       merge_translations locale, translations    
-    end    
-    @available_locales = @dictionary.keys.map &:to_s
+    end        
+    set_available_locales_from_dictionary
   end
   
+  # Merge translations for a specified locale into the dictionary
   def merge_translations locale, translations
     locale = locale.to_s
     if translations.blank?
@@ -71,14 +100,11 @@ class RouteTranslator
     @dictionary[locale] = (@dictionary[locale] || {}).merge(translations)
   end
   
-  def set_options options
-    @prefix_on_default_locale = options[:prefix_on_default_locale] || false
-    @default_locale = options[:default_locale] || I18n.default_locale
-  end
-  
+  # Init dictionary to use I18n to translate route parts. Creates
+  # a hash with a block for each locale to lookup keys in I18n dynamically.
   def init_i18n_dictionary *wanted_locales
     wanted_locales = available_locales if wanted_locales.blank?
-    @dictionary = { default_locale => {}}
+    reset_dictionary
     wanted_locales.each do |locale|
       @dictionary[locale] = Hash.new do |hsh, key|
         hsh[key] = I18n.translate key, :locale => locale
@@ -87,7 +113,8 @@ class RouteTranslator
     @available_locales = @dictionary.keys.map &:to_s
   end
   
-  # Translate a specific RouteSet, usually Rails.application.routes
+  # Translate a specific RouteSet, usually Rails.application.routes, but can
+  # be a RouteSet of a gem, plugin/engine etc.
   def translate route_set    
     Rails.logger.info "Translating routes (default locale: #{default_locale})" if defined?(Rails) && defined?(Rails.logger)
     
@@ -112,17 +139,12 @@ class RouteTranslator
     end
   end
   
+  # Add unmodified root route to route_set
   def add_root_route root_route, route_set
     root_route.conditions[:path_info] = root_route.conditions[:path_info].dup
     route_set.set.add_route *root_route
     route_set.named_routes[root_route.name] = root_route
-    route_set.routes << root_route
-    
-    # defaults = root_route.defaults.dup
-    # conditions = root_route.conditions.merge :path_info => "/"
-    # defaults.merge! LOCALE_PARAM_KEY => default_locale unless prefix_on_default_locale
-    # 
-    # route_set.add_route root_route.app, conditions, root_route.requirements.dup, defaults, :root    
+    route_set.routes << root_route  
   end
   
   # Add standard route helpers for default locale e.g.
@@ -144,7 +166,7 @@ class RouteTranslator
     end
   end
   
-  # Generate translations for route for all available locales
+  # Generate translations for a single route for all available locales
   def translations_for route
     available_locales.map do |locale|
       translate_route route, locale
@@ -162,15 +184,18 @@ class RouteTranslator
     [route.app, conditions, requirements, defaults, new_name]
   end
   
+  # Check if a prefix for locale should be added. Is true for all
+  # non-default locales. A prefix for the default_locale can be forced
+  # by setting +prefix_on_default_locale+ to +true+
   def add_prefix? locale
     @prefix_on_default_locale || !default_locale?(locale)
   end
-  
-  def root_route? route
-    route.name == :root
-  end
-  
+    
+  # Translates a path and adds the locale prefix.
   def translate_path path, locale
+    # Hack, please enlighten me with a better way.
+    # without this, formatted root routes "/(.:format)" would translate to
+    # "/de/(.:format)", which doesnt recognize "/de" (but "/de/")
     new_path = if path == "/(.:format)"
       ""
     else      
@@ -189,6 +214,11 @@ class RouteTranslator
     new_path
   end
   
+  # Tries to translate a single path segment. If the path segment
+  # contains sth. like a optional format "people(.:format)", only 
+  # "people" will be translated, if there is no translation, the path
+  # segment is blank or begins with a ":" (param key), the segment
+  # is returned untouched
   def translate_path_segment segment, locale
     return segment if segment.blank? or segment.starts_with?(":")
     
@@ -209,31 +239,32 @@ class RouteTranslator
     @default_locale ||= I18n.default_locale.to_s
   end
   
+  def default_locale= locale
+    @default_locale = locale.to_s
+  end
+  
   def default_locale? locale
     default_locale == locale.to_s
   end
   
-  def dictionary
-    @dictionary || init_dictionary
-  end
   
   def translate_string str, locale
-    dictionary[locale.to_s][str.to_s]
+    @dictionary[locale.to_s][str.to_s]
   end
   
   def locale_suffix locale
     self.class.locale_suffix locale
   end
   
-  private  
-  def init_dictionary
-    @dictionary = {}
-    available_locales.each do |locale|
-      @dictionary[locale] = {}
-    end
-    
-    @dictionary
-  end  
+  private    
+  def set_available_locales_from_dictionary
+    @available_locales = @dictionary.keys.map &:to_s
+  end
+  
+  # Resets dictionary
+  def reset_dictionary
+    @dictionary = { default_locale => {}}
+  end
   
   def reset_route_set route_set
     route_set.clear!
@@ -248,7 +279,7 @@ class RouteTranslator
 end
 
 
-# Adapter for Rails.application.routes
+# Adapter for Rails 3 Apps
 module ActionDispatch
   module Routing
     module Translator
@@ -258,7 +289,8 @@ module ActionDispatch
         end
         
         def translate_from_file *file_path
-          RouteTranslator.init_from_file(File.join(file_path)).translate Rails.application.routes
+          file_path = %w(config locales routes.yml) if file_path.blank?
+          RouteTranslator.init_from_file(File.join(Rails.root, *file_path)).translate Rails.application.routes
         end
         
         def i18n *locales
@@ -270,24 +302,20 @@ module ActionDispatch
 end   
 
 # Add set_locale_from_url to controllers
-# also works in Rails 3
 ActionController::Base.class_eval do 
   private
   # called by before_filter
-  def set_locale_from_url            
-    # use ActionDispatch in Rails 3
+  def set_locale_from_url           
     I18n.locale = params[RouteTranslator::LOCALE_PARAM_KEY]
     default_url_options({RouteTranslator::LOCALE_PARAM_KEY => I18n.locale })
   end
 end
 
-# Add locale_suffix to controllers, views and mailers   
-# also works in Rails 3
+# Add locale_suffix to controllers, views and mailers  
 RouteTranslator::ROUTE_HELPER_CONTAINER.each do |klass|
   klass.class_eval do
     private
     def locale_suffix locale
-      # use ActionDispatch in Rails 3
       RouteTranslator.locale_suffix locale
     end
   end
