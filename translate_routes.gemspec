@@ -19,6 +19,7 @@ Gem::Specification.new do |s|
   s.files = [
     "lib/route_translator.rb",
      "lib/tasks/translate_routes_tasks.rake",
+     "lib/translate_routes.rb",
      "lib/translate_routes_test_helper.rb",
      "test/locales/routes.yml",
      "test/translate_routes_test.rb"
