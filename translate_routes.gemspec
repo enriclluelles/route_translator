@@ -11,6 +11,6 @@ Gem::Specification.new do |s|
   s.required_rubygems_version = ">= 1.3.7"
 
  
-  s.files        = Dir.glob("{lib}/**/*") + %w(MIT-LICENSE README.markdown ROADMAP.md ChangeLog)
+  s.files        = Dir.glob("{lib}/**/*") + %w(MIT-LICENSE README.markdown ChangeLog)
   s.require_path = 'lib'
 end
