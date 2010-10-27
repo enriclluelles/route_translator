@@ -1,10 +1,9 @@
 config_path = File.expand_path(File.join(RAILS_ROOT, 'config'))
-require File.join(config_path, 'environment')
 
 namespace :translate_routes do
 
   desc "Updates yaml translation files for the given languages"
-  task :update_yaml, :langs do |task, args|
+  task :update_yaml, :langs, :needs => :environment do |task, args|
     segments = ActionController::Routing::Translator.original_static_segments
     
     if args[:langs].is_a?(String)    
