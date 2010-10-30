@@ -1,7 +1,7 @@
 require 'test/unit'
 require 'rubygems'
 
-%w(actionpack activesupport actionmailer).each{ |gem_lib| gem gem_lib, '2.3.2' }
+%w(actionpack activesupport actionmailer).each{ |gem_lib| gem gem_lib, '2.3.10' }
 %w(activesupport actionpack actionmailer action_controller).each{ |lib| require lib }
 
 plugin_root = File.join(File.dirname(__FILE__), '..')
@@ -309,7 +309,7 @@ class TranslateRoutesTest < ActionController::TestCase
     }
     
     def self.translate(locale, key, options)
-      @@translations[locale][key] || options[:default]
+      @@translations[locale.to_s][key] || options[:default]
     rescue 
       options[:default]
     end
