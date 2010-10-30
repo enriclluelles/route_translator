@@ -1,13 +1,3 @@
-<<<<<<< HEAD:tasks/translate_routes_tasks.rake
-config_path = File.expand_path(File.join(RAILS_ROOT, 'config'))
-=======
-# config_path = File.expand_path(File.join(RAILS_ROOT, 'config'))
-# require File.join(config_path, 'environment')
->>>>>>> 168019e4a438a41c6f3fcf2e1a9c8e4539ecd3b3:lib/tasks/translate_routes_tasks.rake
-
-# namespace :translate_routes do              
-
-# http://github.com/thecocktail/translate_routes/commit/222190a039ad26f4d3ab5e5c8a8a410f9687be68
 namespace :translate_routes => :environment do
 
   desc "Updates yaml translation files for the given languages"
