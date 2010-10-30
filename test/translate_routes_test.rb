@@ -7,6 +7,14 @@ require 'rubygems'
 plugin_root = File.join(File.dirname(__FILE__), '..')
 require "#{plugin_root}/lib/route_translator"
 
+require 'ruby-debug'
+
+# require 'rails'
+# module Rails ; mattr_accessor :root; end
+# class TestApp < Rails::Application ; end
+#
+# Rails.root = plugin_root
+# Rails.logger = Logger.new(STDOUT)
 
 class PeopleController < ActionController::Base;  end
 
@@ -46,7 +54,7 @@ class TranslateRoutesTest < ActionController::TestCase
   def test_unnamed_root_route_with_prefix
     @routes.draw { root :to => 'people#index' }
     config_default_locale_settings('es', true)
-    @route_translator.load_dictionary_from_file File.join('locales', 'routes.yml')
+    @route_translator.load_dictionary_from_file File.expand_path('locales/routes.yml', File.dirname(__FILE__))
 
     assert_routing '/', :controller => 'people', :action => 'index'
     translate_routes
@@ -103,7 +111,7 @@ class TranslateRoutesTest < ActionController::TestCase
   def test_unnamed_root_route_without_prefix
     @routes.draw { root :to => 'people#index' }
     config_default_locale_settings('es', false)
-    @route_translator.load_dictionary_from_file File.join('locales', 'routes.yml')
+    @route_translator.load_dictionary_from_file File.expand_path('locales/routes.yml', File.dirname(__FILE__))
     translate_routes
 
     assert_routing '/', :controller => 'people', :action => 'index', :locale => 'es'
@@ -158,7 +166,7 @@ class TranslateRoutesTest < ActionController::TestCase
   def test_named_root_route_with_prefix
     @routes.draw { root :to => 'people#index' }
     config_default_locale_settings('es', true)
-    @route_translator.load_dictionary_from_file File.join('locales', 'routes.yml')
+    @route_translator.load_dictionary_from_file File.expand_path('locales/routes.yml', File.dirname(__FILE__))
     translate_routes
 
     # i think this is the wanted behavior, anyhow, can't get assert_routing to work
@@ -217,7 +225,7 @@ class TranslateRoutesTest < ActionController::TestCase
   def test_named_root_route_without_prefix
     @routes.draw { root :to => 'people#index' }
     config_default_locale_settings('es', false)
-    @route_translator.load_dictionary_from_file File.join('locales', 'routes.yml')
+    @route_translator.load_dictionary_from_file File.expand_path('locales/routes.yml', File.dirname(__FILE__))
     translate_routes
 
     assert_routing '/', :controller => 'people', :action => 'index', :locale => 'es'
@@ -261,7 +269,7 @@ class TranslateRoutesTest < ActionController::TestCase
   def test_languages_load_from_file
     @routes.draw { match 'people', :to => 'people#index', :as => 'people'}
     config_default_locale_settings('en', false)
-    @route_translator.load_dictionary_from_file File.join('locales', 'routes.yml')
+    @route_translator.load_dictionary_from_file File.expand_path('locales/routes.yml', File.dirname(__FILE__))
     translate_routes
 
     assert_routing '/people', :controller => 'people', :action => 'index', :locale => 'en'
@@ -272,7 +280,7 @@ class TranslateRoutesTest < ActionController::TestCase
   def test_languages_load_from_file_without_dictionary_for_default_locale
     @routes.draw { match 'people', :to => 'people#index', :as => 'people'}
     config_default_locale_settings('fr', false)
-    @route_translator.load_dictionary_from_file File.join('locales', 'routes.yml')
+    @route_translator.load_dictionary_from_file File.expand_path('locales/routes.yml', File.dirname(__FILE__))
     translate_routes
 
     assert_routing '/people', :controller => 'people', :action => 'index', :locale => 'fr'
