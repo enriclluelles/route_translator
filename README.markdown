@@ -83,7 +83,7 @@ Credits
 
 * Contributors:
   * [Aitor Garay-Romero](http://github.com/aitorgr)
-  * [Christian Hølmer] (http://github.com/hoelmer)
+  * [Christian Hølmer](http://github.com/hoelmer)
   * Nico Ritsche
   * [Cedric Darricau](http://github.com/devsigner)
 
