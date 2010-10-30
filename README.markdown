@@ -1,5 +1,7 @@
-TranslateRoutes
+TranslateRoutes 
 ===============
+
+This branch works with Rails 2.3.x, you can find branches for Rails [2.1.x](http://github.com/raul/translate_routes/tree/rails2.1) and [2.2.x](http://github.com/raul/translate_routes/tree/rails2.2)
 
 This Rails plugin provides a simple way to translate your URLs to any number of languages, even on a fully working application.  
 
