@@ -1,3 +1,8 @@
+-- 0.99 : 5 March 2010
+Merged patch by rudionrails to support ignore_routes 
+Merged patch by Azisaka so it works on Ruby 1.9
+Merged namespace fix by maxigs
+
 -- 0.98
   Accepted patch from hoelmer: Updated rake task to use I18n yaml format.
 -- 0.97

@@ -1,7 +1,7 @@
 TranslateRoutes 
 ===============
 
-This branch works with Rails 2.3.x, you can find branches for Rails [2.1.x](http://github.com/raul/translate_routes/tree/rails2.1) and [2.2.x](http://github.com/raul/translate_routes/tree/rails2.2)
+This branch works with Rails 3.x, you can find branches for Rails [2.1.x](http://github.com/raul/translate_routes/tree/rails2.1), [2.2.x](http://github.com/raul/translate_routes/tree/rails2.2) and [2.3.x](http://github.com/raul/translate_routes/tree/rails2.3)
 
 This Rails plugin provides a simple way to translate your URLs to any number of languages, even on a fully working application.  
 
@@ -9,20 +9,13 @@ It works fine with all kind of routing definitions, including RESTful and named 
 **Your current code will remain untouched**: your current routing code, helpers and links will be translated transparently - even in your tests.
 (Un)installing it is a very clean and simple process, so why don't you give it a chance? ;)
 
-This version works only with Rails 2.3.x. You can find all available versions in [the wiki](http://wiki.github.com/raul/translate_routes).
-
-Sample application
-------------------
-There is a [sample application](http://github.com/raul/translate_routes_demo/tree/master) which can be very useful to see how to integrate this plugin on your Rails application. The application itself includes all the required steps: 3 lines, an optional filter and a yaml translations file were used.
-
-
 Quick start
 -----------
 
 Let's start with a tiny example. Of course you need to define your routes first, e.g:
 
-    ActionController::Routing::Routes.draw do |map| 
-      map.contact 'contact', :controller => 'contact', :action => 'index'
+    YourApp::Application.routes.draw do
+      match 'contact', :to => 'contact#index', :as => 'contact'
     end
 
 1) Download the plugin to your app's `/vendor/plugins` directory.
@@ -36,11 +29,11 @@ Let's start with a tiny example. Of course you need to define your routes first,
 3) Append a line to your routes.rb file to activate the translations. If you loaded the translations file with
 your other I18n translations files, the line will be:
 
-    ActionController::Routing::Translator.i18n('es')
+  ActionDispatch::Routing::Translator.i18n('es')
   
 and if you want to keep the file separated (e.g: config/i18n-routes.yml), the line to append is:
 
-	ActionController::Routing::Translator.translate_from_file('config','i18n-routes.yml')
+	ActionDispatch::Routing::Translator.translate_from_file('config','i18n-routes.yml')
 
 You can see it working by executing `rake routes` on the shell:
 
@@ -88,6 +81,10 @@ Credits
   * [Christian Hølmer](http://github.com/hoelmer)
   * Nico Ritsche
   * [Cedric Darricau](http://github.com/devsigner)
+  * [Olivier Gonzalez](http://github.com/gonzoyumo)
+  * [Kristian Mandrup](http://github.com/kristianmandrup)
+  * [Pieter Visser](http://github.com/pietervisser)
+  * [Marian Theisen](http://github.com/cice)
 
 Rails routing resources
 -----------------------
