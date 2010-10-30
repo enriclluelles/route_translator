@@ -82,9 +82,10 @@ Credits
   * Domestika INTERNET S.L <http://domestika.org> - incredible support, really nice people to work with!  
 
 * Contributors:
-  * Aitor Garay-Romero
-  * hoelmer (sorry mate, I can't find your real name)
+  * [Aitor Garay-Romero](http://github.com/aitorgr)
+  * [Christian Hølmer] (http://github.com/hoelmer)
   * Nico Ritsche
+  * [Cedric Darricau](http://github.com/devsigner)
 
 Rails routing resources
 -----------------------
