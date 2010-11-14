@@ -162,8 +162,7 @@ class TranslateRoutesTest < ActionController::TestCase
     @route_translator.load_dictionary_from_file File.expand_path('locales/routes.yml', File.dirname(__FILE__))
     translate_routes
 
-    # i think this is the wanted behavior, anyhow, can't get assert_routing to work
-    # assert_routing '/', :controller => 'people', :action => 'index'
+    assert_routing '/', :controller => 'people', :action => 'index'
     assert_recognizes( {:controller => 'people', :action => 'index'}, '/')
     assert_routing '/es', :controller => 'people', :action => 'index', :locale => 'es'
     assert_routing '/en', :controller => 'people', :action => 'index', :locale => 'en'
@@ -200,6 +199,18 @@ class TranslateRoutesTest < ActionController::TestCase
     assert_routing '/es/gente', :controller => 'people', :action => 'index', :locale => 'es'
     assert_routing '/en/people', :controller => 'people', :action => 'index', :locale => 'en'
     assert_helpers_include :people_en, :people_es, :people
+  end
+
+  def test_named_translated_route_with_prefix_must_have_locale_as_static_segment
+    @routes.draw { match 'people', :to => 'people#index', :as => 'people' }
+    config_default_locale_settings('en', false)
+    @route_translator.yield_dictionary { |t| t['en'] = {}; t['es'] = {'people' => 'gente'} }
+    translate_routes
+    
+    # we check the string representation of the route,
+    # if it stores locale as a dynamic segment it would be represented as: "/:locale/gente"
+    people_es = @routes.routes.select{ |r| r.name == 'people_es' }.first
+    assert_equal "/es/gente", people_es.to_s.split(' ')[1]
   end
 
   # Named routes without prefix on default locale:

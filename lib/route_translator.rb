@@ -151,6 +151,7 @@ class RouteTranslator
 
       # save original routes and clear route set
       original_routes = route_set.routes.dup                     # Array [routeA, routeB, ...]
+
       original_named_routes = route_set.named_routes.routes.dup  # Hash {:name => :route}
 
       reset_route_set route_set
@@ -237,12 +238,12 @@ class RouteTranslator
         segments.join "/"
       end
 
-      if add_prefix? locale
-        new_path = "/:#{LOCALE_PARAM_KEY}" + new_path
-      end
-      return "/" if new_path.blank?
+      new_path = "/#{locale}#{new_path}" if add_prefix? locale
+      # if add_prefix? locale
+      #   new_path = "/:#{LOCALE_PARAM_KEY}" + new_path
+      # end
 
-      new_path
+      new_path.blank? ? '/' : new_path
     end
 
     # Tries to translate a single path segment. If the path segment
