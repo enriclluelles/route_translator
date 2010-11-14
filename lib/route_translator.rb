@@ -162,13 +162,10 @@ class RouteTranslator
         end
       end
 
-      if root_route = original_named_routes[:root]
-        add_root_route root_route, route_set
-      end
-
       original_named_routes.each_key do |route_name|
         route_set.named_routes.helpers.concat add_untranslated_helpers_to_controllers_and_views(route_name)
       end
+      
     end
 
     # Add unmodified root route to route_set
@@ -187,7 +184,7 @@ class RouteTranslator
     def add_untranslated_helpers_to_controllers_and_views old_name
       ['path', 'url'].map do |suffix|
         new_helper_name = "#{old_name}_#{suffix}"
-
+        
         ROUTE_HELPER_CONTAINER.each do |helper_container|
           helper_container.send :define_method, new_helper_name do |*args|
             send "#{old_name}_#{locale_suffix(I18n.locale)}_#{suffix}", *args
@@ -239,9 +236,6 @@ class RouteTranslator
       end
 
       new_path = "/#{locale}#{new_path}" if add_prefix? locale
-      # if add_prefix? locale
-      #   new_path = "/:#{LOCALE_PARAM_KEY}" + new_path
-      # end
 
       new_path.blank? ? '/' : new_path
     end
