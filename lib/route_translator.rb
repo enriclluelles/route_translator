@@ -1,6 +1,5 @@
-# This is my attempt at a restructured TranslateRoutes.
-# I packed everything into a class, which manages the dictionary,
-# and can operate on a specific RouteSet. This class knows nothing
+
+# This class knows nothing
 # about Rails.root or Rails.application.routes, and therefor is easier to
 # test without an Rails App.
 class RouteTranslator
@@ -15,7 +14,7 @@ class RouteTranslator
 
   # Attributes
 
-  attr_accessor :prefix_on_default_locale, :dictionary
+  attr_accessor :dictionary
 
   def available_locales
     @available_locales ||= I18n.available_locales.map(&:to_s)
@@ -213,11 +212,9 @@ class RouteTranslator
       [route.app, conditions, requirements, defaults, new_name]
     end
 
-    # Check if a prefix for locale should be added. Is true for all
-    # non-default locales. A prefix for the default_locale can be forced
-    # by setting +prefix_on_default_locale+ to +true+
+    # Add prefix for all non-default locales
     def add_prefix? locale
-      @prefix_on_default_locale || !default_locale?(locale)
+      !default_locale?(locale)
     end
 
     # Translates a path and adds the locale prefix.
@@ -270,10 +267,6 @@ class RouteTranslator
     end
   end
   include Translator
-
-  def initialize
-    @prefix_on_default_locale = false
-  end
 
   def locale_suffix locale
     self.class.locale_suffix locale
