@@ -1,0 +1,1 @@
+require 'route_translator'
