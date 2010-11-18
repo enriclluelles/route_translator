@@ -219,22 +219,12 @@ class RouteTranslator
 
     # Translates a path and adds the locale prefix.
     def translate_path path, locale
-      # Hack, please enlighten me with a better way.
-      # without this, formatted root routes "/(.:format)" would translate to
-      # "/de/(.:format)", which doesnt recognize "/de" (but "/de/")
-      new_path = if path == "/(.:format)"
-        ""
-      else
-        segments = path.split("/").map do |path_segment|
-          translate_path_segment(path_segment, locale)
-        end
-
-        segments.join "/"
-      end
-
+      final_optional_segments = path.match(/(\(.+\))$/)[1] rescue nil   # i.e: (.:format)
+      path_segments = path.gsub(final_optional_segments,'').split("/")
+      new_path = path_segments.map{ |seg| translate_path_segment(seg, locale) }.join('/')
       new_path = "/#{locale}#{new_path}" if add_prefix? locale
-
-      new_path.blank? ? '/' : new_path
+      new_path = '/' if new_path.blank?
+      final_optional_segments ? new_path + final_optional_segments : new_path
     end
 
     # Tries to translate a single path segment. If the path segment

@@ -90,8 +90,7 @@ class TranslateRoutesTest < ActionController::TestCase
     
     # we check the string representation of the route,
     # if it stores locale as a dynamic segment it would be represented as: "/:locale/gente"
-    people_es = @routes.routes.select{ |r| r.name == 'people_es' }.first
-    assert_equal "/es/gente", people_es.to_s.split(' ')[1]
+    assert_equal "/es/gente(.:format)", path_string(named_route('people_es'))
   end
   
   def test_named_empty_route_without_prefix
@@ -148,6 +147,16 @@ class TranslateRoutesTest < ActionController::TestCase
     assert_routing '/es/gente', :controller => 'people', :action => 'index', :locale => 'es'
     assert_helpers_include :people_en, :people_es, :people
   end
+
+  def test_formatted_root_route
+    @routes.draw{ root :to => 'people#index', :as => 'root' }
+    @route_translator.yield_dictionary { |t| t['en'] = {}; t['es'] = {'people' => 'gente'} }
+    assert_equal '/(.:format)', path_string(named_route('root'))
+    translate_routes
+    assert_equal '/(.:format)', path_string(named_route('root_en'))
+    assert_equal '/es(.:format)', path_string(named_route('root_es'))
+  end
+  
   
   def test_languages_load_from_file
     @routes.draw { match 'people', :to => 'people#index', :as => 'people'}
@@ -211,6 +220,17 @@ class TranslateRoutesTest < ActionController::TestCase
   end
 
   private
+
+  # Given a route defined as a string like this:
+  # 'ANY    /es(.:format)                            {:controller=>"people", :action=>"index"}'
+  # returns "/es(.:format)"
+  def path_string(route)
+    route.to_s.split(' ')[1]
+  end
+
+  def named_route(name)
+    @routes.routes.select{ |r| r.name == name }.first
+  end
 
   def assert_helpers_include(*helpers)
     helpers.each do |helper|
