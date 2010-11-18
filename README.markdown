@@ -85,6 +85,7 @@ Credits
   * [Kristian Mandrup](http://github.com/kristianmandrup)
   * [Pieter Visser](http://github.com/pietervisser)
   * [Marian Theisen](http://github.com/cice)
+  * [Enric Lluelles](http://github.com/enriclluelles)
 
 Rails routing resources
 -----------------------
