@@ -222,7 +222,7 @@ class RouteTranslator
       final_optional_segments = path.match(/(\(.+\))$/)[1] rescue nil   # i.e: (.:format)
       path_segments = path.gsub(final_optional_segments,'').split("/")
       new_path = path_segments.map{ |seg| translate_path_segment(seg, locale) }.join('/')
-      new_path = "/#{locale}#{new_path}" if add_prefix? locale
+      new_path = "/#{locale.downcase}#{new_path}" if add_prefix? locale
       new_path = '/' if new_path.blank?
       final_optional_segments ? new_path + final_optional_segments : new_path
     end
@@ -237,7 +237,7 @@ class RouteTranslator
 
       match = TRANSLATABLE_SEGMENT.match(segment)[1] rescue nil
 
-      translate_string(match, locale) || segment
+      (translate_string(match, locale) || segment).downcase
     end
 
     def translate_string str, locale
