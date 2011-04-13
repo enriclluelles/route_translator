@@ -247,6 +247,16 @@ class RouteTranslator
       [route.app, conditions, requirements, defaults, new_name]
     end
 
+    def untranslated_route route
+      conditions = { :path_info => route.path }
+      conditions[:request_method] = route.conditions[:request_method].source.upcase if route.conditions.has_key? :request_method
+      requirements = {}
+      route.requirements.each do |k,v|
+        requirements[k] = v.class == Symbol ? v.to_s : v
+      end
+
+      [route.app, conditions, requirements, route.defaults, route.name]
+    end
     # Add prefix for all non-default locales
     def add_prefix? locale
       !default_locale?(locale)
