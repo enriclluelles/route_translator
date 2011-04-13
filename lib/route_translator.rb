@@ -336,7 +336,6 @@ ActionController::Base.class_eval do
   # called by before_filter
   def set_locale_from_url
     I18n.locale = params[RouteTranslator::LOCALE_PARAM_KEY]
-    default_url_options.merge! RouteTranslator::LOCALE_PARAM_KEY => I18n.locale
   end
 end
 
