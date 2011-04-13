@@ -80,9 +80,9 @@ class RouteTranslator
     private
 
     def localized
-      routes_before = @set.routes.map(&:to_s)
+      routes_before = @set.routes.map(&:identifier)
       yield
-      routes_after = @set.routes.map(&:to_s)
+      routes_after = @set.routes.map(&:identifier)
       @set.localized_routes ||= []
       @set.localized_routes.concat(routes_after - routes_before)
       @set.localized_routes.uniq!
@@ -181,7 +181,7 @@ class RouteTranslator
       route_set.valid_conditions.push :locale
 
       original_routes.each do |original_route|
-        if localized_routes && localized_routes.include?(original_route.to_s) then
+        if localized_routes && localized_routes.include?(original_route.identifier) then
           translations_for(original_route).each do |translated_route_args|
             route_set.add_route *translated_route_args
           end
@@ -191,7 +191,7 @@ class RouteTranslator
         end
       end
 
-      Hash[original_named_routes.select{|k,v| localized_routes && localized_routes.include?(v.to_s)}].each_key do |route_name|
+      Hash[original_named_routes.select{|k,v| localized_routes && localized_routes.include?(v.identifier)}].each_key do |route_name|
         route_set.named_routes.helpers.concat add_untranslated_helpers_to_controllers_and_views(route_name)
       end
       
@@ -327,6 +327,12 @@ module ActionDispatch
         end
       end
     end
+  end
+end
+
+ActionDispatch::Routing::Route.class_eval do
+  def identifier
+    "#{name} #{self.to_s}"
   end
 end
 
