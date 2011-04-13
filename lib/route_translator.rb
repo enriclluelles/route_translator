@@ -240,6 +240,7 @@ class RouteTranslator
       conditions = { :path_info => translate_path(route.path, locale) }
       conditions[:request_method] = route.conditions[:request_method].source.upcase if route.conditions.has_key? :request_method
       requirements = route.requirements.merge LOCALE_PARAM_KEY => locale
+      requirements[:method] = route.requirements[:method].to_s if route.requirements.has_key? :method
       defaults = route.defaults.merge LOCALE_PARAM_KEY => locale
       new_name = "#{route.name}_#{locale_suffix(locale)}" if route.name
 
