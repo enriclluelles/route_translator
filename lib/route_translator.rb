@@ -3,7 +3,7 @@
 # about Rails.root or Rails.application.routes, and therefor is easier to
 # test without an Rails App.
 class RouteTranslator
-  TRANSLATABLE_SEGMENT = /^(\w+)(\()?/.freeze
+  TRANSLATABLE_SEGMENT = /^([-_a-zA-Z0-9]+)(\()?/.freeze
   LOCALE_PARAM_KEY = :locale.freeze
   ROUTE_HELPER_CONTAINER = [
     ActionController::Base,
