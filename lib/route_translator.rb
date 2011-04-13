@@ -68,6 +68,30 @@ class RouteTranslator
     end
   end
 
+
+  module RouteSet
+    attr_accessor :localized_routes
+  end
+
+
+
+  module Mapper
+
+    private
+
+    def localized
+      routes_before = @set.routes.map(&:to_s)
+      yield
+      routes_after = @set.routes.map(&:to_s)
+      @set.localized_routes ||= []
+      @set.localized_routes.concat(routes_after - routes_before)
+      @set.localized_routes.uniq!
+    end
+
+  end
+
+
+
   module DictionaryManagement
     # Resets dictionary and yields the block wich can be used to manually fill the dictionary
     # with translations e.g.
@@ -150,18 +174,23 @@ class RouteTranslator
 
       # save original routes and clear route set
       original_routes = route_set.routes.dup                     # Array [routeA, routeB, ...]
-
+      localized_routes = route_set.localized_routes              # We obtain the string form of the routes we want to localize
       original_named_routes = route_set.named_routes.routes.dup  # Hash {:name => :route}
 
       reset_route_set route_set
 
       original_routes.each do |original_route|
-        translations_for(original_route).each do |translated_route_args|
-          route_set.add_route *translated_route_args
+        if localized_routes && localized_routes.include?(original_route.to_s) then
+          translations_for(original_route).each do |translated_route_args|
+            route_set.add_route *translated_route_args
+          end
+        else
+          route = untranslated_route original_route
+          route_set.add_route *route
         end
       end
 
-      original_named_routes.each_key do |route_name|
+      Hash[original_named_routes.select{|k,v| localized_routes && localized_routes.include?(v.to_s)}].each_key do |route_name|
         route_set.named_routes.helpers.concat add_untranslated_helpers_to_controllers_and_views(route_name)
       end
       
@@ -304,3 +333,7 @@ RouteTranslator::ROUTE_HELPER_CONTAINER.each do |klass|
     end
   end
 end
+
+
+ActionDispatch::Routing::Mapper.send    :include, RouteTranslator::Mapper
+ActionDispatch::Routing::RouteSet.send  :include, RouteTranslator::RouteSet
