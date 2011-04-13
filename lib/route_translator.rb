@@ -178,6 +178,7 @@ class RouteTranslator
       original_named_routes = route_set.named_routes.routes.dup  # Hash {:name => :route}
 
       reset_route_set route_set
+      route_set.valid_conditions.push :locale
 
       original_routes.each do |original_route|
         if localized_routes && localized_routes.include?(original_route.to_s) then
