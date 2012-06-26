@@ -1,8 +1,6 @@
 require 'test/unit'
-require 'rubygems'
 require 'mocha'
 
-%w(actionpack activesupport actionmailer).each{ |gem_lib| gem gem_lib, '3.0.1' }
 %w(active_support action_pack action_mailer action_controller action_dispatch).each{ |lib| require lib }
 
 plugin_root = File.join(File.dirname(__FILE__), '..')

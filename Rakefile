@@ -1,25 +1,9 @@
 require 'rake'
 require 'rake/testtask'
-require 'rake/rdoctask'
+require 'rdoc/task'
 
 desc 'Default: run unit tests.'
 task :default => :test
-
-begin
-  require 'jeweler'
-  Jeweler::Tasks.new do |gem|
-    gem.name = "translate_routes"
-    gem.summary = %Q{Translate your Rails routes in a simple manner}
-    gem.description = %Q{Translates the Rails routes of your application into the languages defined in your locale files}
-    gem.email = "raul@murciano.net"
-    gem.homepage = "http://github.com/raul/translate_routes"
-    gem.authors = ["Raul Murciano"]
-    gem.files = Dir.glob('lib/**/*.rb')
-  end
-  Jeweler::GemcutterTasks.new
-rescue LoadError
-  puts "Jeweler (or a dependency) not available. Install it with: gem install jeweler"
-end
 
 desc 'Test the translate_routes plugin.'
 Rake::TestTask.new(:test) do |t|

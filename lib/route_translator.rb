@@ -1,10 +1,12 @@
+require 'journey'
+
 
 # This class knows nothing
 # about Rails.root or Rails.application.routes, and therefor is easier to
 # test without an Rails App.
 class RouteTranslator
   TRANSLATABLE_SEGMENT = /^([-_a-zA-Z0-9]+)(\()?/.freeze
-  LOCALE_PARAM_KEY = :locale.freeze
+  LOCALE_PARAM_KEY = :locale
   ROUTE_HELPER_CONTAINER = [
     ActionController::Base,
     ActionView::Base,
@@ -80,9 +82,9 @@ class RouteTranslator
     private
 
     def localized
-      routes_before = @set.routes.map(&:identifier)
+      routes_before = @set.routes.map(&:to_s)
       yield
-      routes_after = @set.routes.map(&:identifier)
+      routes_after = @set.routes.map(&:to_s)
       @set.localized_routes ||= []
       @set.localized_routes.concat(routes_after - routes_before)
       @set.localized_routes.uniq!
@@ -177,21 +179,28 @@ class RouteTranslator
       localized_routes = route_set.localized_routes              # We obtain the string form of the routes we want to localize
       original_named_routes = route_set.named_routes.routes.dup  # Hash {:name => :route}
 
-      reset_route_set route_set
-      route_set.valid_conditions.push :locale
+      # route_set.valid_conditions.push :locale
 
+      routes_to_create = []
       original_routes.each do |original_route|
-        if localized_routes && localized_routes.include?(original_route.identifier) then
+        if localized_routes && localized_routes.include?(original_route.to_s) then
           translations_for(original_route).each do |translated_route_args|
-            route_set.add_route *translated_route_args
+            routes_to_create << translated_route_args
           end
         else
           route = untranslated_route original_route
-          route_set.add_route *route
+          routes_to_create << route
         end
       end
 
-      Hash[original_named_routes.select{|k,v| localized_routes && localized_routes.include?(v.identifier)}].each_key do |route_name|
+      reset_route_set route_set
+
+      routes_to_create.each do |r|
+        route_set.add_route(*r)
+      end
+
+
+      Hash[original_named_routes.select{|k,v| localized_routes && localized_routes.include?(v.to_s)}].each_key do |route_name|
         route_set.named_routes.helpers.concat add_untranslated_helpers_to_controllers_and_views(route_name)
       end
       
@@ -231,32 +240,44 @@ class RouteTranslator
     # Generate translations for a single route for all available locales
     def translations_for route
       available_locales.map do |locale|
-        translate_route route, locale
+        translate_route(route, locale.dup) #we duplicate the locale string to ensure it's not frozen
       end
     end
 
     # Generate translation for a single route for one locale
     def translate_route route, locale
-      conditions = { :path_info => translate_path(route.path, locale) }
-      conditions[:request_method] = route.conditions[:request_method].source.upcase if route.conditions.has_key? :request_method
-      requirements = route.requirements.merge LOCALE_PARAM_KEY => locale
-      requirements[:method] = route.requirements[:method].to_s if route.requirements.has_key? :method
-      defaults = route.defaults.merge LOCALE_PARAM_KEY => locale
+      path_regex = route.path.respond_to?(:spec) ? route.path.spec : route.path
+
+      conditions = route.conditions.dup.merge({
+        :path_info => translate_path(path_regex.dup.to_s, locale)
+      })
+
+      conditions[:request_method] = request_method_array(conditions[:request_method]) if conditions[:request_method]
+
+      requirements = route.requirements.dup.merge!(LOCALE_PARAM_KEY => locale)
+      defaults = route.defaults.dup.merge LOCALE_PARAM_KEY => locale
+
       new_name = "#{route.name}_#{locale_suffix(locale)}" if route.name
 
       [route.app, conditions, requirements, defaults, new_name]
     end
 
     def untranslated_route route
-      conditions = { :path_info => route.path }
-      conditions[:request_method] = route.conditions[:request_method].source.upcase if route.conditions.has_key? :request_method
-      requirements = {}
-      route.requirements.each do |k,v|
-        requirements[k] = v.class == Symbol ? v.to_s : v
-      end
+      path_regex = route.path.respond_to?(:spec) ? route.path.spec : route.path
 
-      [route.app, conditions, requirements, route.defaults, route.name]
+      conditions = route.conditions.dup.merge({
+        :path_info => path_regex.to_s
+      })
+
+      conditions[:request_method] = request_method_array(conditions[:request_method]) if conditions[:request_method]
+
+      [route.app, conditions, route.requirements.dup, route.defaults.dup, route.name]
     end
+
+    def request_method_array(reg)
+      reg.source.gsub(%r{\^|\$}, "").split("|")
+    end
+
     # Add prefix for all non-default locales
     def add_prefix? locale
       !default_locale?(locale)
@@ -327,12 +348,6 @@ module ActionDispatch
         end
       end
     end
-  end
-end
-
-ActionDispatch::Routing::Route.class_eval do
-  def identifier
-    "#{name} #{self.to_s}"
   end
 end
 
