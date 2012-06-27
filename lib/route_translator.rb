@@ -303,7 +303,7 @@ class RouteTranslator
 
       match = TRANSLATABLE_SEGMENT.match(segment)[1] rescue nil
 
-      (translate_string(match, locale) || segment).downcase
+      (translate_string(match, locale) || segment)
     end
 
     def translate_string str, locale
