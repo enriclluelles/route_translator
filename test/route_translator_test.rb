@@ -199,10 +199,10 @@ class TranslateRoutesTest < ActionController::TestCase
       end
     end
     @route_translator.yield_dictionary { |t| t['en'] = {}; t['es'] = {'people' => 'gente'} }
-    assert_equal '/(.:format)', path_string(named_route('root'))
+    assert_equal '/', path_string(named_route('root'))
     translate_routes
-    assert_equal '/(.:format)', path_string(named_route('root_en'))
-    assert_equal '/es(.:format)', path_string(named_route('root_es'))
+    assert_equal '/', path_string(named_route('root_en'))
+    assert_equal '/es', path_string(named_route('root_es'))
   end
 
   def test_routes_locale_prefixes_are_never_downcased
@@ -333,11 +333,11 @@ class TranslateRoutesTest < ActionController::TestCase
   # 'ANY    /es(.:format)                            {:controller=>"people", :action=>"index"}'
   # returns "/es(.:format)"
   def path_string(route)
-    route.to_s.split(' ')[1]
+    route.respond_to?(:path) ? route.path.spec.to_s : route.to_s.split(' ')[1]
   end
 
   def named_route(name)
-    @routes.routes.select{ |r| r.name == name }.first
+    @routes.routes.detect{ |r| r.name == name }
   end
 
   def assert_helpers_include(*helpers)
