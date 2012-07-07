@@ -204,20 +204,8 @@ class TranslateRoutesTest < ActionController::TestCase
     assert_equal '/(.:format)', path_string(named_route('root_en'))
     assert_equal '/es(.:format)', path_string(named_route('root_es'))
   end
-  
-  def test_routes_translations_are_always_downcased
-    @routes.draw do
-      localized do
-        match 'people', :to => 'people#index', :as => 'people'
-      end
-    end
-    config_default_locale_settings 'en'
-    @route_translator.yield_dictionary { |t| t['en'] = {}; t['es'] = {'people' => 'Gente'} }
-    translate_routes
-    assert_routing '/es/gente', :controller => 'people', :action => 'index', :locale => 'es'
-  end
 
-  def test_routes_locale_prefixes_are_always_downcased
+  def test_routes_locale_prefixes_are_never_downcased
     @routes.draw do
       localized do
         match 'people', :to => 'people#index', :as => 'people'
@@ -226,7 +214,7 @@ class TranslateRoutesTest < ActionController::TestCase
     config_default_locale_settings 'en'
     @route_translator.yield_dictionary { |t| t['en'] = {}; t['ES'] = {'people' => 'Gente'} }
     translate_routes
-    assert_routing '/es/gente', :controller => 'people', :action => 'index', :locale => 'ES'
+    assert_routing '/es/Gente', :controller => 'people', :action => 'index', :locale => 'ES'
   end
   
   def test_languages_load_from_file
