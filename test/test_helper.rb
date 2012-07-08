@@ -20,7 +20,8 @@ end
 module RouteTranslator
   module TestHelper
     def path_string(route)
-      route.respond_to?(:path) ? route.path.spec.to_s : route.to_s.split(' ')[1]
+      path = route.respond_to?(:path) ? route.path : route.to_s.split(' ')[1]
+      path.respond_to?(:spec) ? path.spec.to_s : path.to_s
     end
 
     def named_route(name)
