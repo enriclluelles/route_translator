@@ -1,8 +1,7 @@
 require 'test/unit'
 require 'mocha'
 
-%w(active_support action_pack action_mailer
-   action_controller action_dispatch).each{ |lib| require lib }
+%w(action_mailer action_controller action_dispatch).each{|lib| require lib}
 
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'lib', 'route_translator'))
 require File.expand_path(File.join(File.dirname(__FILE__), '.', 'test_helper'))
@@ -32,7 +31,7 @@ class TranslateRoutesTest < ActionController::TestCase
       end
     end
     config_default_locale_settings 'en'
-    @routes.translate_with_dictionary { |t| t['en'] = {}; t['es'] = {'people' => 'gente'} }
+    @routes.translate_with_dictionary{|t| t['en'] = {}; t['es'] = {'people' => 'gente'} }
 
     assert_routing '/', :controller => 'people', :action => 'index', :locale => 'en'
     assert_routing '/es', :controller => 'people', :action => 'index', :locale => 'es'
@@ -60,12 +59,12 @@ class TranslateRoutesTest < ActionController::TestCase
       end
     end
     config_default_locale_settings 'en'
-    @routes.translate_with_dictionary { |t| t['en'] = {}; t['es'] = {'people' => 'gente'} }
+    @routes.translate_with_dictionary{|t| t['en'] = {}; t['es'] = {'people' => 'gente'} }
 
     assert_routing '/es/foo', :controller => 'people', :action => 'index', :locale => 'es'
     assert_routing '/foo', :controller => 'people', :action => 'index', :locale => 'en'
   end
-  
+
   def test_unnamed_translated_route_on_default_locale
     @routes.draw { match 'people', :to => 'people#index' }
     @routes.draw do
@@ -76,12 +75,12 @@ class TranslateRoutesTest < ActionController::TestCase
 
     config_default_locale_settings 'es'
 
-    @routes.translate_with_dictionary { |t| t['en'] = {}; t['es'] = {'people' => 'gente'} }
+    @routes.translate_with_dictionary{|t| t['en'] = {}; t['es'] = {'people' => 'gente'} }
 
     assert_routing '/en/people', :controller => 'people', :action => 'index', :locale => 'en'
     assert_routing '/gente', :controller => 'people', :action => 'index', :locale => 'es'
   end
-  
+
   def test_unnamed_translated_route_on_non_default_locale
     @routes.draw do
       localized do
@@ -89,7 +88,7 @@ class TranslateRoutesTest < ActionController::TestCase
       end
     end
     config_default_locale_settings 'en'
-    @routes.translate_with_dictionary { |t| t['en'] = {}; t['es'] = {'people' => 'gente'} }
+    @routes.translate_with_dictionary{|t| t['en'] = {}; t['es'] = {'people' => 'gente'} }
 
     assert_routing '/es/gente', :controller => 'people', :action => 'index', :locale => 'es'
     assert_routing '/people', :controller => 'people', :action => 'index', :locale => 'en'
@@ -102,7 +101,7 @@ class TranslateRoutesTest < ActionController::TestCase
       end
     end
     config_default_locale_settings 'en'
-    @routes.translate_with_dictionary { |t| t['en'] = {}; t['es'] = {'people' => 'gente'} }
+    @routes.translate_with_dictionary{|t| t['en'] = {}; t['es'] = {'people' => 'gente'} }
 
     # we check the string representation of the route,
     # if it stores locale as a dynamic segment it would be represented as: "/:locale/gente"
@@ -116,7 +115,7 @@ class TranslateRoutesTest < ActionController::TestCase
       end
     end
     config_default_locale_settings 'es'
-    @routes.translate_with_dictionary { |t|  t['es'] = {};  t['en'] = {'people' => 'gente'}; }
+    @routes.translate_with_dictionary{|t|  t['es'] = {};  t['en'] = {'people' => 'gente'}; }
 
     assert_routing '/en', :controller => 'people', :action => 'index', :locale => 'en'
     assert_routing '/', :controller => 'people', :action => 'index', :locale => 'es'
@@ -138,7 +137,7 @@ class TranslateRoutesTest < ActionController::TestCase
     assert_routing '/en', :controller => 'people', :action => 'index', :locale => 'en'
     assert_unrecognized_route '/es', :controller => 'people', :action => 'index', :locale => 'es'
   end
-  
+
   def test_named_untranslated_route_without_prefix
     @routes.draw do
       localized do
@@ -152,7 +151,7 @@ class TranslateRoutesTest < ActionController::TestCase
     assert_routing 'foo', :controller => 'people', :action => 'index', :locale => 'es'
     assert_helpers_include :people_en, :people_es, :people
   end
-  
+
   def test_named_translated_route_on_default_locale_without_prefix
     @routes.draw do
       localized do
@@ -242,7 +241,7 @@ class TranslateRoutesTest < ActionController::TestCase
     assert_routing '/es/gente', :controller => 'people', :action => 'index', :locale => 'es'
     assert_helpers_include :people_fr, :people_en, :people_es, :people
   end
-  
+
   def test_i18n_based_translations_setting_locales
     @routes.draw do
       localized do
@@ -310,15 +309,15 @@ class TranslateRoutesTest < ActionController::TestCase
     assert_routing '/products', :controller => 'products', :action => 'index'
     assert_unrecognized_route '/es/productos', :controller => 'products', :action => 'index', :locale => 'es'
   end
-  
+
   def test_action_controller_gets_locale_setter
     ActionController::Base.instance_methods.include?('set_locale_from_url')
   end
-  
+
   def test_action_controller_gets_locale_suffix_helper
     ActionController::Base.instance_methods.include?('locale_suffix')
   end
-  
+
   def test_action_view_gets_locale_suffix_helper
     ActionView::Base.instance_methods.include?('locale_suffix')
   end
