@@ -1,0 +1,11 @@
+script: "bundle exec rake test"
+rvm:
+  - ree
+  - 1.9.3
+  - rbx
+  - jruby
+gemfile:
+  - gemfiles/Gemfile.rails-2.3.x
+  - gemfiles/Gemfile.rails-3.0.x
+  - gemfiles/Gemfile.rails-3.1.x
+  - Gemfile
