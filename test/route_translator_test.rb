@@ -1,10 +1,9 @@
 require 'test/unit'
 require 'mocha'
 
-%w(action_mailer action_controller action_dispatch).each{|lib| require lib}
+require 'route_translator'
 
-require File.expand_path(File.join(File.dirname(__FILE__), '..', 'lib', 'route_translator'))
-require File.expand_path(File.join(File.dirname(__FILE__), '.', 'test_helper'))
+require File.expand_path(File.join(File.dirname(__FILE__), 'test_helper'))
 
 
 class PeopleController < ActionController::Base;  end
