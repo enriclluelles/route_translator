@@ -1,4 +1,8 @@
-require File.expand_path(File.join(File.dirname(__FILE__), 'route_translator', 'route_set'))
+require 'active_support'
+require 'action_controller'
+require 'action_mailer'
+require 'action_dispatch'
+require 'route_translator/route_set'
 
 module RouteTranslator
 
