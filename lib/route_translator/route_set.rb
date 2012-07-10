@@ -23,7 +23,8 @@ module RouteTranslator
     end
 
     #Use the translations from the specified file
-    def translate_from_file(file_path)
+    def translate_from_file(file_path = nil)
+      file_path ||= defined?(Rails) && File.join(Rails.root, %w(config i18-routes.yml))
       load_dictionary_from_file(file_path)
       translate
     end
