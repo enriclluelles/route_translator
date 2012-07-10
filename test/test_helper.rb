@@ -28,6 +28,10 @@ module RouteTranslator
       @routes.routes.detect{ |r| r.name == name }
     end
 
+    def formatted_root_route?
+      !(defined?(ActionPack) && ActionPack::VERSION::MAJOR == 3 && ActionPack::VERSION::MINOR > 0)
+    end
+
     def assert_helpers_include(*helpers)
       helpers.each do |helper|
         ['url', 'path'].each do |suffix|

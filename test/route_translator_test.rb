@@ -147,7 +147,7 @@ class TranslateRoutesTest < ActionController::TestCase
     @routes.translate_with_dictionary{ |t| t['en'] = {}; t['es'] = {'people' => 'gente'} }
 
     assert_routing '/en/foo', :controller => 'people', :action => 'index', :locale => 'en'
-    assert_routing 'foo', :controller => 'people', :action => 'index', :locale => 'es'
+    assert_routing '/foo', :controller => 'people', :action => 'index', :locale => 'es'
     assert_helpers_include :people_en, :people_es, :people
   end
 
@@ -189,12 +189,16 @@ class TranslateRoutesTest < ActionController::TestCase
         root :to => 'people#index', :as => 'root'
       end
     end
-    assert_equal '/', path_string(named_route('root'))
 
     @routes.translate_with_dictionary{ |t| t['en'] = {}; t['es'] = {'people' => 'gente'} }
 
-    assert_equal '/', path_string(named_route('root_en'))
-    assert_equal '/es', path_string(named_route('root_es'))
+    if formatted_root_route?
+      assert_equal '/(.:format)', path_string(named_route('root_en'))
+      assert_equal '/es(.:format)', path_string(named_route('root_es'))
+    else
+      assert_equal '/', path_string(named_route('root_en'))
+      assert_equal '/es', path_string(named_route('root_es'))
+    end
   end
 
   def test_routes_locale_prefixes_are_never_downcased
