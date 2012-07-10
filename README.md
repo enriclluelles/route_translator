@@ -126,3 +126,9 @@ Quick Start
     ```ruby
         before_filter :set_locale_from_url
     ```
+
+Contributing
+------------
+
+Bring it! Send me a pull request, don't worry about styling or small
+details, I'm open to discussion
