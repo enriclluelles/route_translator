@@ -9,3 +9,4 @@ for file in gemfiles/* Gemfile; do
   rm $file.lock &> /dev/null
   echo -e "\n\n"
 done
+export BUNDLE_GEMFILE=
