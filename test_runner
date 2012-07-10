@@ -1,9 +1,11 @@
 #!/usr/bin/env bash
 
 for file in gemfiles/* Gemfile; do
-  rm $file.lock
+  echo Using $file
+  rm $file.lock &> /dev/null
   export BUNDLE_GEMFILE=$file
-  bundle install
+  bundle install > /dev/null
   bundle exec rake test
-  rm $file.lock
+  rm $file.lock &> /dev/null
+  echo -e "\n\n"
 done
