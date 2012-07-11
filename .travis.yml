@@ -1,6 +1,9 @@
 script: "bundle exec rake test"
 rvm:
   - 1.9.3
+  - 1.9.2
+  - ree
+  - jruby
 gemfile:
   - gemfiles/Gemfile.rails-3.0.x
   - gemfiles/Gemfile.rails-3.1.x
