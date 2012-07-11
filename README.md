@@ -118,7 +118,7 @@ Quick Start
                    DELETE /fr/voitures/:id(.:format)      cars#destroy {:locale=>"fr"}
     ```
 
-    Note that the route inside a `localized` are translated
+    Note that only the routes inside a `localized` block are translated
 
 5. Include this filter in your `ApplicationController` if you want to set
    the I18n.locale value from the value set in the route
