@@ -12,11 +12,16 @@ module RouteTranslator
 
         routes_to_create = []
         original_routes.each do |original_route|
-          if localized_routes && localized_routes.include?(original_route.to_s) then
+          if localized_routes && localized_routes.include?(original_route.to_s)
             translations_for(original_route).each do |translated_route_args|
               routes_to_create << translated_route_args
             end
           else
+            route = untranslated_route original_route
+            routes_to_create << route
+          end
+          # Always generate unlocalized routes?
+          if RouteTranslator.config.generate_unlocalized_routes
             route = untranslated_route original_route
             routes_to_create << route
           end
@@ -106,7 +111,12 @@ module RouteTranslator
         final_optional_segments = path.slice!(/(\(.+\))$/)
         new_path = path.split("/").map{|seg| translate_path_segment(seg, locale)}.join('/')
 
-        if RouteTranslator.config.force_locale || !default_locale?(locale)
+        # Add locale prefix if it's not the default locale,
+        # or forcing locale to all routes,
+        # or already generating actual unlocalized routes
+        if !default_locale?(locale) ||
+          RouteTranslator.config.force_locale ||
+          RouteTranslator.config.generate_unlocalized_routes
           new_path = "/#{locale.downcase}#{new_path}"
         end
 

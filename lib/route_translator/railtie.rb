@@ -5,6 +5,7 @@ module RouteTranslator
     initializer "route_translator.set_configs" do |app|
       options = app.config.route_translator
       options.force_locale ||= false
+      options.generate_unlocalized_routes ||= false
 
       ActiveSupport.on_load :route_translator do
         options.each do |k, v|
