@@ -69,8 +69,9 @@ Quick Start
         end
       end
 
-      MyApp::Application.routes.translate_from_file #you can pass the file path as a param here
-                                                    #the deault is config/i18n-routes.yml
+      MyApp::Application.routes.translate_from_file
+      # You may pass the file path as a param here,
+      # default is config/i18n-routes.yml
    ```
 
     And add the translations to a YAML file, for example
