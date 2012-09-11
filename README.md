@@ -128,6 +128,26 @@ Quick Start
         before_filter :set_locale_from_url
     ```
 
+Configuration
+-------------
+
+To configure RouteTranslator via rails use `config.route_translator` in your
+application and/or environment files to set configuration properties that will
+be passed to RouteTranslator.
+
+### Example
+
+```ruby
+MyProject::Application.configure do
+  config.route_translator.force_locale = true
+end
+```
+
+### Available Configurations
+
+* **force_locale** - Set this options to `true` to force the locale to be added
+to all generated route paths, even for the default locale. Defaults to `false`
+
 Contributing
 ------------
 
