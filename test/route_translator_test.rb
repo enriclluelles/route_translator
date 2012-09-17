@@ -17,10 +17,18 @@ class TranslateRoutesTest < ActionController::TestCase
     I18n.default_locale = locale
   end
 
+  def config_force_locale (force)
+    RouteTranslator.config.force_locale = force
+  end
+
   def setup
     @controller = ActionController::Base.new
     @view = ActionView::Base.new
     @routes = ActionDispatch::Routing::RouteSet.new
+  end
+
+  def teardown
+    config_force_locale(false)
   end
 
   def test_unnamed_root_route
@@ -311,6 +319,22 @@ class TranslateRoutesTest < ActionController::TestCase
     assert_routing '/es/gente', :controller => 'people', :action => 'index', :locale => 'es'
     assert_routing '/products', :controller => 'products', :action => 'index'
     assert_unrecognized_route '/es/productos', :controller => 'products', :action => 'index', :locale => 'es'
+  end
+
+  def test_force_locale
+    @routes.draw do
+      localized do
+        match 'people', :to => 'people#index', :as => 'people'
+      end
+    end
+
+    config_default_locale_settings 'en'
+    config_force_locale true
+
+    @routes.translate_from_file(File.expand_path('locales/routes.yml', File.dirname(__FILE__)))
+
+    assert_routing '/en/people', :controller => 'people', :action => 'index', :locale => 'en'
+    assert_unrecognized_route '/people', :controller => 'people', :action => 'index'
   end
 
   def test_action_controller_gets_locale_setter

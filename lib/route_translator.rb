@@ -2,7 +2,9 @@ require 'active_support'
 require 'action_controller'
 require 'action_mailer'
 require 'action_dispatch'
+
 require 'route_translator/route_set'
+require 'route_translator/railtie' if defined?(Rails::Railtie)
 
 module RouteTranslator
 
@@ -15,8 +17,14 @@ module RouteTranslator
     ActionDispatch::Routing::UrlFor
   ].freeze
 
+  Configuration = Struct.new(:force_locale)
+
   def self.locale_suffix locale
     locale.to_s.underscore
+  end
+
+  def self.config
+    @config ||= Configuration.new
   end
 
   # Attributes
@@ -40,6 +48,7 @@ module RouteTranslator
     end
   end
 
+  ActiveSupport.run_load_hooks(:route_translator, self)
 end
 
 # Add locale_suffix to controllers, views and mailers
