@@ -1,10 +1,13 @@
 require 'test/unit'
 require 'mocha'
 
+require "rails"
+require "action_controller/railtie"
+
 require 'route_translator'
+require "route_translator/test_request"
 
 require File.expand_path(File.join(File.dirname(__FILE__), 'test_helper'))
-
 
 class PeopleController < ActionController::Base;  end
 class ProductsController < ActionController::Base;  end
@@ -21,7 +24,13 @@ class TranslateRoutesTest < ActionController::TestCase
     RouteTranslator.config.force_locale = force
   end
 
+  def config_translation_file (file)
+    RouteTranslator.config.translation_file = file
+  end
+
   def setup
+    setup_application
+
     @controller = ActionController::Base.new
     @view = ActionView::Base.new
     @routes = ActionDispatch::Routing::RouteSet.new
@@ -29,6 +38,9 @@ class TranslateRoutesTest < ActionController::TestCase
 
   def teardown
     config_force_locale(false)
+    config_default_locale_settings("en")
+    app_file routes_config, ""
+    FileUtils.rm_rf "#{tmp_path}/log"
   end
 
   def test_unnamed_root_route
@@ -335,6 +347,43 @@ class TranslateRoutesTest < ActionController::TestCase
 
     assert_routing '/en/people', :controller => 'people', :action => 'index', :locale => 'en'
     assert_unrecognized_route '/people', :controller => 'people', :action => 'index'
+  end
+
+  def test_config_translation_file
+    @routes.draw do
+      localized do
+        root :to => 'people#index'
+      end
+    end
+
+    config_default_locale_settings 'es'
+    config_translation_file File.expand_path('locales/routes.yml', File.dirname(__FILE__))
+
+    @routes.translate_from_file
+
+    assert_routing '/', :controller => 'people', :action => 'index', :locale => 'es'
+    assert_routing '/en', :controller => 'people', :action => 'index', :locale => 'en'
+    assert_unrecognized_route '/es', :controller => 'people', :action => 'index', :locale => 'es'
+  end
+
+  def test_auto_translate
+    app_file routes_config, <<-RUBY
+      Rails.application.routes.draw do
+        localized do
+          root :to => 'people#index'
+        end
+      end
+    RUBY
+
+    config_default_locale_settings 'es'
+    config_translation_file File.expand_path('locales/routes.yml', File.dirname(__FILE__))
+    app.reload_routes!
+
+    @routes = app.routes
+
+    assert_routing '/', :controller => 'people', :action => 'index', :locale => 'es'
+    assert_routing '/en', :controller => 'people', :action => 'index', :locale => 'en'
+    assert_unrecognized_route '/es', :controller => 'people', :action => 'index', :locale => 'es'
   end
 
   def test_action_controller_gets_locale_setter
