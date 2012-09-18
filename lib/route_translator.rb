@@ -17,7 +17,7 @@ module RouteTranslator
     ActionDispatch::Routing::UrlFor
   ].freeze
 
-  Configuration = Struct.new(:force_locale)
+  Configuration = Struct.new(:force_locale, :generate_unlocalized_routes)
 
   def self.locale_suffix locale
     locale.to_s.underscore

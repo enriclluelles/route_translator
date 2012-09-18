@@ -145,8 +145,12 @@ end
 
 ### Available Configurations
 
-* **force_locale** - Set this options to `true` to force the locale to be added
-to all generated route paths, even for the default locale. Defaults to `false`
+* **force_locale** - Set this options to `true` to force the locale to be
+  added to all generated route paths, even for the default locale.
+  Defaults to `false`.
+* **generate_unlocalized_routes** - Set this option to `true` to add
+  translated routes without deleting original unlocalized versions.
+  Autosets `force_locale=true`. Defaults to `false`.
 
 Contributing
 ------------
