@@ -148,6 +148,9 @@ end
 * **force_locale** - Set this options to `true` to force the locale to be added
 to all generated route paths, even for the default locale. Defaults to `false`
 
+* **translation_file** - Sets the translation file(s) used for translating the
+routes. Defaults to `config/i18n-routes.yml`
+
 Contributing
 ------------
 
