@@ -9,6 +9,8 @@ module RouteTranslator
         # save original routes and clear route set
         original_routes = routes.dup
         original_named_routes = named_routes.routes.dup  # Hash {:name => :route}
+
+        # The filter method exists if the "routing-filter" gem is used
         original_filters = set.respond_to?(:filters) ? set.filters.dup : []
 
         routes_to_create = []
