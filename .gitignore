@@ -4,5 +4,6 @@ SampleApp/tmp/**/*
 SampleApp/db/test.sqlite3
 /.rvmrc
 /Gemfile.lock
+gemfiles/*.lock
 test/log
 test/tmp
