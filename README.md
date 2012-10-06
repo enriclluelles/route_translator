@@ -152,6 +152,9 @@ end
   translated routes without deleting original unlocalized versions.
   Autosets `force_locale=true`. Defaults to `false`.
 
+* **translation_file** - Sets the translation file(s) used for translating the
+routes. Defaults to `config/i18n-routes.yml`
+
 Contributing
 ------------
 

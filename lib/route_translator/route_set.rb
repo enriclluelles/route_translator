@@ -24,13 +24,24 @@ module RouteTranslator
 
     #Use the translations from the specified file
     def translate_from_file(file_path = nil)
-      file_path ||= defined?(Rails) && File.join(Rails.root, %w(config i18n-routes.yml))
+      file_path = absolute_path(file_path)
+
       reset_dictionary
       Dir[file_path].each do |file|
         add_dictionary_from_file(file)
       end
       translate
     end
+
+private
+
+    def absolute_path (file_path)
+      file_path ||= RouteTranslator.config.translation_file
+      file_path = Rails.root.join(file_path) if defined?(Rails)
+      file_path
+    end
+
+public
 
     include Helpers
     include Translator

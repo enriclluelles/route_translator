@@ -4,6 +4,7 @@ require 'action_mailer'
 require 'action_dispatch'
 
 require 'route_translator/route_set'
+require 'route_translator/routes_reloader'
 require 'route_translator/railtie' if defined?(Rails::Railtie)
 
 module RouteTranslator
@@ -17,7 +18,7 @@ module RouteTranslator
     ActionDispatch::Routing::UrlFor
   ].freeze
 
-  Configuration = Struct.new(:force_locale, :generate_unlocalized_routes)
+  Configuration = Struct.new(:force_locale, :generate_unlocalized_routes, :translation_file)
 
   def self.locale_suffix locale
     locale.to_s.underscore

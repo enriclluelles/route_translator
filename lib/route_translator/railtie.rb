@@ -6,6 +6,7 @@ module RouteTranslator
       options = app.config.route_translator
       options.force_locale ||= false
       options.generate_unlocalized_routes ||= false
+      options.translation_file ||= File.join(%w[config i18n-routes.yml])
 
       ActiveSupport.on_load :route_translator do
         options.each do |k, v|
