@@ -34,12 +34,16 @@ module RouteTranslator
     def setup_application
       return if defined?(@@app)
 
-      app = Class.new(Rails::Application)
+      app = @@app = Class.new(Rails::Application)
       app.config.active_support.deprecation = :stderr
       app.paths["log"] = "#{tmp_path}/log/test.log"
-      app.paths["config/routes"] = File.join(app_path, routes_config)
+      if (app.paths.config rescue nil)
+        app.paths.config.routes = File.join(app_path, routes_config) 
+      else
+        app.paths["config/routes"] = File.join(app_path, routes_config)
+      end
       app.initialize!
-      @@app = Rails.application = app
+      Rails.application = app
     end
 
     def app
