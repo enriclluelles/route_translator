@@ -10,6 +10,9 @@ module RouteTranslator
         original_routes = routes.dup
         original_named_routes = named_routes.routes.dup  # Hash {:name => :route}
 
+        # The filter method exists if the "routing-filter" gem is used
+        original_filters = set.respond_to?(:filters) ? set.filters.dup : []
+
         routes_to_create = []
         original_routes.each do |original_route|
           if localized_routes && localized_routes.include?(original_route.to_s)
@@ -33,6 +36,10 @@ module RouteTranslator
           add_route(*r)
         end
 
+        if original_filters.any?
+          set.filters << original_filters
+          set.filters.flatten!
+        end
 
         Hash[original_named_routes.select{|k,v| localized_routes && localized_routes.include?(v.to_s)}].each_key do |route_name|
           named_routes.helpers.concat add_untranslated_helpers_to_controllers_and_views(route_name)
