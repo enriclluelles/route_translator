@@ -1,4 +1,3 @@
-require 'rails/application/route_inspector'
 
 class StubbedI18nBackend
   @@translations = {
@@ -68,8 +67,10 @@ module RouteTranslator
     end
 
     def print_routes (route_set)
+      require 'rails/application/route_inspector'
       inspector = Rails::Application::RouteInspector.new
       puts inspector.format(route_set.routes, ENV['CONTROLLER']).join "\n"
+    rescue LoadError
     end
 
     def assert_helpers_include(*helpers)
