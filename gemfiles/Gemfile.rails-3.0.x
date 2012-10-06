@@ -1,6 +1,5 @@
 source "http://rubygems.org"
 
-gem "route_translator", :path => ".."
+gemspec :path => ".."
 
 gem "rails", "~>3.0.1"
-gem "mocha"
