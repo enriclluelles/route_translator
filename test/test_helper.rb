@@ -37,11 +37,6 @@ module RouteTranslator
       app = @@app = Class.new(Rails::Application)
       app.config.active_support.deprecation = :stderr
       app.paths["log"] = "#{tmp_path}/log/test.log"
-      if (app.paths.config rescue nil)
-        app.paths.config.routes = File.join(app_path, routes_config) 
-      else
-        app.paths["config/routes"] = File.join(app_path, routes_config)
-      end
       app.initialize!
       Rails.application = app
     end
@@ -59,11 +54,13 @@ module RouteTranslator
       tmp_path(*%w[app] + args)
     end
 
-    def app_file(path, contents)
-      FileUtils.mkdir_p File.dirname("#{app_path}/#{path}")
-      File.open("#{app_path}/#{path}", 'w') do |f|
+    def routes_file(contents)
+      fn = File.join(app_path, routes_config)
+      FileUtils.mkdir_p File.dirname(fn)
+      File.open(fn, 'w') do |f|
         f.puts contents
       end
+      app.routes_reloader.paths.unshift(fn)
     end
 
     def routes_config
