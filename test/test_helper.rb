@@ -37,6 +37,7 @@ module RouteTranslator
       app = @@app = Class.new(Rails::Application)
       app.config.active_support.deprecation = :stderr
       app.paths["log"] = "#{tmp_path}/log/test.log"
+      app.paths["config/routes"] = File.join(app_path, routes_config)
       app.initialize!
       Rails.application = app
     end
