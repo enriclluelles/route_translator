@@ -17,6 +17,6 @@ Gem::Specification.new do |s|
   s.test_files = `git ls-files test`.split($\)
   s.require_paths = ["lib"]
 
-  s.add_development_dependency("mocha", "~>0.12.9")
+  s.add_development_dependency("mocha")
   s.add_development_dependency("guard-test")
 end
