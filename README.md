@@ -131,15 +131,13 @@ Quick Start
 Configuration
 -------------
 
-To configure RouteTranslator via rails use `config.route_translator` in your
-application and/or environment files to set configuration properties that will
-be passed to RouteTranslator.
-
-### Example
+You can configure RouteTranslator via an initializer or using the different environment
+config files this. It's done this way:
 
 ```ruby
-MyProject::Application.configure do
-  config.route_translator.force_locale = true
+RouteTranslator.config do |config|
+  config.force_locale = true
+  config.locale_param_key = :my_locale
 end
 ```
 
@@ -151,9 +149,10 @@ end
 * **generate_unlocalized_routes** - Set this option to `true` to add
   translated routes without deleting original unlocalized versions.
   Autosets `force_locale=true`. Defaults to `false`.
-
 * **translation_file** - Sets the translation file(s) used for translating the
 routes. Defaults to `config/i18n-routes.yml`
+* **locale_param_key** - The param key that will we used to set the
+  locale to the newly generated routes. Defaults to :locale
 
 Contributing
 ------------
