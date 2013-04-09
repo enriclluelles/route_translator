@@ -86,9 +86,25 @@ module RouteTranslator
     end
 
     def print_routes (route_set)
-      require 'rails/application/route_inspector'
-      inspector = Rails::Application::RouteInspector.new
-      puts inspector.format(route_set.routes, ENV['CONTROLLER']).join "\n"
+      Rails.application.reload_routes!
+      all_routes = Rails.application.routes.routes
+
+      routes = all_routes.collect do |route|
+
+        reqs = route.requirements.dup
+        reqs[:to] = route.app unless route.app.class.name.to_s =~ /^ActionDispatch::Routing/
+        reqs = reqs.empty? ? "" : reqs.inspect
+
+        {:name => route.name.to_s, :verb => route.verb.to_s, :path => route.path, :reqs => reqs}
+      end
+
+      name_width = routes.map{ |r| r[:name].length }.max
+      verb_width = routes.map{ |r| r[:verb].length }.max
+      path_width = routes.map{ |r| r[:path].length }.max
+
+      routes.each do |r|
+        puts "#{r[:name].rjust(name_width)} #{r[:verb].ljust(verb_width)} #{r[:path].ljust(path_width)} #{r[:reqs]}"
+      end
     rescue LoadError
     end
 
