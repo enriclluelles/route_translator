@@ -75,13 +75,10 @@ module RouteTranslator
       tmp_path(*%w[app] + args)
     end
 
-    def routes_file(contents)
-      fn = File.join(app_path, routes_config)
-      FileUtils.mkdir_p File.dirname(fn)
-      File.open(fn, 'w') do |f|
-        f.puts contents
-      end
-      app.routes_reloader.paths.unshift(fn)
+    def load_routes_file(path)
+      app.routes_reloader.paths.clear
+      app.routes_reloader.paths.unshift(path)
+      app.reload_routes!
     end
 
     def routes_config

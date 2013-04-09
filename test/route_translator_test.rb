@@ -35,7 +35,6 @@ class TranslateRoutesTest < ActionController::TestCase
     config_force_locale false
     config_generate_unlocalized_routes false
     config_default_locale_settings("en")
-    routes_file ""
     FileUtils.rm_rf "#{tmp_path}/log"
   end
 
@@ -380,13 +379,7 @@ class TranslateRoutesTest < ActionController::TestCase
 
   def test_auto_translate
 
-    routes_file <<-RUBY
-      Rails.application.routes.draw do
-        localized do
-          root :to => 'people#index'
-        end
-      end
-    RUBY
+    load_routes_file(File.expand_path('dummy_routes.rb', File.dirname(__FILE__)))
 
     config_default_locale_settings 'es'
     config_translation_file File.expand_path('locales/routes.yml', File.dirname(__FILE__))
