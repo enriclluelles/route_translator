@@ -1,12 +1,3 @@
-require 'test/unit'
-require 'mocha'
-
-require "rails"
-require "action_controller/railtie"
-
-require 'route_translator'
-require "route_translator/test_request"
-
 require File.expand_path(File.join(File.dirname(__FILE__), 'test_helper'))
 
 class PeopleController < ActionController::Base;  end
