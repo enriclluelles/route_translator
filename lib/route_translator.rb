@@ -9,7 +9,6 @@ require 'route_translator/routes_reloader'
 module RouteTranslator
 
   TRANSLATABLE_SEGMENT = /^([-_a-zA-Z0-9]+)(\()?/.freeze
-  LOCALE_PARAM_KEY = :locale
   ROUTE_HELPER_CONTAINER = [
     ActionController::Base,
     ActionView::Base,
@@ -17,7 +16,7 @@ module RouteTranslator
     ActionDispatch::Routing::UrlFor
   ].freeze
 
-  Configuration = Struct.new(:force_locale, :generate_unlocalized_routes, :translation_file)
+  Configuration = Struct.new(:force_locale, :generate_unlocalized_routes, :translation_file, :locale_param_key)
 
   def self.locale_suffix locale
     locale.to_s.underscore
@@ -28,15 +27,20 @@ module RouteTranslator
     @config.force_locale ||= false
     @config.generate_unlocalized_routes ||= false
     @config.translation_file ||= File.join(%w[config i18n-routes.yml])
+    @config.locale_param_key ||= :locale
     yield @config if block
     @config
+  end
+
+  def self.locale_param_key
+    self.config.locale_param_key
   end
 
   # Attributes
 
   module Controller
     def set_locale_from_url
-      I18n.locale = params[RouteTranslator::LOCALE_PARAM_KEY]
+      I18n.locale = params[RouteTranslator.locale_param_key]
     end
   end
 
