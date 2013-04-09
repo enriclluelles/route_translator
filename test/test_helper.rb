@@ -1,5 +1,5 @@
 require 'test/unit'
-require 'mocha'
+require 'minitest/mock'
 
 require "rails"
 require "action_controller/railtie"

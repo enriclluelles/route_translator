@@ -284,10 +284,11 @@ class TranslateRoutesTest < ActionController::TestCase
       end
     end
     config_default_locale_settings 'en'
-    I18n.stubs(:available_locales).at_least_once.returns StubbedI18nBackend.available_locales
-    I18n.backend = StubbedI18nBackend
+    I18n.stub(:available_locales, StubbedI18nBackend.available_locales) do
+      I18n.backend = StubbedI18nBackend
 
-    @routes.translate_with_i18n
+      @routes.translate_with_i18n
+    end
 
     assert_routing '/fr/people', :controller => 'people', :action => 'index', :locale => 'fr'
     assert_routing '/es/gente', :controller => 'people', :action => 'index', :locale => 'es'
