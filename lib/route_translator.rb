@@ -5,7 +5,6 @@ require 'action_dispatch'
 
 require 'route_translator/route_set'
 require 'route_translator/routes_reloader'
-require 'route_translator/railtie' if defined?(Rails::Railtie)
 
 module RouteTranslator
 
@@ -24,8 +23,13 @@ module RouteTranslator
     locale.to_s.underscore
   end
 
-  def self.config
+  def self.config(&block)
     @config ||= Configuration.new
+    @config.force_locale ||= false
+    @config.generate_unlocalized_routes ||= false
+    @config.translation_file ||= File.join(%w[config i18n-routes.yml])
+    yield @config if block
+    @config
   end
 
   # Attributes
