@@ -37,7 +37,7 @@ private
 
     def absolute_path (file_path)
       file_path ||= RouteTranslator.config.translation_file
-      file_path = Rails.root.join(file_path) if defined?(Rails)
+      file_path = Rails.root.join(file_path) if defined?(Rails) && Rails.root
       file_path
     end
 

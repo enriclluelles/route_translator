@@ -24,7 +24,6 @@ class TranslateRoutesTest < ActionController::TestCase
   end
 
   def setup
-
     @controller = ActionController::Base.new
     @view = ActionView::Base.new
     @routes = ActionDispatch::Routing::RouteSet.new
@@ -304,6 +303,7 @@ class TranslateRoutesTest < ActionController::TestCase
         match 'products', :to => 'products#index', :as => 'products'
       end
     end
+
     config_default_locale_settings 'en'
 
     @routes.translate_from_file(File.expand_path('locales/routes.yml', File.dirname(__FILE__)))

@@ -4,7 +4,7 @@ module RouteTranslator
       # Translate a specific RouteSet, usually Rails.application.routes, but can
       # be a RouteSet of a gem, plugin/engine etc.
       def translate
-        Rails.logger.info "Translating routes (default locale: #{default_locale})" if defined?(Rails) && defined?(Rails.logger)
+        Rails.logger.info "Translating routes (default locale: #{default_locale})" if defined?(Rails) && Rails.logger
 
         # save original routes and clear route set
         original_routes = routes.dup
