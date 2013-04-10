@@ -51,15 +51,16 @@ module RouteTranslator
       !(defined?(ActionPack) && ActionPack::VERSION::MAJOR == 3 && ActionPack::VERSION::MINOR > 0)
     end
 
-    def setup_application
-      return if defined?(@@app)
-
-      app = @@app = Class.new(Rails::Application)
-      app.config.active_support.deprecation = :stderr
-      app.paths["log"] = "#{tmp_path}/log/test.log"
-      app.paths["config/routes"] = File.join(app_path, routes_config)
-      app.initialize!
-      Rails.application = app
+    def setup_application(routes_file = "")
+      if defined?(Rails)
+        Rails.application = nil
+        app = @@app = Class.new(Rails::Application)
+        app.config.active_support.deprecation = :stderr
+        app.paths["log"] = "#{tmp_path}/log/test.log"
+        app.paths["config/routes"] = routes_file
+        app.initialize!
+        Rails.application = app
+      end
     end
 
     def app
@@ -86,8 +87,7 @@ module RouteTranslator
     end
 
     def print_routes (route_set)
-      Rails.application.reload_routes!
-      all_routes = Rails.application.routes.routes
+      all_routes = route_set.routes
 
       routes = all_routes.collect do |route|
 
@@ -95,15 +95,15 @@ module RouteTranslator
         reqs[:to] = route.app unless route.app.class.name.to_s =~ /^ActionDispatch::Routing/
         reqs = reqs.empty? ? "" : reqs.inspect
 
-        {:name => route.name.to_s, :verb => route.verb.to_s, :path => route.path, :reqs => reqs}
+        {:name => route.name.to_s, :verb => route.verb.to_s, :path => route.path.try(:spec).to_s, :reqs => reqs}
       end
 
       name_width = routes.map{ |r| r[:name].length }.max
       verb_width = routes.map{ |r| r[:verb].length }.max
-      path_width = routes.map{ |r| r[:path].length }.max
+      path_width = routes.map{ |r| r[:path].to_s.length }.max
 
       routes.each do |r|
-        puts "#{r[:name].rjust(name_width)} #{r[:verb].ljust(verb_width)} #{r[:path].ljust(path_width)} #{r[:reqs]}"
+        puts "#{r[:name].rjust(name_width)} #{r[:verb].ljust(verb_width)} #{r[:path].to_s.ljust(path_width)} #{r[:reqs]}"
       end
     rescue LoadError
     end

@@ -24,7 +24,6 @@ class TranslateRoutesTest < ActionController::TestCase
   end
 
   def setup
-    setup_application
 
     @controller = ActionController::Base.new
     @view = ActionView::Base.new
@@ -380,7 +379,7 @@ class TranslateRoutesTest < ActionController::TestCase
 
   def test_auto_translate
 
-    load_routes_file(File.expand_path('dummy_routes.rb', File.dirname(__FILE__)))
+    setup_application(File.expand_path('dummy_routes.rb', File.dirname(__FILE__)))
 
     config_default_locale_settings 'es'
     config_translation_file File.expand_path('locales/routes.yml', File.dirname(__FILE__))
