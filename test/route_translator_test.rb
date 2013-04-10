@@ -48,6 +48,40 @@ class TranslateRoutesTest < ActionController::TestCase
     assert_routing '/es', :controller => 'people', :action => 'index', :locale => 'es'
   end
 
+  def test_resources
+    @routes.draw do
+      localized do
+        resources :products
+      end
+    end
+
+    config_default_locale_settings 'es'
+
+    @routes.translate_from_file(File.expand_path('locales/routes.yml', File.dirname(__FILE__)))
+
+    assert_routing '/en/products', :controller => 'products', :action => 'index', :locale => 'en'
+    assert_routing '/productos', :controller => 'products', :action => 'index', :locale => 'es'
+    assert_routing({:path => '/productos/1', :method => "GET"}, {:controller => 'products', :action => 'show', :id => '1', :locale => 'es'})
+    assert_routing({:path => '/productos/1', :method => "PUT"}, {:controller => 'products', :action => 'update', :id => '1', :locale => 'es'})
+  end
+
+  def test_resources_with_only
+    @routes.draw do
+      localized do
+        resources :products, :only => [:index, :show]
+      end
+    end
+
+    config_default_locale_settings 'es'
+
+    @routes.translate_from_file(File.expand_path('locales/routes.yml', File.dirname(__FILE__)))
+
+    assert_routing '/en/products', :controller => 'products', :action => 'index', :locale => 'en'
+    assert_routing '/productos', :controller => 'products', :action => 'index', :locale => 'es'
+    assert_routing({:path => '/productos/1', :method => "GET"}, {:controller => 'products', :action => 'show', :id => '1', :locale => 'es'})
+    assert_unrecognized_route({:path => '/productos/1', :method => "PUT"}, {:controller => 'products', :action => 'update', :id => '1', :locale => 'es'})
+  end
+
   def test_unnamed_root_route_without_prefix
     @routes.draw do
       localized do
