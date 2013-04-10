@@ -109,7 +109,10 @@ module RouteTranslator
         [route.app, conditions, route.requirements.dup, route.defaults.dup, route.name]
       end
 
+      #In Rails 3.0 the request_method used to construct the route needs to be a Regexp
+      #In Rails 3.1 and 3.2 it's stored as a Regexp but needs to be passed as an array during creation
       def request_method_array(reg)
+        return reg if Rails.version && Rails.version < "3.1"
         reg.source.gsub(%r{\^|\$}, "").split("|")
       end
 
