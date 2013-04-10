@@ -56,8 +56,8 @@ module RouteTranslator
         Rails.application = nil
         app = @@app = Class.new(Rails::Application)
         app.config.active_support.deprecation = :stderr
-        app.paths["log"] = "#{tmp_path}/log/test.log"
-        app.paths["config/routes"] = routes_file
+        app.paths.config.routes << routes_file rescue NoMethodError
+        app.paths['config/routes'] << routes_file
         app.initialize!
         Rails.application = app
       end
@@ -65,25 +65,6 @@ module RouteTranslator
 
     def app
       @@app
-    end
-
-    def tmp_path(*args)
-      @tmp_path ||= File.join(File.dirname(__FILE__), "tmp")
-      File.join(@tmp_path, *args)
-    end
-
-    def app_path(*args)
-      tmp_path(*%w[app] + args)
-    end
-
-    def load_routes_file(path)
-      app.routes_reloader.paths.clear
-      app.routes_reloader.paths.unshift(path)
-      app.reload_routes!
-    end
-
-    def routes_config
-      @@routes_config ||= File.join("config", "routes.rb")
     end
 
     def print_routes (route_set)

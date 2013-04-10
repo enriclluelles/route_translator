@@ -33,7 +33,6 @@ class TranslateRoutesTest < ActionController::TestCase
     config_force_locale false
     config_generate_unlocalized_routes false
     config_default_locale_settings("en")
-    FileUtils.rm_rf "#{tmp_path}/log"
   end
 
   def test_unnamed_root_route
