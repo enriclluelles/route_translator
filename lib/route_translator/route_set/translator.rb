@@ -94,7 +94,11 @@ module RouteTranslator
 
         new_name = "#{route.name}_#{locale_suffix(locale)}" if route.name
 
-        [route.app, conditions, requirements, defaults, new_name]
+        if route.path.respond_to?(:anchored)
+          [route.app, conditions, requirements, defaults, new_name, route.path.anchored]
+        else
+          [route.app, conditions, requirements, defaults, new_name]
+        end
       end
 
       def untranslated_route route
@@ -106,7 +110,11 @@ module RouteTranslator
 
         conditions[:request_method] = request_method_array(conditions[:request_method]) if conditions[:request_method]
 
-        [route.app, conditions, route.requirements.dup, route.defaults.dup, route.name]
+        if route.path.respond_to?(:anchored)
+          [route.app, conditions, route.requirements.dup, route.defaults.dup, route.name, route.path.anchored]
+        else
+          [route.app, conditions, route.requirements.dup, route.defaults.dup, route.name]
+        end
       end
 
       #In Rails 3.0 the request_method used to construct the route needs to be a Regexp
