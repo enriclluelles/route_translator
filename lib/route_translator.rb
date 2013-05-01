@@ -3,8 +3,8 @@ require 'action_controller'
 require 'action_mailer'
 require 'action_dispatch'
 
-require 'route_translator/route_set'
-require 'route_translator/routes_reloader'
+require 'route_translator/extensions'
+require 'route_translator/translator'
 
 module RouteTranslator
 
@@ -36,28 +36,6 @@ module RouteTranslator
     self.config.locale_param_key
   end
 
-  # Attributes
-
-  module Controller
-    def set_locale_from_url
-      I18n.locale = params[RouteTranslator.locale_param_key]
-    end
-  end
-
-  module Mapper
-    #yield the block and add all the routes created
-    #in it to the localized_routes array
-    def localized
-      routes_before = @set.routes.map(&:to_s)
-      yield
-      routes_after = @set.routes.map(&:to_s)
-      @set.localized_routes ||= []
-      @set.localized_routes.concat(routes_after - routes_before)
-      @set.localized_routes.uniq!
-    end
-  end
-
-  ActiveSupport.run_load_hooks(:route_translator, self)
 end
 
 # Add locale_suffix to controllers, views and mailers
@@ -69,7 +47,3 @@ RouteTranslator::ROUTE_HELPER_CONTAINER.each do |klass|
     end
   end
 end
-
-ActionController::Base.send(:include, RouteTranslator::Controller)
-ActionDispatch::Routing::Mapper.send(:include, RouteTranslator::Mapper)
-ActionDispatch::Routing::RouteSet.send(:include, RouteTranslator::RouteSet)
