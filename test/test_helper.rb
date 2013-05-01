@@ -18,35 +18,6 @@ module ActionDispatch
   end
 end
 
-
-class StubbedI18nBackend
-  DEFAULT_TRANSLATIONS = {
-    'es' => {
-      'people' => 'gente',
-      'products' => 'productos'
-    },
-    'fr' => {} # empty on purpose to test behaviour on incompleteness scenarios
-  }
-
-  def initialize(translations = nil)
-    @translations = translations || DEFAULT_TRANSLATIONS
-  end
-
-  def translate(locale, key, options)
-    @translations[locale.to_s][key] || options[:default]
-  rescue
-    options[:default]
-  end
-
-  def available_locales
-    @translations.keys
-  end
-
-  def self.available_locales
-    new.available_locales
-  end
-end
-
 module RouteTranslator
   module TestHelper
     def path_string(route)
@@ -78,7 +49,7 @@ module RouteTranslator
       @@app
     end
 
-    def print_routes (route_set)
+    def print_routes(route_set)
       all_routes = route_set.routes
 
       routes = all_routes.collect do |route|

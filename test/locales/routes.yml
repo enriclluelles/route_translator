@@ -1,10 +1,6 @@
-# es:
-#   people: gente
-#   
-# en:
-
 es:
   people: gente
   products: productos
 
-en:  
+en:
+  m: m
