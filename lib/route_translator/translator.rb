@@ -43,7 +43,7 @@ module RouteTranslator
       # or forcing locale to all routes,
       # or already generating actual unlocalized routes
       if !default_locale?(locale) || RouteTranslator.config.force_locale || RouteTranslator.config.generate_unlocalized_routes
-        new_path = "/#{locale.downcase}#{new_path}"
+        new_path = "/#{locale.to_s.downcase}#{new_path}"
       end
 
       new_path = "/" if new_path.blank?
@@ -74,8 +74,8 @@ module RouteTranslator
     end
 
     def self.translate_string(str, locale)
-      fallback = I18n.translate(str, locale: locale, default: str)
-      I18n.translate("routes.#{str}", locale: locale, default: fallback)
+      fallback = I18n.translate(str, :locale => locale, :default => str)
+      I18n.translate("routes.#{str}", :locale => locale, :default => fallback)
     end
   end
 end

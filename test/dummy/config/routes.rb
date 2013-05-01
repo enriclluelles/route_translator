@@ -1,5 +1,5 @@
 Dummy::Application.routes.draw do
   localized do
-    get 'dummy', to: 'dummy#dummy'
+    get 'dummy', :to => 'dummy#dummy'
   end
 end

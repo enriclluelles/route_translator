@@ -1,5 +1,6 @@
 require 'test/unit'
 require 'minitest/mock'
+require 'minitest/unit'
 
 require "rails"
 require "action_controller/railtie"

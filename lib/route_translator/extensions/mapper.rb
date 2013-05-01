@@ -9,7 +9,7 @@ module ActionDispatch
         @localized = false
       end
 
-      if instance_methods.include?(:add_route)
+      if instance_methods.map(&:to_s).include?('add_route')
         def add_route(action, options) # :nodoc:
           path = path_for_action(action, options.delete(:path))
 

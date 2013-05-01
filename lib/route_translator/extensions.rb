@@ -1,3 +1,3 @@
-require_relative './extensions/mapper'
-require_relative './extensions/route_set'
-require_relative './extensions/action_controller'
+require 'route_translator/extensions/mapper'
+require 'route_translator/extensions/route_set'
+require 'route_translator/extensions/action_controller'

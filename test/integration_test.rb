@@ -1,6 +1,6 @@
-require File.expand_path(File.join(File.dirname(__FILE__), 'test_helper'))
+require File.expand_path('../test_helper', __FILE__)
 require 'route_translator'
-require_relative 'dummy/config/environment'
+require File.expand_path('../dummy/config/environment', __FILE__)
 
 class_to_inherit = defined?(ActionDispatch::IntegrationTest) ? ActionDispatch::IntegrationTest : ActionController::IntegrationTest
 class LocaleFromParamsTest < class_to_inherit
@@ -10,7 +10,7 @@ class LocaleFromParamsTest < class_to_inherit
     config_default_locale_settings 'en'
 
     get '/es/dummy'
-    assert_equal @response.body, 'es'
+    assert_equal 'es', @response.body
     assert_response :success
   end
 end
