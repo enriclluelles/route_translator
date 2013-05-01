@@ -26,7 +26,6 @@ module RouteTranslator
     @config ||= Configuration.new
     @config.force_locale ||= false
     @config.generate_unlocalized_routes ||= false
-    @config.translation_file ||= File.join(%w[config i18n-routes.yml])
     @config.locale_param_key ||= :locale
     yield @config if block
     @config

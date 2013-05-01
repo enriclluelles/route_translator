@@ -9,7 +9,7 @@ module RouteTranslator
       ['path', 'url'].map do |suffix|
         new_helper_name = "#{old_name}_#{suffix}"
 
-        ROUTE_HELPER_CONTAINER.each do |helper_container|
+        RouteTranslator::ROUTE_HELPER_CONTAINER.each do |helper_container|
           helper_container.send :define_method, new_helper_name do |*args|
             if respond_to? "#{old_name}_#{locale_suffix(I18n.locale)}_#{suffix}"
               send "#{old_name}_#{locale_suffix(I18n.locale)}_#{suffix}", *args
@@ -23,18 +23,23 @@ module RouteTranslator
       end
     end
 
-    def self.add_translated_routes(path, route_set)
-      path_info = conditions[:path_info]
+    def self.translations_for(app, conditions = {}, requirements = {}, defaults = {}, name = nil, anchor = true)
+      add_untranslated_helpers_to_controllers_and_views(name)
       I18n.available_locales.each do |locale|
-        conditions[:path_info] = translate_path(path_info, locale)
-        route_set.add_route(app, conditions, requirements, defaults, name, anchor)
+        new_conditions = conditions.dup
+        new_conditions[:path_info] = translate_path(conditions[:path_info], locale)
+        new_defaults = defaults.merge(RouteTranslator.locale_param_key => locale.to_s)
+        new_requirements = requirements.merge(RouteTranslator.locale_param_key => locale.to_s)
+        new_name = translate_name(name, locale)
+        yield app, new_conditions, new_requirements, new_defaults, new_name, anchor
       end
     end
 
     # Translates a path and adds the locale prefix.
     def self.translate_path(path, locale)
-      final_optional_segments = path.slice!(/(\(.+\))$/)
-      new_path = path.split("/").map{|seg| translate_path_segment(seg, locale)}.join('/')
+      new_path = path.dup
+      final_optional_segments = new_path.slice!(/(\(.+\))$/)
+      new_path = new_path.split("/").map{|seg| translate_path_segment(seg, locale)}.join('/')
 
       # Add locale prefix if it's not the default locale,
       # or forcing locale to all routes,
@@ -46,7 +51,17 @@ module RouteTranslator
       end
 
       new_path = "/" if new_path.blank?
+
       "#{new_path}#{final_optional_segments}"
+    end
+
+    def self.translate_name(name, locale)
+      return nil unless name
+      "#{name}_#{RouteTranslator.locale_suffix(locale)}"
+    end
+
+    def self.default_locale?(locale)
+      I18n.default_locale.to_sym == locale.to_sym
     end
 
     # Tries to translate a single path segment. If the path segment
@@ -63,7 +78,8 @@ module RouteTranslator
     end
 
     def self.translate_string(str, locale)
-      I18n.translate(str, locale: locale, default: str)
+      fallback = I18n.translate(str, locale: locale, default: str)
+      I18n.translate("routes.#{str}", locale: locale, default: fallback)
     end
   end
 end
