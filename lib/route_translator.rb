@@ -9,18 +9,8 @@ require 'route_translator/translator'
 module RouteTranslator
 
   TRANSLATABLE_SEGMENT = /^([-_a-zA-Z0-9]+)(\()?/.freeze
-  ROUTE_HELPER_CONTAINER = [
-    ActionController::Base,
-    ActionView::Base,
-    ActionMailer::Base,
-    ActionDispatch::Routing::UrlFor
-  ].freeze
 
   Configuration = Struct.new(:force_locale, :generate_unlocalized_routes, :translation_file, :locale_param_key)
-
-  def self.locale_suffix locale
-    locale.to_s.underscore
-  end
 
   def self.config(&block)
     @config ||= Configuration.new
@@ -35,14 +25,4 @@ module RouteTranslator
     self.config.locale_param_key
   end
 
-end
-
-# Add locale_suffix to controllers, views and mailers
-RouteTranslator::ROUTE_HELPER_CONTAINER.each do |klass|
-  klass.class_eval do
-    private
-    def locale_suffix locale
-      RouteTranslator.locale_suffix locale
-    end
-  end
 end

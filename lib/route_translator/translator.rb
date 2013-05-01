@@ -5,26 +5,23 @@ module RouteTranslator
     #   people_path -> people_de_path
     #   I18n.locale = :fr
     #   people_path -> people_fr_path
-    def self.add_untranslated_helpers_to_controllers_and_views old_name
-      ['path', 'url'].map do |suffix|
+    def self.add_untranslated_helpers_to_controllers_and_views(old_name, helper_container)
+      ['path', 'url'].each do |suffix|
         new_helper_name = "#{old_name}_#{suffix}"
 
-        RouteTranslator::ROUTE_HELPER_CONTAINER.each do |helper_container|
-          helper_container.send :define_method, new_helper_name do |*args|
-            if respond_to? "#{old_name}_#{locale_suffix(I18n.locale)}_#{suffix}"
-              send "#{old_name}_#{locale_suffix(I18n.locale)}_#{suffix}", *args
-            else
-              send "#{old_name}_#{locale_suffix(I18n.default_locale)}_#{suffix}", *args
-            end
+        helper_container.__send__(:define_method, new_helper_name) do |*args|
+          locale_suffix = I18n.locale.to_s.underscore
+          if respond_to?("#{old_name}_#{locale_suffix}_#{suffix}")
+            __send__("#{old_name}_#{locale_suffix}_#{suffix}", *args)
+          else
+            __send__("#{old_name}_#{I18n.default_locale.to_s.underscore}_#{suffix}", *args)
           end
         end
-
-        new_helper_name.to_sym
       end
     end
 
-    def self.translations_for(app, conditions = {}, requirements = {}, defaults = {}, name = nil, anchor = true)
-      add_untranslated_helpers_to_controllers_and_views(name)
+    def self.translations_for(app, conditions, requirements, defaults, name, anchor, route_set)
+      add_untranslated_helpers_to_controllers_and_views(name, route_set.named_routes.module)
       I18n.available_locales.each do |locale|
         new_conditions = conditions.dup
         new_conditions[:path_info] = translate_path(conditions[:path_info], locale)
@@ -33,6 +30,7 @@ module RouteTranslator
         new_name = translate_name(name, locale)
         yield app, new_conditions, new_requirements, new_defaults, new_name, anchor
       end
+      yield app, conditions, requirements, defaults, name, anchor if RouteTranslator.config.generate_unlocalized_routes
     end
 
     # Translates a path and adds the locale prefix.
@@ -44,9 +42,7 @@ module RouteTranslator
       # Add locale prefix if it's not the default locale,
       # or forcing locale to all routes,
       # or already generating actual unlocalized routes
-      if !default_locale?(locale) ||
-        RouteTranslator.config.force_locale ||
-        RouteTranslator.config.generate_unlocalized_routes
+      if !default_locale?(locale) || RouteTranslator.config.force_locale || RouteTranslator.config.generate_unlocalized_routes
         new_path = "/#{locale.downcase}#{new_path}"
       end
 
@@ -57,7 +53,7 @@ module RouteTranslator
 
     def self.translate_name(name, locale)
       return nil unless name
-      "#{name}_#{RouteTranslator.locale_suffix(locale)}"
+      "#{name}_#{locale.to_s.underscore}"
     end
 
     def self.default_locale?(locale)
