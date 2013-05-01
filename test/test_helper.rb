@@ -20,6 +20,22 @@ end
 
 module RouteTranslator
   module TestHelper
+    def config_default_locale_settings(locale)
+      I18n.default_locale = locale
+    end
+
+    def config_force_locale(boolean)
+      RouteTranslator.config.force_locale = boolean
+    end
+
+    def config_generate_unlocalized_routes(boolean)
+      RouteTranslator.config.generate_unlocalized_routes = boolean
+    end
+
+    def config_translation_file (file)
+      RouteTranslator.config.translation_file = file
+    end
+
     def path_string(route)
       path = route.respond_to?(:path) ? route.path : route.to_s.split(' ')[1]
       path.respond_to?(:spec) ? path.spec.to_s : path.to_s
@@ -31,22 +47,6 @@ module RouteTranslator
 
     def formatted_root_route?
       !(defined?(ActionPack) && ActionPack::VERSION::MAJOR == 3 && ActionPack::VERSION::MINOR > 0)
-    end
-
-    def setup_application(routes_file = "")
-      if defined?(Rails)
-        Rails.application = nil
-        app = @@app = Class.new(Rails::Application)
-        app.config.active_support.deprecation = :stderr
-        app.paths.config.routes << routes_file rescue NoMethodError
-        app.paths['config/routes'] << routes_file
-        app.initialize!
-        Rails.application = app
-      end
-    end
-
-    def app
-      @@app
     end
 
     def print_routes(route_set)

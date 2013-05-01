@@ -8,22 +8,6 @@ class TranslateRoutesTest < ActionController::TestCase
   include ActionDispatch::Assertions::RoutingAssertions
   include RouteTranslator::TestHelper
 
-  def config_default_locale_settings(locale)
-    I18n.default_locale = locale
-  end
-
-  def config_force_locale(boolean)
-    RouteTranslator.config.force_locale = boolean
-  end
-
-  def config_generate_unlocalized_routes(boolean)
-    RouteTranslator.config.generate_unlocalized_routes = boolean
-  end
-
-  def config_translation_file (file)
-    RouteTranslator.config.translation_file = file
-  end
-
   def setup
     @controller = ActionController::Base.new
     @view = ActionView::Base.new
@@ -346,6 +330,7 @@ class TranslateRoutesTest < ActionController::TestCase
     assert_unrecognized_route '/es', :controller => 'people', :action => 'index', :locale => 'es'
   end
 
+
   def test_action_controller_gets_locale_setter
     ActionController::Base.instance_methods.include?('set_locale_from_url')
   end
@@ -357,5 +342,4 @@ class TranslateRoutesTest < ActionController::TestCase
   def test_action_view_gets_locale_suffix_helper
     ActionView::Base.instance_methods.include?('locale_suffix')
   end
-
 end
