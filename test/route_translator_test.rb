@@ -1,4 +1,5 @@
 require File.expand_path(File.join(File.dirname(__FILE__), 'test_helper'))
+require 'route_translator'
 
 class PeopleController < ActionController::Base;  end
 class ProductsController < ActionController::Base;  end
@@ -27,6 +28,8 @@ class TranslateRoutesTest < ActionController::TestCase
     @controller = ActionController::Base.new
     @view = ActionView::Base.new
     @routes = ActionDispatch::Routing::RouteSet.new
+    I18n.load_path = [ File.expand_path('../locales/routes.yml', __FILE__) ]
+    I18n.reload!
   end
 
   def teardown
@@ -36,13 +39,12 @@ class TranslateRoutesTest < ActionController::TestCase
   end
 
   def test_unnamed_root_route
+    config_default_locale_settings 'en'
     @routes.draw do
       localized do
         root :to => 'people#index'
       end
     end
-    config_default_locale_settings 'en'
-    @routes.translate_with_dictionary{|t| t['en'] = {}; t['es'] = {'people' => 'gente'} }
 
     assert_routing '/', :controller => 'people', :action => 'index', :locale => 'en'
     assert_routing '/es', :controller => 'people', :action => 'index', :locale => 'es'
@@ -56,8 +58,6 @@ class TranslateRoutesTest < ActionController::TestCase
     end
 
     config_default_locale_settings 'es'
-
-    @routes.translate_from_file(File.expand_path('locales/routes.yml', File.dirname(__FILE__)))
 
     assert_routing '/en/products', :controller => 'products', :action => 'index', :locale => 'en'
     assert_routing '/productos', :controller => 'products', :action => 'index', :locale => 'es'
@@ -74,8 +74,6 @@ class TranslateRoutesTest < ActionController::TestCase
 
     config_default_locale_settings 'es'
 
-    @routes.translate_from_file(File.expand_path('locales/routes.yml', File.dirname(__FILE__)))
-
     assert_routing '/en/products', :controller => 'products', :action => 'index', :locale => 'en'
     assert_routing '/productos', :controller => 'products', :action => 'index', :locale => 'es'
     assert_routing({:path => '/productos/1', :method => "GET"}, {:controller => 'products', :action => 'show', :id => '1', :locale => 'es'})
@@ -83,14 +81,13 @@ class TranslateRoutesTest < ActionController::TestCase
   end
 
   def test_unnamed_root_route_without_prefix
+    config_default_locale_settings 'es'
+
     @routes.draw do
       localized do
         root :to => 'people#index'
       end
     end
-    config_default_locale_settings 'es'
-
-    @routes.translate_from_file(File.expand_path('locales/routes.yml', File.dirname(__FILE__)))
 
     assert_routing '/', :controller => 'people', :action => 'index', :locale => 'es'
     assert_routing '/en', :controller => 'people', :action => 'index', :locale => 'en'
@@ -98,19 +95,21 @@ class TranslateRoutesTest < ActionController::TestCase
   end
 
   def test_unnamed_untranslated_route
+    config_default_locale_settings 'en'
+
     @routes.draw do
       localized do
         match 'foo', :to => 'people#index'
       end
     end
-    config_default_locale_settings 'en'
-    @routes.translate_with_dictionary{|t| t['en'] = {}; t['es'] = {'people' => 'gente'} }
 
     assert_routing '/es/foo', :controller => 'people', :action => 'index', :locale => 'es'
     assert_routing '/foo', :controller => 'people', :action => 'index', :locale => 'en'
   end
 
   def test_unnamed_translated_route_on_default_locale
+    config_default_locale_settings 'es'
+
     @routes.draw { match 'people', :to => 'people#index' }
     @routes.draw do
       localized do
@@ -118,35 +117,30 @@ class TranslateRoutesTest < ActionController::TestCase
       end
     end
 
-    config_default_locale_settings 'es'
-
-    @routes.translate_with_dictionary{|t| t['en'] = {}; t['es'] = {'people' => 'gente'} }
 
     assert_routing '/en/people', :controller => 'people', :action => 'index', :locale => 'en'
     assert_routing '/gente', :controller => 'people', :action => 'index', :locale => 'es'
   end
 
   def test_unnamed_translated_route_on_non_default_locale
+    config_default_locale_settings 'en'
     @routes.draw do
       localized do
         match 'people', :to => 'people#index'
       end
     end
-    config_default_locale_settings 'en'
-    @routes.translate_with_dictionary{|t| t['en'] = {}; t['es'] = {'people' => 'gente'} }
 
     assert_routing '/es/gente', :controller => 'people', :action => 'index', :locale => 'es'
     assert_routing '/people', :controller => 'people', :action => 'index', :locale => 'en'
   end
 
   def test_named_translated_route_with_prefix_must_have_locale_as_static_segment
+    config_default_locale_settings 'en'
     @routes.draw do
       localized do
         match 'people', :to => 'people#index'
       end
     end
-    config_default_locale_settings 'en'
-    @routes.translate_with_dictionary{|t| t['en'] = {}; t['es'] = {'people' => 'gente'} }
 
     # we check the string representation of the route,
     # if it stores locale as a dynamic segment it would be represented as: "/:locale/gente"
@@ -154,13 +148,12 @@ class TranslateRoutesTest < ActionController::TestCase
   end
 
   def test_named_empty_route_without_prefix
+    config_default_locale_settings 'es'
     @routes.draw do
       localized do
         root :to => 'people#index', :as => 'people'
       end
     end
-    config_default_locale_settings 'es'
-    @routes.translate_with_dictionary{|t|  t['es'] = {};  t['en'] = {'people' => 'gente'}; }
 
     assert_routing '/en', :controller => 'people', :action => 'index', :locale => 'en'
     assert_routing '/', :controller => 'people', :action => 'index', :locale => 'es'
@@ -292,16 +285,12 @@ class TranslateRoutesTest < ActionController::TestCase
   end
 
   def test_i18n_based_translations_setting_locales
+    config_default_locale_settings 'en'
     @routes.draw do
       localized do
         match 'people', :to => 'people#index', :as => 'people'
       end
     end
-    config_default_locale_settings 'en'
-
-    I18n.backend = StubbedI18nBackend
-
-    @routes.translate_with_i18n('es')
 
     assert_routing '/es/gente', :controller => 'people', :action => 'index', :locale => 'es'
     assert_routing '/people', :controller => 'people', :action => 'index', :locale => 'en'
@@ -309,16 +298,13 @@ class TranslateRoutesTest < ActionController::TestCase
   end
 
   def test_i18n_based_translations_taking_i18n_available_locales
-    @routes.draw do
-      localized do
-        match 'people', :to => 'people#index', :as => 'people'
-      end
-    end
     config_default_locale_settings 'en'
     I18n.stub(:available_locales, StubbedI18nBackend.available_locales) do
-      I18n.backend = StubbedI18nBackend
-
-      @routes.translate_with_i18n
+      @routes.draw do
+        localized do
+          match 'people', :to => 'people#index', :as => 'people'
+        end
+      end
     end
 
     assert_routing '/fr/people', :controller => 'people', :action => 'index', :locale => 'fr'
@@ -337,24 +323,18 @@ class TranslateRoutesTest < ActionController::TestCase
       end
     end
 
-    config_default_locale_settings 'en'
-
-    @routes.translate_from_file(File.expand_path('locales/routes.yml', File.dirname(__FILE__)))
-
     assert_routing '/es/gente', :controller => 'people', :action => 'index', :locale => 'es'
     assert_routing '/es/productos', :controller => 'products', :action => 'index', :locale => 'es'
   end
 
   def test_not_localizing_routes_outside_blocks
+    config_default_locale_settings 'en'
     @routes.draw do
       localized do
         match 'people', :to => 'people#index', :as => 'people'
       end
       match 'products', :to => 'products#index', :as => 'products'
     end
-    config_default_locale_settings 'en'
-
-    @routes.translate_from_file(File.expand_path('locales/routes.yml', File.dirname(__FILE__)))
 
     assert_routing '/es/gente', :controller => 'people', :action => 'index', :locale => 'es'
     assert_routing '/products', :controller => 'products', :action => 'index'
@@ -362,64 +342,41 @@ class TranslateRoutesTest < ActionController::TestCase
   end
 
   def test_force_locale
+    config_default_locale_settings 'en'
+    config_force_locale true
+
     @routes.draw do
       localized do
         match 'people', :to => 'people#index', :as => 'people'
       end
     end
-
-    config_default_locale_settings 'en'
-    config_force_locale true
-
-    @routes.translate_from_file(File.expand_path('locales/routes.yml', File.dirname(__FILE__)))
 
     assert_routing '/en/people', :controller => 'people', :action => 'index', :locale => 'en'
     assert_unrecognized_route '/people', :controller => 'people', :action => 'index'
   end
 
   def test_generate_unlocalized_routes
+    config_default_locale_settings 'en'
+    config_generate_unlocalized_routes true
+
     @routes.draw do
       localized do
         match 'people', :to => 'people#index', :as => 'people'
       end
     end
 
-    config_default_locale_settings 'en'
-    config_generate_unlocalized_routes true
-
-    @routes.translate_from_file(File.expand_path('locales/routes.yml', File.dirname(__FILE__)))
-
     assert_routing '/en/people', :controller => 'people', :action => 'index', :locale => 'en'
     assert_routing '/people', :controller => 'people', :action => 'index'
   end
 
   def test_config_translation_file
+    config_default_locale_settings 'es'
+
     @routes.draw do
       localized do
         root :to => 'people#index'
       end
     end
-
-    config_default_locale_settings 'es'
-    config_translation_file File.expand_path('locales/routes.yml', File.dirname(__FILE__))
-
-    @routes.translate_from_file
-
-    assert_routing '/', :controller => 'people', :action => 'index', :locale => 'es'
-    assert_routing '/en', :controller => 'people', :action => 'index', :locale => 'en'
-    assert_unrecognized_route '/es', :controller => 'people', :action => 'index', :locale => 'es'
-  end
-
-  def test_auto_translate
-
-    setup_application(File.expand_path('dummy_routes.rb', File.dirname(__FILE__)))
-
-    config_default_locale_settings 'es'
-    config_translation_file File.expand_path('locales/routes.yml', File.dirname(__FILE__))
-
-    app.reload_routes!
-
-    @routes = app.routes
 
     assert_routing '/', :controller => 'people', :action => 'index', :locale => 'es'
     assert_routing '/en', :controller => 'people', :action => 'index', :locale => 'en'

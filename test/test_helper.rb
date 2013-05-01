@@ -20,19 +20,30 @@ end
 
 
 class StubbedI18nBackend
-  @@translations = {
-    'es' => { 'people' => 'gente'},
+  DEFAULT_TRANSLATIONS = {
+    'es' => {
+      'people' => 'gente',
+      'products' => 'productos'
+    },
     'fr' => {} # empty on purpose to test behaviour on incompleteness scenarios
   }
 
-  def self.translate(locale, key, options)
-    @@translations[locale.to_s][key] || options[:default]
+  def initialize(translations = nil)
+    @translations = translations || DEFAULT_TRANSLATIONS
+  end
+
+  def translate(locale, key, options)
+    @translations[locale.to_s][key] || options[:default]
   rescue
     options[:default]
   end
 
+  def available_locales
+    @translations.keys
+  end
+
   def self.available_locales
-    @@translations.keys
+    new.available_locales
   end
 end
 
