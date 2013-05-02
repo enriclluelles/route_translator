@@ -78,7 +78,8 @@ module RouteTranslator
 
     def self.translate_string(str, locale)
       fallback = I18n.translate(str, :locale => locale, :default => str)
-      I18n.translate("routes.#{str}", :locale => locale, :default => fallback)
+      res = I18n.translate("routes.#{str}", :locale => locale, :default => fallback)
+      URI.escape(res)
     end
   end
 end
