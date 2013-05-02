@@ -49,6 +49,16 @@ class TranslateRoutesTest < ActionController::TestCase
     assert_routing({:path => '/productos/1', :method => "PUT"}, {:controller => 'products', :action => 'update', :id => '1', :locale => 'es'})
   end
 
+  def test_utf8_characters
+    draw_routes do
+      localized do
+        get 'people', :to => 'people#index'
+      end
+    end
+
+    assert_routing URI.escape('/ru/люди'), :controller => 'people', :action => 'index', :locale => 'ru'
+  end
+
   def test_resources_with_only
     config_default_locale_settings 'es'
 
