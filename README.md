@@ -8,7 +8,7 @@ app routes with a simple dictionary format
 
 It started as a fork of the awesome [translate_routes](https://github.com/raul/translate_routes) plugin by [Raúl Murciano](https://github.com/raul) and then I made changes as I needed until it became the actual code
 
-Right now it works with all the different flavours of rails3 (3.0, 3.1, 3.2) but I'm planning to make it compatible with rails 2.3 too. I'll see how it goes
+Right now it works with all the different flavours of rails3-4(3.0, 3.1, 3.2, 4.0rc1) but I'm planning to make it compatible with rails 2.3 too. I'll see how it goes
 
 
 Quick Start
@@ -68,23 +68,24 @@ Quick Start
           resources :cars
         end
       end
-
-      MyApp::Application.routes.translate_from_file
-      # You may pass the file path as a param here,
-      # default is config/i18n-routes.yml
    ```
 
-    And add the translations to a YAML file, for example
-`config/i18n-routes.yml`:
+    And add the translations to your locale files, for example:
 
     ```yaml
     es:
-      cars: coches
-      new: nuevo
+      routes:
+        cars: coches
+        new: nuevo
     fr:
-      cars: voitures
-      new: nouveau
+      routes:
+        cars: voitures
+        new: nouveau
     ```
+
+    Note that the `routes` scope is not mandatory, as the gem will
+    try to fall back to unscoped keys e.g.(first 'scope.cars' second 'cars'),
+    but it's convenient for separation of concerns
 
 4. Your routes are translated! Here's the output of your `rake routes` now:
 
@@ -120,12 +121,13 @@ Quick Start
     ```
 
     Note that only the routes inside a `localized` block are translated
+    N
 
-5. Include this filter in your `ApplicationController` if you want to set
-   the I18n.locale value from the value set in the route
+5. Your I18n.locale will be set up automatically from the url param when
+   it's available. To disable it add this to your controller
 
     ```ruby
-        before_filter :set_locale_from_url
+        skip_before_filter :set_locale_from_url
     ```
 
 Configuration
@@ -149,8 +151,6 @@ end
 * **generate_unlocalized_routes** - Set this option to `true` to add
   translated routes without deleting original unlocalized versions.
   Autosets `force_locale=true`. Defaults to `false`.
-* **translation_file** - Sets the translation file(s) used for translating the
-routes. Defaults to `config/i18n-routes.yml`
 * **locale_param_key** - The param key that will we used to set the
   locale to the newly generated routes. Defaults to :locale
 
@@ -159,4 +159,3 @@ Contributing
 
 Bring it! Send me a pull request, don't worry about styling or small
 details, I'm open to discussion
-
