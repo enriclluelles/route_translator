@@ -9,8 +9,6 @@ class TranslateRoutesTest < ActionController::TestCase
   include RouteTranslator::TestHelper
 
   def setup
-    @controller = ActionController::Base.new
-    @view = ActionView::Base.new
     @routes = ActionDispatch::Routing::RouteSet.new
     I18n.backend = I18n::Backend::Simple.new
     I18n.load_path = [ File.expand_path('../locales/routes.yml', __FILE__) ]
@@ -25,7 +23,7 @@ class TranslateRoutesTest < ActionController::TestCase
 
   def test_unnamed_root_route
     config_default_locale_settings 'en'
-    @routes.draw do
+    draw_routes do
       localized do
         root :to => 'people#index'
       end
@@ -38,7 +36,7 @@ class TranslateRoutesTest < ActionController::TestCase
   def test_resources
     config_default_locale_settings 'es'
 
-    @routes.draw do
+    draw_routes do
       localized do
         resources :products
       end
@@ -54,7 +52,7 @@ class TranslateRoutesTest < ActionController::TestCase
   def test_resources_with_only
     config_default_locale_settings 'es'
 
-    @routes.draw do
+    draw_routes do
       localized do
         resources :products, :only => [:index, :show]
       end
@@ -69,7 +67,7 @@ class TranslateRoutesTest < ActionController::TestCase
   def test_unnamed_root_route_without_prefix
     config_default_locale_settings 'es'
 
-    @routes.draw do
+    draw_routes do
       localized do
         root :to => 'people#index'
       end
@@ -83,9 +81,9 @@ class TranslateRoutesTest < ActionController::TestCase
   def test_unnamed_untranslated_route
     config_default_locale_settings 'en'
 
-    @routes.draw do
+    draw_routes do
       localized do
-        match 'foo', :to => 'people#index'
+        get 'foo', :to => 'people#index'
       end
     end
 
@@ -96,10 +94,10 @@ class TranslateRoutesTest < ActionController::TestCase
   def test_unnamed_translated_route_on_default_locale
     config_default_locale_settings 'es'
 
-    @routes.draw { match 'people', :to => 'people#index' }
-    @routes.draw do
+    @routes.draw { get 'people', :to => 'people#index' }
+    draw_routes do
       localized do
-        match 'people', :to => 'people#index'
+        get 'people', :to => 'people#index'
       end
     end
 
@@ -110,9 +108,9 @@ class TranslateRoutesTest < ActionController::TestCase
 
   def test_unnamed_translated_route_on_non_default_locale
     config_default_locale_settings 'en'
-    @routes.draw do
+    draw_routes do
       localized do
-        match 'people', :to => 'people#index'
+        get 'people', :to => 'people#index'
       end
     end
 
@@ -123,9 +121,9 @@ class TranslateRoutesTest < ActionController::TestCase
   def test_named_translated_route_with_prefix_must_have_locale_as_static_segment
     config_default_locale_settings 'en'
 
-    @routes.draw do
+    draw_routes do
       localized do
-        match 'people', :to => 'people#index'
+        get 'people', :to => 'people#index'
       end
     end
 
@@ -136,7 +134,7 @@ class TranslateRoutesTest < ActionController::TestCase
 
   def test_named_empty_route_without_prefix
     config_default_locale_settings 'es'
-    @routes.draw do
+    draw_routes do
       localized do
         root :to => 'people#index', :as => 'people'
       end
@@ -150,7 +148,7 @@ class TranslateRoutesTest < ActionController::TestCase
   def test_named_root_route_without_prefix
     config_default_locale_settings 'es'
 
-    @routes.draw do
+    draw_routes do
       localized do
         root :to => 'people#index'
       end
@@ -164,39 +162,38 @@ class TranslateRoutesTest < ActionController::TestCase
   def test_named_untranslated_route_without_prefix
     config_default_locale_settings 'es'
 
-    @routes.draw do
+    draw_routes do
       localized do
-        match 'foo', :to => 'people#index', :as => 'people'
+        get 'foo', :to => 'people#index', :as => 'people'
       end
     end
 
     assert_routing '/en/foo', :controller => 'people', :action => 'index', :locale => 'en'
     assert_routing '/foo', :controller => 'people', :action => 'index', :locale => 'es'
 
-    @routes.install_helpers
     assert_helpers_include :people_en, :people_es, :people
   end
 
   def test_named_translated_route_on_default_locale_without_prefix
     config_default_locale_settings 'es'
 
-    @routes.draw do
+    draw_routes do
       localized do
-        match 'people', :to => 'people#index', :as => 'people'
+        get 'people', :to => 'people#index', :as => 'people'
       end
     end
 
     assert_routing '/en/people', :controller => 'people', :action => 'index', :locale => 'en'
     assert_routing 'gente', :controller => 'people', :action => 'index', :locale => 'es'
 
-    @routes.install_helpers
+    
     assert_helpers_include :people_en, :people_es, :people
   end
 
   def test_named_translated_route_on_non_default_locale_without_prefix
-    @routes.draw do
+    draw_routes do
       localized do
-        match 'people', :to => 'people#index', :as => 'people'
+        get 'people', :to => 'people#index', :as => 'people'
       end
     end
 
@@ -205,12 +202,12 @@ class TranslateRoutesTest < ActionController::TestCase
     assert_routing '/people', :controller => 'people', :action => 'index', :locale => 'en'
     assert_routing '/es/gente', :controller => 'people', :action => 'index', :locale => 'es'
 
-    @routes.install_helpers
+    
     assert_helpers_include :people_en, :people_es, :people
   end
 
   def test_formatted_root_route
-    @routes.draw do
+    draw_routes do
       localized do
         root :to => 'people#index', :as => 'root'
       end
@@ -228,16 +225,16 @@ class TranslateRoutesTest < ActionController::TestCase
   def test_i18n_based_translations_setting_locales
     config_default_locale_settings 'en'
 
-    @routes.draw do
+    draw_routes do
       localized do
-        match 'people', :to => 'people#index', :as => 'people'
+        get 'people', :to => 'people#index', :as => 'people'
       end
     end
 
     assert_routing '/es/gente', :controller => 'people', :action => 'index', :locale => 'es'
     assert_routing '/people', :controller => 'people', :action => 'index', :locale => 'en'
 
-    @routes.install_helpers
+    
     assert_helpers_include :people_en, :people_es, :people
   end
 
@@ -245,9 +242,9 @@ class TranslateRoutesTest < ActionController::TestCase
     config_default_locale_settings 'en'
 
     I18n.stub(:available_locales, [:es, :en, :fr]) do
-      @routes.draw do
+      draw_routes do
         localized do
-          match 'people', :to => 'people#index', :as => 'people'
+          get 'people', :to => 'people#index', :as => 'people'
         end
       end
     end
@@ -256,17 +253,16 @@ class TranslateRoutesTest < ActionController::TestCase
     assert_routing '/es/gente', :controller => 'people', :action => 'index', :locale => 'es'
     assert_routing '/people', :controller => 'people', :action => 'index', :locale => 'en'
 
-    @routes.install_helpers
     assert_helpers_include :people_fr, :people_en, :people_es, :people
   end
 
   def test_2_localized_blocks
-    @routes.draw do
+    draw_routes do
       localized do
-        match 'people', :to => 'people#index', :as => 'people'
+        get 'people', :to => 'people#index', :as => 'people'
       end
       localized do
-        match 'products', :to => 'products#index', :as => 'products'
+        get 'products', :to => 'products#index', :as => 'products'
       end
     end
 
@@ -276,11 +272,11 @@ class TranslateRoutesTest < ActionController::TestCase
 
   def test_not_localizing_routes_outside_blocks
     config_default_locale_settings 'en'
-    @routes.draw do
+    draw_routes do
       localized do
-        match 'people', :to => 'people#index', :as => 'people'
+        get 'people', :to => 'people#index', :as => 'people'
       end
-      match 'products', :to => 'products#index', :as => 'products'
+      get 'products', :to => 'products#index', :as => 'products'
     end
 
     assert_routing '/es/gente', :controller => 'people', :action => 'index', :locale => 'es'
@@ -292,9 +288,9 @@ class TranslateRoutesTest < ActionController::TestCase
     config_default_locale_settings 'en'
     config_force_locale true
 
-    @routes.draw do
+    draw_routes do
       localized do
-        match 'people', :to => 'people#index', :as => 'people'
+        get 'people', :to => 'people#index', :as => 'people'
       end
     end
 
@@ -306,9 +302,9 @@ class TranslateRoutesTest < ActionController::TestCase
     config_default_locale_settings 'en'
     config_generate_unlocalized_routes true
 
-    @routes.draw do
+    draw_routes do
       localized do
-        match 'people', :to => 'people#index', :as => 'people'
+        get 'people', :to => 'people#index', :as => 'people'
       end
     end
 
@@ -319,7 +315,7 @@ class TranslateRoutesTest < ActionController::TestCase
   def test_config_translation_file
     config_default_locale_settings 'es'
 
-    @routes.draw do
+    draw_routes do
       localized do
         root :to => 'people#index'
       end

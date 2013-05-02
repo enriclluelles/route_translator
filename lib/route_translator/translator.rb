@@ -25,6 +25,9 @@ module RouteTranslator
       I18n.available_locales.each do |locale|
         new_conditions = conditions.dup
         new_conditions[:path_info] = translate_path(conditions[:path_info], locale)
+        if new_conditions[:required_defaults] && !new_conditions[:required_defaults].include?(RouteTranslator.locale_param_key)
+          new_conditions[:required_defaults] << RouteTranslator.locale_param_key if new_conditions[:required_defaults]
+        end
         new_defaults = defaults.merge(RouteTranslator.locale_param_key => locale.to_s)
         new_requirements = requirements.merge(RouteTranslator.locale_param_key => locale.to_s)
         new_route_name = translate_name(route_name, locale)

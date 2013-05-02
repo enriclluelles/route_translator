@@ -21,6 +21,16 @@ end
 
 module RouteTranslator
   module TestHelper
+    def draw_routes(&block)
+      @routes.draw(&block)
+      if @routes.respond_to?(:install_helpers)
+        @routes.install_helpers 
+      else
+        ActionView::Base.send(:include, @routes.url_helpers)
+        ActionController::Base.send(:include, @routes.url_helpers)
+      end
+    end
+
     def config_default_locale_settings(locale)
       I18n.default_locale = locale
     end
@@ -47,7 +57,9 @@ module RouteTranslator
     end
 
     def formatted_root_route?
-      !(defined?(ActionPack) && ActionPack::VERSION::MAJOR == 3 && ActionPack::VERSION::MINOR > 0)
+      b = ActionPack::VERSION::MAJOR == 3 && ActionPack::VERSION::MINOR > 0
+      b ||= ActionPack::VERSION::MAJOR == 4
+      !b
     end
 
     def print_routes(route_set)
@@ -73,16 +85,23 @@ module RouteTranslator
     end
 
     def assert_helpers_include(*helpers)
+      controller = ActionController::Base.new
+      view = ActionView::Base.new
       helpers.each do |helper|
         ['url', 'path'].each do |suffix|
-          [@controller, @view].each { |obj| assert_respond_to obj, "#{helper}_#{suffix}".to_sym }
+          [controller, view].each { |obj| assert_respond_to obj, "#{helper}_#{suffix}".to_sym }
         end
       end
     end
 
+    # Hack for compatibility between Rails 4 and Rails 3
     def assert_unrecognized_route(route_path, options)
       assert_raise ActionController::RoutingError do
+        begin
         assert_routing route_path, options
+        rescue Minitest::Assertion => m
+          raise ActionController::RoutingError.new("")
+        end
       end
     end
   end
