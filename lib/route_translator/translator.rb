@@ -20,17 +20,18 @@ module RouteTranslator
       end
     end
 
-    def self.translations_for(app, conditions, requirements, defaults, name, anchor, route_set)
-      add_untranslated_helpers_to_controllers_and_views(name, route_set.named_routes.module)
+    def self.translations_for(app, conditions, requirements, defaults, route_name, anchor, route_set, &block)
+      add_untranslated_helpers_to_controllers_and_views(route_name, route_set.named_routes.module)
       I18n.available_locales.each do |locale|
         new_conditions = conditions.dup
         new_conditions[:path_info] = translate_path(conditions[:path_info], locale)
         new_defaults = defaults.merge(RouteTranslator.locale_param_key => locale.to_s)
         new_requirements = requirements.merge(RouteTranslator.locale_param_key => locale.to_s)
-        new_name = translate_name(name, locale)
-        yield app, new_conditions, new_requirements, new_defaults, new_name, anchor
+        new_route_name = translate_name(route_name, locale)
+        new_route_name = nil if route_set.named_routes.routes[new_route_name.to_sym] #TODO: Investigate this :(
+        block.call(app, new_conditions, new_requirements, new_defaults, new_route_name, anchor)
       end
-      yield app, conditions, requirements, defaults, name, anchor if RouteTranslator.config.generate_unlocalized_routes
+      block.call(app, conditions, requirements, defaults, route_name, anchor) if RouteTranslator.config.generate_unlocalized_routes
     end
 
     # Translates a path and adds the locale prefix.
@@ -51,9 +52,8 @@ module RouteTranslator
       "#{new_path}#{final_optional_segments}"
     end
 
-    def self.translate_name(name, locale)
-      return nil unless name
-      "#{name}_#{locale.to_s.underscore}"
+    def self.translate_name(n, locale)
+      "#{n}_#{locale.to_s.underscore}" if n.present?
     end
 
     def self.default_locale?(locale)
