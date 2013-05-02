@@ -3,8 +3,8 @@ require 'action_controller'
 require 'action_mailer'
 require 'action_dispatch'
 
-require 'route_translator/extensions'
-require 'route_translator/translator'
+require File.expand_path('../route_translator/extensions', __FILE__)
+require File.expand_path('../route_translator/translator', __FILE__)
 
 module RouteTranslator
 
