@@ -31,7 +31,7 @@ module RouteTranslator
         new_defaults = defaults.merge(RouteTranslator.locale_param_key => locale.to_s)
         new_requirements = requirements.merge(RouteTranslator.locale_param_key => locale.to_s)
         new_route_name = translate_name(route_name, locale)
-        new_route_name = nil if route_set.named_routes.routes[new_route_name.to_sym] #TODO: Investigate this :(
+        new_route_name = nil if new_route_name && route_set.named_routes.routes[new_route_name.to_sym] #TODO: Investigate this :(
         block.call(app, new_conditions, new_requirements, new_defaults, new_route_name, anchor)
       end
       block.call(app, conditions, requirements, defaults, route_name, anchor) if RouteTranslator.config.generate_unlocalized_routes
