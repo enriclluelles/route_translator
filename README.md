@@ -72,7 +72,7 @@ Quick Start
 
     And add the translations to your locale files, for example:
 
-    ```yaml
+    ```yml
     es:
       routes:
         cars: coches
@@ -117,7 +117,6 @@ Quick Start
     ```
 
     Note that only the routes inside a `localized` block are translated
-    N
 
 5. Your I18n.locale will be set up automatically from the url param when
    it's available. To disable it add this to your controller
