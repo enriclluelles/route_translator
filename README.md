@@ -83,10 +83,6 @@ Quick Start
         new: nouveau
     ```
 
-    Note that the `routes` scope is not mandatory, as the gem will
-    try to fall back to unscoped keys e.g.(first 'scope.cars' second 'cars'),
-    but it's convenient for separation of concerns
-
 4. Your routes are translated! Here's the output of your `rake routes` now:
 
     ```

@@ -5,7 +5,8 @@ es:
     tr_param: tr_parametro
 
 ru:
-  people: люди
+  routes:
+    people: люди
 
 en:
-  m: m
+  m: m #Adding this here just to have en in I18n.available_locales
