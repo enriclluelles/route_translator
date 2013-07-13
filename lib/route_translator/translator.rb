@@ -66,10 +66,10 @@ module RouteTranslator
     # Tries to translate a single path segment. If the path segment
     # contains sth. like a optional format "people(.:format)", only
     # "people" will be translated, if there is no translation, the path
-    # segment is blank or begins with a ":" (param key), the segment
-    # is returned untouched
+    # segment is blank, begins with a ":" (param key) or "*" (wildcard),
+    # the segment is returned untouched
     def self.translate_path_segment segment, locale
-      return segment if segment.blank? or segment.starts_with?(":")
+      return segment if segment.blank? or segment.starts_with?(":") or segment.starts_with?("*")
 
       match = TRANSLATABLE_SEGMENT.match(segment)[1] rescue nil
 

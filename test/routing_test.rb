@@ -64,6 +64,15 @@ class TranslateRoutesTest < ActionController::TestCase
     assert_routing '/es/productos/a', :controller => 'products', :action => 'index', :locale => 'es', :tr_param => 'a'
   end
 
+  def test_wildcards_dont_get_translated
+    draw_routes do
+      localized do
+        get 'products/*tr_param', :to => 'products#index', :constraints => { :tr_param => /\w/ }
+      end
+    end
+    assert_routing '/es/productos/a/b', :controller => 'products', :action => 'index', :locale => 'es', :tr_param => 'a/b'
+  end
+
   def test_resources
     config_default_locale_settings 'es'
 
