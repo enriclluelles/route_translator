@@ -22,7 +22,13 @@ module RouteTranslator
 
     def self.translations_for(app, conditions, requirements, defaults, route_name, anchor, route_set, &block)
       add_untranslated_helpers_to_controllers_and_views(route_name, route_set.named_routes.module)
-      I18n.available_locales.each do |locale|
+      # Make sure the default locale is translated in last place to avoid
+      # problems with wildcards when default locale is omitted in paths. The
+      # default routes will catch all paths like wildcard if it is translated first
+      available_locales = I18n.available_locales.dup
+      available_locales.delete I18n.default_locale
+      available_locales.push I18n.default_locale
+      available_locales.each do |locale|
         new_conditions = conditions.dup
         new_conditions[:path_info] = translate_path(conditions[:path_info], locale)
         if new_conditions[:required_defaults] && !new_conditions[:required_defaults].include?(RouteTranslator.locale_param_key)
@@ -66,10 +72,10 @@ module RouteTranslator
     # Tries to translate a single path segment. If the path segment
     # contains sth. like a optional format "people(.:format)", only
     # "people" will be translated, if there is no translation, the path
-    # segment is blank or begins with a ":" (param key), the segment
-    # is returned untouched
+    # segment is blank, begins with a ":" (param key) or "*" (wildcard),
+    # the segment is returned untouched
     def self.translate_path_segment segment, locale
-      return segment if segment.blank? or segment.starts_with?(":")
+      return segment if segment.blank? or segment.starts_with?(":") or segment.starts_with?("*")
 
       match = TRANSLATABLE_SEGMENT.match(segment)[1] rescue nil
 
