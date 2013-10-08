@@ -55,6 +55,17 @@ class TranslateRoutesTest < ActionController::TestCase
     assert_routing '/es/productos/a/b', :controller => 'products', :action => 'index', :locale => 'es', :non_optional_param => 'b', :optional_param => 'a'
   end
 
+  def test_translations_after_optional_segments
+    draw_routes do
+      localized do
+        get '(/:optional_param)/products', :to => 'products#index'
+      end
+    end
+
+    assert_routing '/es/productos', :controller => 'products', :action => 'index', :locale => 'es'
+    assert_routing '/es/a/productos', :controller => 'products', :action => 'index', :locale => 'es', :optional_param => 'a'
+  end
+
   def test_dynamic_segments_dont_get_translated
     draw_routes do
       localized do
