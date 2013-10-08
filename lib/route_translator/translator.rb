@@ -40,7 +40,9 @@ module RouteTranslator
     # Translates a path and adds the locale prefix.
     def self.translate_path(path, locale)
       new_path = path.dup
-      final_optional_segments = new_path.slice!(/(\(.+\))$/)
+
+      final_optional_segments = new_path.slice!(/(\([^\/]+\))$/)
+
       new_path = new_path.split("/").map{|seg| translate_path_segment(seg, locale)}.join('/')
 
       # Add locale prefix if it's not the default locale,
@@ -69,11 +71,12 @@ module RouteTranslator
     # segment is blank or begins with a ":" (param key), the segment
     # is returned untouched
     def self.translate_path_segment segment, locale
-      return segment if segment.blank? or segment.starts_with?(":")
-
+      return segment if segment.blank? or segment.starts_with?(":") or segment.starts_with?("(")
+      
+      appended_part = segment.slice!(/(\()$/)
       match = TRANSLATABLE_SEGMENT.match(segment)[1] rescue nil
-
-      (translate_string(match, locale) || segment)
+      
+      (translate_string(match, locale) || segment) + appended_part.to_s
     end
 
     def self.translate_string(str, locale)
