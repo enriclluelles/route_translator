@@ -148,6 +148,7 @@ end
   Autosets `force_locale=true`. Defaults to `false`.
 * **locale_param_key** - The param key that will we used to set the
   locale to the newly generated routes. Defaults to :locale
+* **no_prefix** - Translated routes will be generated without locale prefix if set to `true`. Defaults to `false`.
 
 Contributing
 ------------
