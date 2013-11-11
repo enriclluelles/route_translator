@@ -50,7 +50,7 @@ module RouteTranslator
       # Add locale prefix if it's not the default locale,
       # or forcing locale to all routes,
       # or already generating actual unlocalized routes
-      if !default_locale?(locale) || RouteTranslator.config.force_locale || RouteTranslator.config.generate_unlocalized_routes
+      if !default_locale?(locale) || RouteTranslator.config.force_locale || RouteTranslator.config.generate_unlocalized_routes || RouteTranslator.config.generate_unnamed_unlocalized_routes
         new_path = "/#{locale.to_s.downcase}#{new_path}"
       end
 

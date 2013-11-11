@@ -370,7 +370,6 @@ class TranslateRoutesTest < ActionController::TestCase
     I18n.locale = 'en'
     config_default_locale_settings 'en'
     config_generate_unnamed_unlocalized_routes true
-    config_force_locale true
 
     draw_routes do
       localized do
