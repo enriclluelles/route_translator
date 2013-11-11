@@ -146,6 +146,11 @@ end
 * **generate_unlocalized_routes** - Set this option to `true` to add
   translated routes without deleting original unlocalized versions.
   Autosets `force_locale=true`. Defaults to `false`.
+* **generate_unnamed_unlocalized_routes** - Set this option to `true` to add
+  the behavior of **force_locale**, but with a named default route which
+  behaves as if **generate_unlocalized_routes** was `true`, so a
+  `people_path` will redirect to `/en` or `/es` depending on the value of `I18n.locale`.
+  Defaults to `false`.
 * **locale_param_key** - The param key that will we used to set the
   locale to the newly generated routes. Defaults to :locale
 

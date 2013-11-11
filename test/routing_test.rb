@@ -20,6 +20,7 @@ class TranslateRoutesTest < ActionController::TestCase
     config_force_locale false
     config_generate_unlocalized_routes false
     config_default_locale_settings("en")
+    config_generate_unnamed_unlocalized_routes false
   end
 
   def test_unnamed_root_route
@@ -326,6 +327,7 @@ class TranslateRoutesTest < ActionController::TestCase
   end
 
   def test_force_locale
+    I18n.locale = 'en'
     config_default_locale_settings 'en'
     config_force_locale true
 
@@ -337,9 +339,15 @@ class TranslateRoutesTest < ActionController::TestCase
 
     assert_routing '/en/people', :controller => 'people', :action => 'index', :locale => 'en'
     assert_unrecognized_route '/people', :controller => 'people', :action => 'index'
+    assert_equal '/en/people', @routes.url_helpers.people_en_path
+    assert_equal '/en/people', @routes.url_helpers.people_path
+    I18n.locale = 'es'
+    # The dynamic route maps to the current locale
+    assert_equal '/es/gente', @routes.url_helpers.people_path
   end
 
   def test_generate_unlocalized_routes
+    I18n.locale = 'en'
     config_default_locale_settings 'en'
     config_generate_unlocalized_routes true
 
@@ -351,6 +359,33 @@ class TranslateRoutesTest < ActionController::TestCase
 
     assert_routing '/en/people', :controller => 'people', :action => 'index', :locale => 'en'
     assert_routing '/people', :controller => 'people', :action => 'index'
+    assert_equal '/en/people', @routes.url_helpers.people_en_path
+    assert_equal '/people', @routes.url_helpers.people_path
+    I18n.locale = 'es'
+    # The dynamic route maps to the default locale, not the current
+    assert_equal '/people', @routes.url_helpers.people_path
+  end
+
+  def test_generate_unnamed_unlocalized_routes
+    I18n.locale = 'en'
+    config_default_locale_settings 'en'
+    config_generate_unnamed_unlocalized_routes true
+    config_force_locale true
+
+    draw_routes do
+      localized do
+        get 'people', :to => 'people#index', :as => 'people'
+      end
+    end
+
+    assert_routing '/en/people', :controller => 'people', :action => 'index', :locale => 'en'
+    assert_routing '/people', :controller => 'people', :action => 'index'
+    assert_equal '/en/people', @routes.url_helpers.people_en_path
+    assert_equal '/en/people', @routes.url_helpers.people_path
+
+    I18n.locale = 'es'
+    # The dynamic route maps to the current locale
+    assert_equal '/es/gente', @routes.url_helpers.people_path
   end
 
   def test_config_translation_file
