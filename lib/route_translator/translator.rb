@@ -40,7 +40,11 @@ module RouteTranslator
         new_route_name = nil if new_route_name && route_set.named_routes.routes[new_route_name.to_sym] #TODO: Investigate this :(
         block.call(app, new_conditions, new_requirements, new_defaults, new_route_name, anchor)
       end
-      block.call(app, conditions, requirements, defaults, route_name, anchor) if RouteTranslator.config.generate_unlocalized_routes
+      if RouteTranslator.config.generate_unnamed_unlocalized_routes
+        block.call(app, conditions, requirements, defaults, nil, anchor)
+      elsif RouteTranslator.config.generate_unlocalized_routes
+        block.call(app, conditions, requirements, defaults, route_name, anchor)
+      end
     end
 
     # Translates a path and adds the locale prefix.
@@ -52,7 +56,7 @@ module RouteTranslator
       # Add locale prefix if it's not the default locale,
       # or forcing locale to all routes,
       # or already generating actual unlocalized routes
-      if !default_locale?(locale) || RouteTranslator.config.force_locale || RouteTranslator.config.generate_unlocalized_routes
+      if !default_locale?(locale) || RouteTranslator.config.force_locale || RouteTranslator.config.generate_unlocalized_routes || RouteTranslator.config.generate_unnamed_unlocalized_routes
         new_path = "/#{locale.to_s.downcase}#{new_path}"
       end
 
