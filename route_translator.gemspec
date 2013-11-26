@@ -19,4 +19,6 @@ Gem::Specification.new do |s|
 
   s.add_development_dependency("minitest", "~> 4.7.0")
   s.add_development_dependency("sinatra")
+  s.add_development_dependency("pry")
+  s.add_development_dependency("pry-nav")
 end
