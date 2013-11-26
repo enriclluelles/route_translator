@@ -8,11 +8,11 @@ rvm:
 gemfile:
   - gemfiles/Gemfile.rails-3.0.x
   - gemfiles/Gemfile.rails-3.1.x
-  - gemfiles/Gemfile.rails-4.0.x
+  - gemfiles/Gemfile.rails-3.2.x
   - Gemfile
 matrix:
   exclude:
     - rvm: 1.8.7
-      gemfile: gemfiles/Gemfile.rails-4.0.x
+      gemfile: Gemfile
   allow_failures:
     - rvm: rbx-2.1.1
