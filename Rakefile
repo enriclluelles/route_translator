@@ -1,6 +1,7 @@
 require 'rake'
 require 'rake/testtask'
 require 'rdoc/task'
+require 'bundler/gem_tasks'
 
 desc 'Default: run tests.'
 task :default => :test
