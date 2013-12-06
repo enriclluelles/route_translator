@@ -7,3 +7,5 @@ SampleApp/db/test.sqlite3
 gemfiles/*.lock
 test/log
 test/tmp
+/.ruby-*
+/.idea
