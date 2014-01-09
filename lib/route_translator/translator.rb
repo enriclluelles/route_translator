@@ -51,18 +51,18 @@ module RouteTranslator
     def self.translate_path(path, locale)
       new_path = path.dup
       final_optional_segments = new_path.slice!(/(\(.+\))$/)
-      new_path = new_path.split("/").map{|seg| translate_path_segment(seg, locale)}.join('/')
+      translated_segments = new_path.split("/").select{ |seg| !seg.blank? }.map{|seg| translate_path_segment(seg, locale)}
 
       # Add locale prefix if it's not the default locale,
       # or forcing locale to all routes,
       # or already generating actual unlocalized routes
       if !default_locale?(locale) || RouteTranslator.config.force_locale || RouteTranslator.config.generate_unlocalized_routes || RouteTranslator.config.generate_unnamed_unlocalized_routes
-        new_path = "/#{locale.to_s.downcase}#{new_path}"
+        if !locale_param_present?(new_path)
+          translated_segments.unshift locale.to_s.downcase
+        end
       end
 
-      new_path = "/" if new_path.blank?
-
-      "#{new_path}#{final_optional_segments}"
+      "/#{translated_segments.join('/')}#{final_optional_segments}"
     end
 
     def self.translate_name(n, locale)
@@ -89,6 +89,10 @@ module RouteTranslator
     def self.translate_string(str, locale)
       res = I18n.translate(str, :scope => :routes, :locale => locale, :default => str)
       URI.escape(res)
+    end
+
+    def self.locale_param_present?(path)
+      !(path.split('/').detect { |segment| segment.to_s == ":#{RouteTranslator.locale_param_key.to_s}" }.nil?)
     end
   end
 end
