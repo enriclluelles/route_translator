@@ -410,6 +410,22 @@ class TranslateRoutesTest < ActionController::TestCase
     assert_unrecognized_route '/es', :controller => 'people', :action => 'index', :locale => 'es'
   end
 
+  def test_dont_add_locale_to_routes_if_local_param_present
+    config_default_locale_settings 'es'
+    config_force_locale true
+
+    draw_routes do
+      scope 'segment/:locale' do
+        localized do
+          resources :products
+        end
+      end
+    end
+
+    assert_routing '/segment/es/productos/product_slug', :controller => 'products', :action => 'show', :locale => 'es', :id => 'product_slug'
+    assert_routing '/segment/en/products/product_slug', :controller => 'products', :action => 'show', :locale => 'en', :id => 'product_slug'
+  end
+
 
   def test_action_controller_gets_locale_setter
     ActionController::Base.instance_methods.include?('set_locale_from_url')

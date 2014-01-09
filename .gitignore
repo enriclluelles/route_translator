@@ -1,9 +1,85 @@
-.DS_Store
+
 SampleApp/log/*.log
 SampleApp/tmp/**/*
 SampleApp/db/test.sqlite3
-/.rvmrc
-/Gemfile.lock
+
+## Gemfiles
 gemfiles/*.lock
+
+## Tests
 test/log
 test/tmp
+
+### Ruby version managers
+/.rvmrc
+/.ruby-version
+/.ruby-gemset
+
+### `bundle gem` defaults
+
+*.gem
+*.rbc
+.bundle
+.config
+.yardoc
+Gemfile.lock
+InstalledFiles
+_yardoc
+coverage
+doc/
+lib/bundler/man
+pkg
+rdoc
+spec/reports
+test/tmp
+test/version_tmp
+tmp
+
+
+
+### Mess files
+
+.~lock.*
+.tmp*
+**.orig
+
+
+### Editors meta-data
+
+## IntelliJ IDEA / RubyMine
+*.iml
+*.ipr
+*.iws
+.idea/
+
+## Eclipse project management files
+.buildpath
+.loadpath
+.project
+.settings/*
+.externalToolBuilders/*
+
+## Textmate
+*.tmproj
+*.tmproject
+tmtags
+
+# SublimeText project files
+/*.sublime-project
+*.sublime-workspace
+
+
+### OS temporary files
+
+## Mac OS X
+.DS_Store
+._*
+# Files that might appear on external disk
+.Spotlight-V100
+.Trashes
+
+## Windows
+Thumbs.db
+
+## Linux
+*~
