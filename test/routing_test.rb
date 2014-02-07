@@ -422,4 +422,24 @@ class TranslateRoutesTest < ActionController::TestCase
   def test_action_view_gets_locale_suffix_helper
     ActionView::Base.instance_methods.include?('locale_suffix')
   end
+
+  def test_action_controller_test_case_reades_default_urls
+    config_default_locale_settings 'en'
+
+    draw_routes do
+      localized do
+        resources :person
+      end
+    end
+
+    test_case = ActionController::TestCase.new(nil)
+
+    # Not localized
+    assert test_case.respond_to?(:people_path)
+    assert test_case.respond_to?(:new_person_path)
+
+    # Localized
+    assert test_case.respond_to?(:people_en_path)
+    assert test_case.respond_to?(:new_person_en_path)
+  end
 end

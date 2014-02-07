@@ -26,11 +26,10 @@ module ActionDispatch
           end
 
           mapping = Mapping.new(@set, @scope, path, options)
-          app, conditions, requirements, defaults, as, anchor = mapping.to_route
           if @localized
-            @set.add_localized_route(app, conditions, requirements, defaults, as, anchor)
+            @set.add_localized_route(*mapping.to_route)
           else
-            @set.add_route(app, conditions, requirements, defaults, as, anchor)
+            @set.add_route(*mapping.to_route)
           end
         end
       else

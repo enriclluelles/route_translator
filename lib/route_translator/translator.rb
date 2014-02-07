@@ -17,6 +17,9 @@ module RouteTranslator
             __send__("#{old_name}_#{I18n.default_locale.to_s.underscore}_#{suffix}", *args)
           end
         end
+
+        # Including the named routes helpers module
+        ActionController::TestCase.__send__(:include, helper_container)
       end
     end
 
