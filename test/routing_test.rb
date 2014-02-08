@@ -423,12 +423,16 @@ class TranslateRoutesTest < ActionController::TestCase
     ActionView::Base.instance_methods.include?('locale_suffix')
   end
 
-  def test_action_controller_test_case_reades_default_urls
+  def test_action_controller_test_case_reads_default_urls
     test_case_reads_default_urls(ActionController::TestCase)
   end
 
-  def test_action_view_test_caes_reads_default_urls
+  def test_action_view_test_case_reads_default_urls
     test_case_reads_default_urls(ActionView::TestCase)
+  end
+
+  def test_action_mailer_test_case_reads_default_urls
+    test_case_reads_default_urls(ActionMailer::TestCase)
   end
 
   private
