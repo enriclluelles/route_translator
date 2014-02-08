@@ -443,6 +443,7 @@ class TranslateRoutesTest < ActionController::TestCase
       localized do
         resources :person
       end
+      match "/dummy", :to => "dummy#dummy", via: :all
     end
 
     test_case = klass.new(nil)
@@ -450,7 +451,10 @@ class TranslateRoutesTest < ActionController::TestCase
     # Not localized
     assert test_case.respond_to?(:people_path)
     assert test_case.respond_to?(:new_person_path)
+    assert test_case.respond_to?(:dummy_path)
 
+    assert_routing '/dummy', :controller => 'dummy', :action => 'dummy'
+    
     # Localized
     assert test_case.respond_to?(:people_en_path)
     assert test_case.respond_to?(:new_person_en_path)

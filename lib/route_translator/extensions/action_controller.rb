@@ -12,7 +12,7 @@ module ActionController
   class TestCase
   	include ActionController::UrlFor
 
-  	delegate :env, :request, to: :@controller
+  	delegate :env, :request, :to => :@controller
   	def _routes; @routes; end
   end
 end
