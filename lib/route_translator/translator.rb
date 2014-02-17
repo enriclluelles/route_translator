@@ -53,10 +53,11 @@ module RouteTranslator
       final_optional_segments = new_path.slice!(/(\([^\/]+\))$/)
       translated_segments = new_path.split("/").select{ |seg| !seg.blank? }.map{|seg| translate_path_segment(seg, locale)}
 
-      # Add locale prefix if it's not the default locale,
+      # if not hiding locale then
+      # add locale prefix if it's not the default locale,
       # or forcing locale to all routes,
       # or already generating actual unlocalized routes
-      if !default_locale?(locale) || RouteTranslator.config.force_locale || RouteTranslator.config.generate_unlocalized_routes || RouteTranslator.config.generate_unnamed_unlocalized_routes
+      if !RouteTranslator.config.hide_locale && (!default_locale?(locale) || RouteTranslator.config.force_locale || RouteTranslator.config.generate_unlocalized_routes || RouteTranslator.config.generate_unnamed_unlocalized_routes)
         if !locale_param_present?(new_path)
           translated_segments.unshift locale.to_s.downcase
         end
