@@ -39,6 +39,10 @@ module RouteTranslator
       RouteTranslator.config.force_locale = boolean
     end
 
+    def config_hide_locale(boolean)
+      RouteTranslator.config.hide_locale = boolean
+    end
+
     def config_generate_unlocalized_routes(boolean)
       RouteTranslator.config.generate_unlocalized_routes = boolean
     end

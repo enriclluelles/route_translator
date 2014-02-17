@@ -18,6 +18,7 @@ class TranslateRoutesTest < ActionController::TestCase
 
   def teardown
     config_force_locale false
+    config_hide_locale false
     config_generate_unlocalized_routes false
     config_default_locale_settings("en")
     config_generate_unnamed_unlocalized_routes false
@@ -435,6 +436,20 @@ class TranslateRoutesTest < ActionController::TestCase
 
     assert_routing '/segment/es/productos/product_slug', :controller => 'products', :action => 'show', :locale => 'es', :id => 'product_slug'
     assert_routing '/segment/en/products/product_slug', :controller => 'products', :action => 'show', :locale => 'en', :id => 'product_slug'
+  end
+
+  def test_config_hide_locale
+    config_default_locale_settings 'en'
+    config_hide_locale true
+
+    draw_routes do
+      localized do
+        resources :people
+      end
+    end
+
+    assert_routing '/gente', :controller => 'people', :action => 'index', :locale => 'es'
+    assert_routing '/people', :controller => 'people', :action => 'index', :locale => 'en'
   end
 
 
