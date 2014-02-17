@@ -8,6 +8,7 @@ gemfiles/*.lock
 
 ## Tests
 test/log
+test/dummy/log
 test/tmp
 
 ### Ruby version managers
