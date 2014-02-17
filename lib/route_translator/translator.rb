@@ -62,7 +62,7 @@ module RouteTranslator
         end
       end
 
-      "/#{translated_segments.join('/')}#{final_optional_segments}"
+      "/#{translated_segments.join('/')}#{final_optional_segments}".gsub(/\/\(\//, '(/')
     end
 
     def self.translate_name(n, locale)
@@ -79,7 +79,7 @@ module RouteTranslator
     # segment is blank, begins with a ":" (param key) or "*" (wildcard),
     # the segment is returned untouched
     def self.translate_path_segment segment, locale
-      return segment if segment.blank? or segment.starts_with?(":") or segment.starts_with?("(")
+      return segment if segment.blank? or segment.starts_with?(":") or segment.starts_with?("(") or segment.starts_with?("*")
       
       appended_part = segment.slice!(/(\()$/)
       match = TRANSLATABLE_SEGMENT.match(segment)[1] rescue nil
