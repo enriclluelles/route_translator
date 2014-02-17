@@ -408,20 +408,6 @@ class TranslateRoutesTest < ActionController::TestCase
     assert_equal '/es/gente', @routes.url_helpers.people_path
   end
 
-  def test_config_translation_file
-    config_default_locale_settings 'es'
-
-    draw_routes do
-      localized do
-        root :to => 'people#index'
-      end
-    end
-
-    assert_routing '/', :controller => 'people', :action => 'index', :locale => 'es'
-    assert_routing '/en', :controller => 'people', :action => 'index', :locale => 'en'
-    assert_unrecognized_route '/es', :controller => 'people', :action => 'index', :locale => 'es'
-  end
-
   def test_dont_add_locale_to_routes_if_local_param_present
     config_default_locale_settings 'es'
     config_force_locale true

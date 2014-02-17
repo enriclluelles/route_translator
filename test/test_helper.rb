@@ -51,10 +51,6 @@ module RouteTranslator
       RouteTranslator.config.generate_unnamed_unlocalized_routes = boolean
     end
 
-    def config_translation_file (file)
-      RouteTranslator.config.translation_file = file
-    end
-
     def path_string(route)
       path = route.respond_to?(:path) ? route.path : route.to_s.split(' ')[1]
       path.respond_to?(:spec) ? path.spec.to_s : path.to_s
