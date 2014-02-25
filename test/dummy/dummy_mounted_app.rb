@@ -1,6 +1,5 @@
-require 'sinatra'
-class DummyMountedApp < Sinatra::Base
-  get "/" do
-    "Good"
+class DummyMountedApp
+  def call(env)
+    [200, {"Content-Type" => "text/plain"}, ["Good"]]
   end
 end
