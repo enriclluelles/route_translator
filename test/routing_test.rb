@@ -473,7 +473,7 @@ class TranslateRoutesTest < ActionController::TestCase
       end
     end
 
-    test_case = klass.new(nil)
+    test_case = klass.new(:respond_to?)
 
     # Not localized
     assert test_case.respond_to?(:people_path)
