@@ -2,6 +2,9 @@ require 'test/unit'
 require 'minitest/mock'
 require 'minitest/unit'
 
+require 'i18n'
+I18n.enforce_available_locales = true
+
 require "rails"
 require "action_controller/railtie"
 

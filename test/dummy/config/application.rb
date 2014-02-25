@@ -9,5 +9,6 @@ module Dummy
   class Application < Rails::Application
     # config.logger = Logger.new(File.new("/dev/null", 'w'))
     config.active_support.deprecation = :log
+    config.eager_load = false
   end
 end
