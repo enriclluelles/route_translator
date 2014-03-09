@@ -249,7 +249,7 @@ class TranslateRoutesTest < ActionController::TestCase
     assert_routing '/en/people', :controller => 'people', :action => 'index', :locale => 'en'
     assert_routing 'gente', :controller => 'people', :action => 'index', :locale => 'es'
 
-    
+
     assert_helpers_include :people_en, :people_es, :people
   end
 
@@ -265,7 +265,7 @@ class TranslateRoutesTest < ActionController::TestCase
     assert_routing '/people', :controller => 'people', :action => 'index', :locale => 'en'
     assert_routing '/es/gente', :controller => 'people', :action => 'index', :locale => 'es'
 
-    
+
     assert_helpers_include :people_en, :people_es, :people
   end
 
@@ -297,7 +297,7 @@ class TranslateRoutesTest < ActionController::TestCase
     assert_routing '/es/gente', :controller => 'people', :action => 'index', :locale => 'es'
     assert_routing '/people', :controller => 'people', :action => 'index', :locale => 'en'
 
-    
+
     assert_helpers_include :people_en, :people_es, :people
   end
 
@@ -478,7 +478,7 @@ class TranslateRoutesTest < ActionController::TestCase
     # Not localized
     assert test_case.respond_to?(:people_path)
     assert test_case.respond_to?(:new_person_path)
-    
+
     # Localized
     assert test_case.respond_to?(:people_en_path)
     assert test_case.respond_to?(:new_person_en_path)

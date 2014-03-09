@@ -27,7 +27,7 @@ module RouteTranslator
     def draw_routes(&block)
       @routes.draw(&block)
       if @routes.respond_to?(:install_helpers)
-        @routes.install_helpers 
+        @routes.install_helpers
       else
         ActionView::Base.send(:include, @routes.url_helpers)
         ActionController::Base.send(:include, @routes.url_helpers)

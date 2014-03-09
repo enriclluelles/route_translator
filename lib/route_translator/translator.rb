@@ -86,10 +86,10 @@ module RouteTranslator
     # the segment is returned untouched
     def self.translate_path_segment segment, locale
       return segment if segment.blank? or segment.starts_with?(":") or segment.starts_with?("(") or segment.starts_with?("*")
-      
+
       appended_part = segment.slice!(/(\()$/)
       match = TRANSLATABLE_SEGMENT.match(segment)[1] rescue nil
-      
+
       (translate_string(match, locale) || segment) + appended_part.to_s
     end
 
