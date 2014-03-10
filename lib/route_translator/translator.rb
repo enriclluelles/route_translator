@@ -56,7 +56,7 @@ module RouteTranslator
     def self.translate_path(path, locale)
       new_path = path.dup
       final_optional_segments = new_path.slice!(/(\([^\/]+\))$/)
-      translated_segments = new_path.split("/").select{ |seg| !seg.blank? }.map{|seg| translate_path_segment(seg, locale)}
+      translated_segments = new_path.split("/").map{ |seg| translate_path_segment(seg, locale) }.select{ |seg| !seg.blank? }
 
       # if not hiding locale then
       # add locale prefix if it's not the default locale,

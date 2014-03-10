@@ -407,6 +407,25 @@ class TranslateRoutesTest < ActionController::TestCase
     # The dynamic route maps to the current locale
     assert_equal '/es/gente', @routes.url_helpers.people_path
   end
+  
+  def test_blank_localized_routes
+    I18n.locale = 'en'
+    config_default_locale_settings 'en'
+
+    draw_routes do
+      localized do
+        get 'people/blank', :to => 'people#index', :as => 'people'
+      end
+    end
+    
+    I18n.locale = 'en'
+    assert_routing '/people/blank', :controller => 'people', :action => 'index', :locale => 'en'
+    assert_equal '/people/blank', @routes.url_helpers.people_en_path
+    
+    I18n.locale = 'es'
+    assert_routing '/es/gente', :controller => 'people', :action => 'index', :locale => 'es'
+    assert_equal '/es/gente', @routes.url_helpers.people_es_path
+  end
 
   def test_dont_add_locale_to_routes_if_local_param_present
     config_default_locale_settings 'es'

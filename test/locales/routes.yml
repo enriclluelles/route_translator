@@ -3,6 +3,7 @@ es:
     people: gente
     products: productos
     tr_param: tr_parametro
+    blank: ""
 
 ru:
   routes:
