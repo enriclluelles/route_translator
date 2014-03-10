@@ -10,9 +10,9 @@ module ActionController
   end
 
   class TestCase
-  	include ActionController::UrlFor
+    include ActionController::UrlFor
 
-  	delegate :env, :request, :to => :@controller
-  	def _routes; @routes; end
+    delegate :env, :request, :to => :@controller
+    def _routes; @routes; end
   end
 end
