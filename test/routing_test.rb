@@ -457,7 +457,6 @@ class TranslateRoutesTest < ActionController::TestCase
     assert_routing '/people', :controller => 'people', :action => 'index', :locale => 'en'
   end
 
-
   def test_action_controller_gets_locale_setter
     ActionController::Base.instance_methods.include?('set_locale_from_url')
   end

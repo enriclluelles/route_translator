@@ -20,4 +20,13 @@ class IntegrationTest < class_to_inherit
     assert_equal "Good", @response.body
     assert_response :success
   end
+  
+  def test_i18n_locale_thread_safe
+    config_default_locale_settings 'en'
+    
+    get '/es/dummy'
+    assert_equal 'es', @response.body
+    
+    assert_equal :en, I18n.locale
+  end
 end
