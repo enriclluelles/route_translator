@@ -122,7 +122,7 @@ Quick Start
    it's available. To disable it add this to your controller
 
     ```ruby
-        skip_before_filter :set_locale_from_url
+        skip_around_filter :set_locale_from_url
     ```
 
 Configuration
