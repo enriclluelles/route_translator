@@ -1,6 +1,7 @@
 RouteTranslator
 ===============
 
+[![Gem Version](https://badge.fury.io/rb/route_translator.svg)](http://badge.fury.io/rb/route_translator)
 [![Build Status](https://secure.travis-ci.org/enriclluelles/route_translator.png)](http://travis-ci.org/enriclluelles/route_translator)
 
 RouteTranslator is a gem to allow you to manage the translations of your
