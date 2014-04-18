@@ -5,9 +5,11 @@ module RouteTranslator
     #   people_path -> people_de_path
     #   I18n.locale = :fr
     #   people_path -> people_fr_path
-    def self.add_untranslated_helpers_to_controllers_and_views(old_name, helper_container)
+    def self.add_untranslated_helpers_to_controllers_and_views(old_name, helper_container, helper_list)
       ['path', 'url'].each do |suffix|
         new_helper_name = "#{old_name}_#{suffix}"
+
+        helper_list.push(new_helper_name.to_sym) unless helper_list.include?(new_helper_name.to_sym)
 
         helper_container.__send__(:define_method, new_helper_name) do |*args|
           locale_suffix = I18n.locale.to_s.underscore
@@ -18,15 +20,11 @@ module RouteTranslator
           end
         end
 
-        # Including the named routes helpers module
-        [ActionController::TestCase, ActionView::TestCase, ActionMailer::TestCase].each do |klass|
-          klass.__send__(:include, helper_container)
-        end
       end
     end
 
     def self.translations_for(app, conditions, requirements, defaults, route_name, anchor, route_set, &block)
-      add_untranslated_helpers_to_controllers_and_views(route_name, route_set.named_routes.module)
+      add_untranslated_helpers_to_controllers_and_views(route_name, route_set.named_routes.module, route_set.named_routes.helpers)
       # Make sure the default locale is translated in last place to avoid
       # problems with wildcards when default locale is omitted in paths. The
       # default routes will catch all paths like wildcard if it is translated first

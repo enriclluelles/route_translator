@@ -468,37 +468,45 @@ class TranslateRoutesTest < ActionController::TestCase
   def test_action_view_gets_locale_suffix_helper
     ActionView::Base.instance_methods.include?('locale_suffix')
   end
+end
 
-  def test_action_controller_test_case_reads_default_urls
-    test_case_reads_default_urls(ActionController::TestCase)
-  end
+class ProductsControllerTest < ActionController::TestCase
+  include ActionDispatch::Assertions::RoutingAssertions
+  include RouteTranslator::TestHelper
 
-  def test_action_view_test_case_reads_default_urls
-    test_case_reads_default_urls(ActionView::TestCase)
-  end
+  def setup
+    @routes = ActionDispatch::Routing::RouteSet.new
+    I18n.backend = I18n::Backend::Simple.new
+    I18n.load_path = [ File.expand_path('../locales/routes.yml', __FILE__) ]
+    I18n.reload!
 
-  def test_action_mailer_test_case_reads_default_urls
-    test_case_reads_default_urls(ActionMailer::TestCase)
-  end
-
-  private
-  def test_case_reads_default_urls(klass)
     config_default_locale_settings 'en'
 
     draw_routes do
       localized do
-        resources :person
+        resources :products
       end
     end
+  end
 
-    test_case = klass.new(:respond_to?)
+  def teardown
+    config_force_locale false
+    config_hide_locale false
+    config_generate_unlocalized_routes false
+    config_default_locale_settings("en")
+    config_generate_unnamed_unlocalized_routes false
+  end
 
-    # Not localized
-    assert test_case.respond_to?(:people_path)
-    assert test_case.respond_to?(:new_person_path)
+  def test_url_helpers_are_included
 
-    # Localized
-    assert test_case.respond_to?(:people_en_path)
-    assert test_case.respond_to?(:new_person_en_path)
+    #doing it this way because assert_nothing_raised doesn't work on all rails versions
+    %w(product_path product_url product_es_path product_es_url).each do |method|
+      begin
+        send(method)
+      rescue Exception => e
+        raise e if e.is_a?(NameError) #swallow anything that isn't a NameError
+      end
+    end
   end
 end
+
