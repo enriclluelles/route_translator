@@ -155,7 +155,7 @@ end
   behaves as if **generate_unlocalized_routes** was `true`, so
   `root_path` will redirect to `/en` or `/es` depending on the value of `I18n.locale`.
   Defaults to `false`.
-* **locale_param_key** - The param key that will we used to set the
+* **locale_param_key** - The param key that will be used to set the
   locale to the newly generated routes. Defaults to :locale
 
 Contributing
