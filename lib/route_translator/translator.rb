@@ -13,31 +13,31 @@ module RouteTranslator
 
         helper_container.__send__(:define_method, new_helper_name) do |*args|
           locale_suffix = I18n.locale.to_s.underscore
-          if respond_to?("#{old_name}_#{locale_suffix}_#{suffix}")
+          if RouteTranslator.config.tld_locales && RouteTranslator.config.tld_locales[self.try(:tld)]
+            if args.empty? || (args.select{|e| e.is_a?(Hash) }.first[:locale] == I18n.default_locale)
+            __send__("#{old_name}_native_#{self.try(:locale_from_tld)}_#{suffix}", *args)
+            else
+            __send__("#{old_name}_#{args.first[:locale]}_#{suffix}", *args)
+            end
+          elsif respond_to?("#{old_name}_#{locale_suffix}_#{suffix}")
             __send__("#{old_name}_#{locale_suffix}_#{suffix}", *args)
           else
             __send__("#{old_name}_#{I18n.default_locale.to_s.underscore}_#{suffix}", *args)
           end
         end
-
       end
     end
 
     def self.translations_for(app, conditions, requirements, defaults, route_name, anchor, route_set, &block)
       add_untranslated_helpers_to_controllers_and_views(route_name, route_set.named_routes.module, route_set.named_routes.helpers)
-      # Make sure the default locale is translated in last place to avoid
-      # problems with wildcards when default locale is omitted in paths. The
-      # default routes will catch all paths like wildcard if it is translated first
-      available_locales = I18n.available_locales.dup
-      available_locales.delete I18n.default_locale
-      available_locales.push I18n.default_locale
+
       available_locales.each do |locale|
         new_conditions = conditions.dup
         new_conditions[:path_info] = translate_path(conditions[:path_info], locale)
         if new_conditions[:required_defaults] && !new_conditions[:required_defaults].include?(RouteTranslator.locale_param_key)
           new_conditions[:required_defaults] << RouteTranslator.locale_param_key if new_conditions[:required_defaults]
         end
-        new_defaults = defaults.merge(RouteTranslator.locale_param_key => locale.to_s)
+        new_defaults = defaults.merge(RouteTranslator.locale_param_key => locale.to_s.gsub('native_', ''))
         new_requirements = requirements.merge(RouteTranslator.locale_param_key => locale.to_s)
         new_route_name = translate_name(route_name, locale)
         new_route_name = nil if new_route_name && route_set.named_routes.routes[new_route_name.to_sym] #TODO: Investigate this :(
@@ -50,23 +50,35 @@ module RouteTranslator
       end
     end
 
+    private
+    def self.available_locales
+      available_locales = I18n.available_locales.dup
+      available_locales.push *RouteTranslator.native_locales if RouteTranslator.native_locales.present?
+      # Make sure the default locale is translated in last place to avoid
+      # problems with wildcards when default locale is omitted in paths. The
+      # default routes will catch all paths like wildcard if it is translated first.
+      available_locales.push(available_locales.delete(I18n.default_locale))
+    end
+
     # Translates a path and adds the locale prefix.
     def self.translate_path(path, locale)
       new_path = path.dup
       final_optional_segments = new_path.slice!(/(\([^\/]+\))$/)
       translated_segments = new_path.split("/").map{ |seg| translate_path_segment(seg, locale) }.select{ |seg| !seg.blank? }
 
-      # if not hiding locale then
-      # add locale prefix if it's not the default locale,
-      # or forcing locale to all routes,
-      # or already generating actual unlocalized routes
-      if !RouteTranslator.config.hide_locale && (!default_locale?(locale) || RouteTranslator.config.force_locale || RouteTranslator.config.generate_unlocalized_routes || RouteTranslator.config.generate_unnamed_unlocalized_routes)
-        if !locale_param_present?(new_path)
-          translated_segments.unshift locale.to_s.downcase
-        end
+      if display_locale?(locale) && !locale_param_present?(new_path)
+        translated_segments.unshift(locale.to_s.downcase)
       end
 
       "/#{translated_segments.join('/')}#{final_optional_segments}".gsub(/\/\(\//, '(/')
+    end
+
+    def self.display_locale?(locale)
+      !RouteTranslator.config.hide_locale && !RouteTranslator.native_locale?(locale) &&
+        (!default_locale?(locale) ||
+         RouteTranslator.config.force_locale ||
+         RouteTranslator.config.generate_unlocalized_routes ||
+         RouteTranslator.config.generate_unnamed_unlocalized_routes)
     end
 
     def self.translate_name(n, locale)
@@ -82,7 +94,7 @@ module RouteTranslator
     # "people" will be translated, if there is no translation, the path
     # segment is blank, begins with a ":" (param key) or "*" (wildcard),
     # the segment is returned untouched
-    def self.translate_path_segment segment, locale
+    def self.translate_path_segment(segment, locale)
       return segment if segment.blank? or segment.starts_with?(":") or segment.starts_with?("(") or segment.starts_with?("*")
 
       appended_part = segment.slice!(/(\()$/)
@@ -92,6 +104,7 @@ module RouteTranslator
     end
 
     def self.translate_string(str, locale)
+      locale = "#{locale}".gsub('native_', '')
       res = I18n.translate(str, :scope => :routes, :locale => locale, :default => str)
       URI.escape(res)
     end

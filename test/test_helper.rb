@@ -57,6 +57,10 @@ module RouteTranslator
       RouteTranslator.config.generate_unnamed_unlocalized_routes = boolean
     end
 
+    def config_tld_locales(hash)
+      RouteTranslator.config.tld_locales = hash.with_indifferent_access
+    end
+
     def path_string(route)
       path = route.respond_to?(:path) ? route.path : route.to_s.split(' ')[1]
       path.respond_to?(:spec) ? path.spec.to_s : path.to_s
