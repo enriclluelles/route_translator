@@ -157,6 +157,26 @@ end
   Defaults to `false`.
 * **locale_param_key** - The param key that will be used to set the
   locale to the newly generated routes. Defaults to :locale
+* **tld_locales** - a hash mapping domain tlds to locales, eg  
+  `{:'co.uk' => :en, :de => :de }` 
+  This allows multi-domain applications to set the native locale dynamically
+  based on the TLD of the domain, and hide that locale from routes, acting like a
+  dynamic `hide_locale`.  
+
+  This also affects path_helpers, see example: 
+  ```ruby
+  # host: your_app.co.uk
+  users_path              #=> '/users'
+  users_path(locale: :en) #=> '/users'
+  users_path(locale: :de) #=> '/de/benutzer'
+  # host: your_app.de
+  users_path              #=> '/benutzer'
+  users_path(locale: :en) #=> '/en/users'
+  users_path(locale: :de) #=> '/benutzer'
+  ```
+
+  This option supercedes and ignores all the other options and should be
+  considered an alternative use-case for this gem.
 
 Contributing
 ------------
