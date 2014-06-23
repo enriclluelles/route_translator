@@ -3,7 +3,10 @@
 
 en:
   routes:
-    dummy: 'dummy'
+    dummy: dummy
 es:
   routes:
-    dummy: 'dummy'
+    dummy: dummy
+ru:
+  routes:
+    dummy: манекен

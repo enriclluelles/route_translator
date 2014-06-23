@@ -22,6 +22,7 @@ class TranslateRoutesTest < ActionController::TestCase
     config_generate_unlocalized_routes false
     config_default_locale_settings("en")
     config_generate_unnamed_unlocalized_routes false
+    config_host_locales({})
   end
 
   def test_unnamed_root_route
@@ -94,7 +95,6 @@ class TranslateRoutesTest < ActionController::TestCase
         resources :products
       end
     end
-
 
     assert_routing '/en/products', :controller => 'products', :action => 'index', :locale => 'en'
     assert_routing '/productos', :controller => 'products', :action => 'index', :locale => 'es'
@@ -431,7 +431,7 @@ class TranslateRoutesTest < ActionController::TestCase
     # The dynamic route maps to the current locale
     assert_equal '/es/gente', @routes.url_helpers.people_path
   end
-  
+
   def test_blank_localized_routes
     I18n.locale = 'en'
     config_default_locale_settings 'en'
@@ -441,11 +441,11 @@ class TranslateRoutesTest < ActionController::TestCase
         get 'people/blank', :to => 'people#index', :as => 'people'
       end
     end
-    
+
     I18n.locale = 'en'
     assert_routing '/people/blank', :controller => 'people', :action => 'index', :locale => 'en'
     assert_equal '/people/blank', @routes.url_helpers.people_en_path
-    
+
     I18n.locale = 'es'
     assert_routing '/es/gente', :controller => 'people', :action => 'index', :locale => 'es'
     assert_equal '/es/gente', @routes.url_helpers.people_es_path
@@ -481,6 +481,22 @@ class TranslateRoutesTest < ActionController::TestCase
     assert_routing '/people', :controller => 'people', :action => 'index', :locale => 'en'
   end
 
+  def test_host_locales
+    config_host_locales({ :host => 'es', :'co.uk' => 'en' })
+
+    draw_routes do
+      localized do
+        resources :people
+      end
+      root :to => 'people#index'
+    end
+
+    assert_recognizes({:controller => 'people', :action => 'index', :locale => 'es'}, {:path => '/gente',   :method => :get})
+    assert_recognizes({:controller => 'people', :action => 'index', :locale => 'es'}, {:path => '/es/gente',:method => :get})
+    assert_recognizes({:controller => 'people', :action => 'index', :locale => 'en'}, {:path => '/people',  :method => :get})
+  end
+
+
   def test_action_controller_gets_locale_setter
     ActionController::Base.instance_methods.include?('set_locale_from_url')
   end
@@ -504,7 +520,8 @@ class ProductsControllerTest < ActionController::TestCase
     I18n.load_path = [ File.expand_path('../locales/routes.yml', __FILE__) ]
     I18n.reload!
 
-    config_default_locale_settings 'en'
+    config_default_locale_settings 'es'
+    config_host_locales({:es => 'es'})
 
     draw_routes do
       localized do
@@ -519,12 +536,12 @@ class ProductsControllerTest < ActionController::TestCase
     config_generate_unlocalized_routes false
     config_default_locale_settings("en")
     config_generate_unnamed_unlocalized_routes false
+    config_host_locales({})
   end
 
   def test_url_helpers_are_included
-
     #doing it this way because assert_nothing_raised doesn't work on all rails versions
-    %w(product_path product_url product_es_path product_es_url).each do |method|
+    %w(product_path product_url product_es_path product_es_url product_native_es_path product_native_es_url).each do |method|
       begin
         send(method)
       rescue Exception => e
@@ -533,4 +550,3 @@ class ProductsControllerTest < ActionController::TestCase
     end
   end
 end
-
