@@ -11,10 +11,6 @@ test/log
 test/dummy/log
 test/tmp
 
-### Ruby version managers
-/.rvmrc
-/.ruby-version
-/.ruby-gemset
 
 ### `bundle gem` defaults
 
@@ -37,6 +33,20 @@ test/version_tmp
 tmp
 
 
+### Ruby version managers
+/.rvmrc
+/.ruby-version
+/.ruby-gemset
+
+### gem build
+
+*.gem
+pkg/
+
+### bundler
+
+/.bundle
+/vendor/bundle
 
 ### Mess files
 
