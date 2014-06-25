@@ -285,6 +285,30 @@ class TranslateRoutesTest < ActionController::TestCase
     end
   end
 
+  def test_route_with_mandatory_format
+    draw_routes do
+      localized do
+        get 'people.:format', :to => 'people#index'
+      end
+    end
+
+    assert_routing '/es/gente.xml', :controller => 'people', :action => 'index', :format => 'xml', :locale => 'es'
+    assert_routing '/people.xml', :controller => 'people', :action => 'index', :format => 'xml', :locale => 'en'
+  end
+
+  def test_route_with_optional_format
+    draw_routes do
+      localized do
+        get 'people(.:format)', :to => 'people#index'
+      end
+    end
+
+    assert_routing '/es/gente', :controller => 'people', :action => 'index', :locale => 'es'
+    assert_routing '/people', :controller => 'people', :action => 'index', :locale => 'en'
+    assert_routing '/es/gente.xml', :controller => 'people', :action => 'index', :format => 'xml', :locale => 'es'
+    assert_routing '/people.xml', :controller => 'people', :action => 'index', :format => 'xml', :locale => 'en'
+  end
+
   def test_i18n_based_translations_setting_locales
     config_default_locale_settings 'en'
 
