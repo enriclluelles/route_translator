@@ -5,6 +5,7 @@ SampleApp/db/test.sqlite3
 
 ## Gemfiles
 gemfiles/*.lock
+gemfiles/vendor/
 
 ## Tests
 test/log
