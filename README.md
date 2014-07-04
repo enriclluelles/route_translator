@@ -157,6 +157,56 @@ end
   Defaults to `false`.
 * **locale_param_key** - The param key that will be used to set the
   locale to the newly generated routes. Defaults to :locale
+* **host_locales** - optional hash to set default_locale based on request.host,
+  useful for apps accepting requests from more than one domain. See below for
+  more details.
+
+### Host-based Locale
+If you have an application serving requests from more than one domain, you
+might want to set  default_locale dynamically based on which domain the request
+is coming from.  
+
+The `host_locales` option is a hash mapping hosts to locales, with full
+wildcard support to allow matching multiple domains/subdomains/tlds. Host
+matching is case insensitive. 
+
+When a request hits your app from a domain matching one of the wild-card
+matchers defined in `host_locales`, the default_locale will be set to the
+specified locale, and that locale will be hidden from routes (acting like a
+dynamic `hide_locale` option.
+
+Here are a few examples of possible mappings:
+
+```ruby
+RouteTranslator.config.host_locales = 
+{                                # Matches:
+  '*.es'                 => :es, # TLD:         ['domain.es', 'subdomain.domain.es', 'www.long.string.of.subdomains.es'] etc.
+  'ru.wikipedia.*'       => :ru, # Subdomain:   ['ru.wikipedia.org', 'ru.wikipedia.net', 'ru.wikipedia.com'] etc.
+  '*.subdomain.domain.*' => :ru, # Mixture:     ['subdomain.domain.org', 'www.subdomain.domain.net'] etc.
+  'news.bbc.co.uk'       => :en, # Exact match: ['news.bbc.co.uk'] only
+}
+```
+
+In the case of a host matching more than once, the order in which the matchers
+are defined will be taken into account, like so:
+
+```ruby
+RouteTranslator.config.host_locales = { 'russia.*' => :ru, '*.com'    => :en } # 'russia.com' will have locale :ru
+RouteTranslator.config.host_locales = { '*.com'    => :en, 'russia.*' => :ru } # 'russia.com' will have locale :en
+```
+
+If `host_locales` option is set, the following options will be forced (even if
+you set to true):
+
+```ruby
+@config.generate_unlocalized_routes         = false
+@config.generate_unnamed_unlocalized_routes = false
+@config.force_locale                        = false
+@config.hide_locale                         = false
+```
+
+This is to avoid odd behaviour brought about by route conflicts and because 
+`host_locales` forces and hides the host-locale dynamically.
 
 Contributing
 ------------
