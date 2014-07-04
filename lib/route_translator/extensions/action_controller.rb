@@ -28,6 +28,6 @@ module ActionController
         I18n.locale         = original_locale  if host_locale
       end
     end
-    
+
   end
 end
