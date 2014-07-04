@@ -482,7 +482,7 @@ class TranslateRoutesTest < ActionController::TestCase
   end
 
   def test_host_locales
-    config_host_locales({ :host => 'es', :'co.uk' => 'en' })
+    config_host_locales({ '*.es' => 'es', '*.com' => 'en' })
 
     draw_routes do
       localized do
@@ -491,9 +491,12 @@ class TranslateRoutesTest < ActionController::TestCase
       root :to => 'people#index'
     end
 
-    assert_recognizes({:controller => 'people', :action => 'index', :locale => 'es'}, {:path => '/gente',   :method => :get})
-    assert_recognizes({:controller => 'people', :action => 'index', :locale => 'es'}, {:path => '/es/gente',:method => :get})
-    assert_recognizes({:controller => 'people', :action => 'index', :locale => 'en'}, {:path => '/people',  :method => :get})
+    assert_recognizes({:controller => 'people', :action => 'index', :locale => 'es'}, { :path => 'http://testapp.es/gente',     :method => :get })
+    assert_recognizes({:controller => 'people', :action => 'index', :locale => 'es'}, { :path => 'http://testapp.es/es/gente',  :method => :get })
+    assert_recognizes({:controller => 'people', :action => 'index'},                  { :path => 'http://testapp.es/',          :method => :get })
+
+    assert_recognizes({:controller => 'people', :action => 'index', :locale => 'en'}, { :path => 'http://testapp.com/people',   :method => :get })
+    assert_recognizes({:controller => 'people', :action => 'index'},                  { :path => 'http://testapp.com/',         :method => :get })
   end
 
 
