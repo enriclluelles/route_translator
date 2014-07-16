@@ -450,6 +450,25 @@ class TranslateRoutesTest < ActionController::TestCase
     assert_equal '/es/gente', @routes.url_helpers.people_es_path
   end
 
+  def test_path_helper_arguments
+    config_default_locale_settings 'es'
+    config_host_locales({ '*.es' => 'es', '*.com' => 'en' })
+
+    draw_routes do
+      localized do
+        resources :products
+      end
+    end
+
+    assert_equal '/productos',                           @routes.url_helpers.products_path
+    assert_equal '/productos/some_product',              @routes.url_helpers.product_path('some_product')
+    assert_equal '/productos/some_product?some=param',   @routes.url_helpers.product_path('some_product', :some => 'param')
+    assert_equal '/en/products',                         @routes.url_helpers.products_path(:locale => 'en')
+    assert_equal '/en/products/some_product',            @routes.url_helpers.product_path('some_product', :locale => 'en')
+    assert_equal '/en/products/some_product?some=param', @routes.url_helpers.product_path('some_product', :locale => 'en', :some => 'param')
+  end
+
+
   def test_dont_add_locale_to_routes_if_local_param_present
     config_default_locale_settings 'es'
     config_force_locale true
