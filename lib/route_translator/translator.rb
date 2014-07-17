@@ -16,12 +16,11 @@ module RouteTranslator
           default_locale_suffix = I18n.default_locale.to_s.underscore
           args_hash             = args.select {|arg| arg.is_a?(Hash) }.first
           args_locale_suffix    = args_hash[:locale].to_s.underscore if args_hash.present?
-          if RouteTranslator.config.host_locales.present?
-            if args.blank? || args_locale_suffix == default_locale_suffix
+
+          if RouteTranslator.config.host_locales.present? && (args_hash.blank? || args_locale_suffix == default_locale_suffix)
             __send__("#{old_name}_native_#{default_locale_suffix}_#{suffix}", *args)
-            elsif args_locale_suffix
+          elsif RouteTranslator.config.host_locales.present? && args_locale_suffix.present?
             __send__("#{old_name}_#{args_locale_suffix}_#{suffix}", *args)
-            end
           elsif respond_to?("#{old_name}_#{locale_suffix}_#{suffix}")
             __send__("#{old_name}_#{locale_suffix}_#{suffix}", *args)
           else

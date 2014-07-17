@@ -39,4 +39,8 @@ module RouteTranslator
       @config.host_locales                        = @config.host_locales.with_indifferent_access
     end
   end
+
+  def self.locale_param_key
+    self.config.locale_param_key
+  end
 end
