@@ -12,21 +12,7 @@ module RouteTranslator
         helper_list.push(new_helper_name.to_sym) unless helper_list.include?(new_helper_name.to_sym)
 
         helper_container.__send__(:define_method, new_helper_name) do |*args|
-          locale_suffix         = I18n.locale.to_s.underscore
-          default_locale_suffix = I18n.default_locale.to_s.underscore
-          args_hash             = args.select {|arg| arg.is_a?(Hash) }.first
-          args_locale_suffix    = args_hash[:locale].to_s.underscore if args_hash.present?
-          if RouteTranslator.config.host_locales.present?
-            if args.blank? || args_locale_suffix == default_locale_suffix
-            __send__("#{old_name}_native_#{default_locale_suffix}_#{suffix}", *args)
-            elsif args_locale_suffix
-            __send__("#{old_name}_#{args_locale_suffix}_#{suffix}", *args)
-            end
-          elsif respond_to?("#{old_name}_#{locale_suffix}_#{suffix}")
-            __send__("#{old_name}_#{locale_suffix}_#{suffix}", *args)
-          else
-            __send__("#{old_name}_#{I18n.default_locale.to_s.underscore}_#{suffix}", *args)
-          end
+          __send__(Translator.route_name_for(args, old_name, suffix, self), *args)
         end
       end
     end
@@ -119,6 +105,35 @@ module RouteTranslator
 
     def self.locale_param_present?(path)
       !(path.split('/').detect { |segment| segment.to_s == ":#{RouteTranslator.locale_param_key.to_s}" }.nil?)
+    end
+
+    def self.default_locale_suffix
+      I18n.default_locale.to_s.underscore
+    end
+
+    def self.locale_suffix
+      I18n.locale.to_s.underscore
+    end
+
+    def self.host_locales_option?
+      RouteTranslator.config.host_locales.present?
+    end
+
+    def self.route_name_for(args, old_name, suffix, kaller)
+      args_hash          = args.select {|arg| arg.is_a?(Hash) }.first
+      args_locale_suffix = args_hash[:locale].to_s.underscore if args_hash.present?
+
+      locale = if host_locales_option? && (args_hash.blank? || args_locale_suffix == default_locale_suffix)
+                 default_locale_suffix
+               elsif host_locales_option? && args_locale_suffix.present?
+                 args_locale_suffix
+               elsif kaller.respond_to?("#{old_name}_#{locale_suffix}_#{suffix}")
+                 locale_suffix
+               else
+                 default_locale_suffix
+               end
+
+      "#{old_name}_#{locale}_#{suffix}"
     end
   end
 end

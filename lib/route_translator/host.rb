@@ -21,9 +21,5 @@ module RouteTranslator
     def native_locales
       config.host_locales.values.map {|locale| :"native_#{locale}" }
     end
-
-    def locale_param_key
-      self.config.locale_param_key
-    end
   end
 end
