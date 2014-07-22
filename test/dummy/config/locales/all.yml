@@ -4,9 +4,12 @@
 en:
   routes:
     dummy: dummy
+    show: show
 es:
   routes:
     dummy: dummy
+    show: mostrar
 ru:
   routes:
     dummy: манекен
+    show: показывать

@@ -1,3 +1,10 @@
+
+require 'i18n'
+begin
+  I18n.enforce_available_locales = true
+rescue NoMethodError
+end
+
 require "action_controller/railtie"
 begin
 require "active_resource/railtie"
