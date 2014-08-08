@@ -17,7 +17,7 @@ Gem::Specification.new do |s|
   s.test_files = `git ls-files test`.split($\)
   s.require_paths = ["lib"]
 
-  s.add_development_dependency("minitest", "~> 4.7.0")
+  s.add_development_dependency("minitest", ">= 4.7.0")
   s.add_development_dependency("pry")
   s.add_development_dependency("pry-nav")
 end
