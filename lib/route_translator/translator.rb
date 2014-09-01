@@ -5,8 +5,23 @@ module RouteTranslator
     #   people_path -> people_de_path
     #   I18n.locale = :fr
     #   people_path -> people_fr_path
-    def self.add_untranslated_helpers_to_controllers_and_views(old_name, helper_container, helper_list)
-      ['path', 'url'].each do |suffix|
+    def self.add_untranslated_helpers_to_controllers_and_views(old_name, named_route_collection)
+      if (named_route_collection.respond_to?(:url_helpers_module))
+        url_helpers_module = named_route_collection.url_helpers_module
+        path_helpers_module = named_route_collection.path_helpers_module
+        url_helpers_list = named_route_collection.helper_names
+        path_helpers_list = named_route_collection.helper_names
+      else
+        url_helpers_module = named_route_collection.module
+        path_helpers_module = named_route_collection.module
+        url_helpers_list = named_route_collection.helpers
+        path_helpers_list = named_route_collection.helpers
+      end
+
+      [
+        ['path', path_helpers_module, path_helpers_list],
+        ['url', url_helpers_module, url_helpers_list]
+      ].each do |suffix, helper_container, helper_list|
         new_helper_name = "#{old_name}_#{suffix}"
 
         helper_list.push(new_helper_name.to_sym) unless helper_list.include?(new_helper_name.to_sym)
@@ -18,7 +33,7 @@ module RouteTranslator
     end
 
     def self.translations_for(app, conditions, requirements, defaults, route_name, anchor, route_set, &block)
-      add_untranslated_helpers_to_controllers_and_views(route_name, route_set.named_routes.module, route_set.named_routes.helpers)
+      add_untranslated_helpers_to_controllers_and_views(route_name, route_set.named_routes)
 
       available_locales.each do |locale|
         new_conditions = conditions.dup
