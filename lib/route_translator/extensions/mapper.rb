@@ -25,7 +25,12 @@ module ActionDispatch
             options[:as] = name_for_action(options[:as], action)
           end
 
-          mapping = Mapping.new(@set, @scope, path, options)
+          begin
+            mapping = Mapping.new(@set, @scope, path, options)
+          rescue ArgumentError => e
+            mapping = Mapping.new(@scope, @set, path, options.delete(:defaults) || {}, options.delete(:as), options)
+          end
+
           if @localized
             @set.add_localized_route(*mapping.to_route)
           else
