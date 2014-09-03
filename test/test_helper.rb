@@ -1,8 +1,7 @@
 #encoding: utf-8
 
-require 'test/unit'
+require 'minitest/autorun'
 require 'minitest/mock'
-require 'minitest/unit'
 
 require 'i18n'
 begin
