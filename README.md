@@ -9,7 +9,7 @@ app routes with a simple dictionary format
 
 It started as a fork of the awesome [translate_routes](https://github.com/raul/translate_routes) plugin by [Raúl Murciano](https://github.com/raul) and then I made changes as I needed until it became the actual code
 
-Right now it works with all the different flavours of rails3-4(3.0, 3.1, 3.2, 4.0) but I'm planning to make it compatible with rails 2.3 too. I'll see how it goes
+Right now it works with all the different flavours of rails3-4(3.0, 3.1, 3.2, 4.0, 4.1, 4.2beta).
 
 
 Quick Start
