@@ -123,30 +123,21 @@ module RouteTranslator
       !(path.split('/').detect { |segment| segment.to_s == ":#{RouteTranslator.locale_param_key.to_s}" }.nil?)
     end
 
-    def self.default_locale_suffix
-      I18n.default_locale.to_s.underscore
-    end
-
-    def self.locale_suffix
-      I18n.locale.to_s.underscore
-    end
-
     def self.host_locales_option?
       RouteTranslator.config.host_locales.present?
     end
 
     def self.route_name_for(args, old_name, suffix, kaller)
-      args_hash          = args.select {|arg| arg.is_a?(Hash) }.first
-      args_locale_suffix = args_hash[:locale].to_s.underscore if args_hash.present?
+      args_hash          = args.detect{|arg| arg.is_a?(Hash)}
+      args_locale = host_locales_option? && args_hash && args_hash[:locale]
+      current_locale_name = I18n.locale.to_s.underscore
 
-      locale = if host_locales_option? && (args_hash.blank? || args_locale_suffix == default_locale_suffix)
-                 default_locale_suffix
-               elsif host_locales_option? && args_locale_suffix.present?
-                 args_locale_suffix
-               elsif kaller.respond_to?("#{old_name}_#{locale_suffix}_#{suffix}")
-                 locale_suffix
+      locale = if args_locale
+                 args_locale.to_s.underscore
+               elsif kaller.respond_to?("#{old_name}_#{current_locale_name}_#{suffix}")
+                 current_locale_name
                else
-                 default_locale_suffix
+                 I18n.default_locale.to_s.underscore
                end
 
       "#{old_name}_#{locale}_#{suffix}"
