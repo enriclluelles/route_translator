@@ -5,8 +5,23 @@ module RouteTranslator
     #   people_path -> people_de_path
     #   I18n.locale = :fr
     #   people_path -> people_fr_path
-    def self.add_untranslated_helpers_to_controllers_and_views(old_name, helper_container, helper_list)
-      ['path', 'url'].each do |suffix|
+    def self.add_untranslated_helpers_to_controllers_and_views(old_name, named_route_collection)
+      if (named_route_collection.respond_to?(:url_helpers_module))
+        url_helpers_module = named_route_collection.url_helpers_module
+        path_helpers_module = named_route_collection.path_helpers_module
+        url_helpers_list = named_route_collection.helper_names
+        path_helpers_list = named_route_collection.helper_names
+      else
+        url_helpers_module = named_route_collection.module
+        path_helpers_module = named_route_collection.module
+        url_helpers_list = named_route_collection.helpers
+        path_helpers_list = named_route_collection.helpers
+      end
+
+      [
+        ['path', path_helpers_module, path_helpers_list],
+        ['url', url_helpers_module, url_helpers_list]
+      ].each do |suffix, helper_container, helper_list|
         new_helper_name = "#{old_name}_#{suffix}"
 
         helper_list.push(new_helper_name.to_sym) unless helper_list.include?(new_helper_name.to_sym)
@@ -18,11 +33,12 @@ module RouteTranslator
     end
 
     def self.translations_for(app, conditions, requirements, defaults, route_name, anchor, route_set, &block)
-      add_untranslated_helpers_to_controllers_and_views(route_name, route_set.named_routes.module, route_set.named_routes.helpers)
+      add_untranslated_helpers_to_controllers_and_views(route_name, route_set.named_routes)
 
       available_locales.each do |locale|
         new_conditions = conditions.dup
         new_conditions[:path_info] = translate_path(conditions[:path_info], locale)
+        new_conditions[:parsed_path_info] = ActionDispatch::Journey::Parser.new.parse(new_conditions[:path_info]) if conditions[:parsed_path_info]
         if new_conditions[:required_defaults] && !new_conditions[:required_defaults].include?(RouteTranslator.locale_param_key)
           new_conditions[:required_defaults] << RouteTranslator.locale_param_key if new_conditions[:required_defaults]
         end
@@ -107,30 +123,21 @@ module RouteTranslator
       !(path.split('/').detect { |segment| segment.to_s == ":#{RouteTranslator.locale_param_key.to_s}" }.nil?)
     end
 
-    def self.default_locale_suffix
-      I18n.default_locale.to_s.underscore
-    end
-
-    def self.locale_suffix
-      I18n.locale.to_s.underscore
-    end
-
     def self.host_locales_option?
       RouteTranslator.config.host_locales.present?
     end
 
     def self.route_name_for(args, old_name, suffix, kaller)
-      args_hash          = args.select {|arg| arg.is_a?(Hash) }.first
-      args_locale_suffix = args_hash[:locale].to_s.underscore if args_hash.present?
+      args_hash          = args.detect{|arg| arg.is_a?(Hash)}
+      args_locale = host_locales_option? && args_hash && args_hash[:locale]
+      current_locale_name = I18n.locale.to_s.underscore
 
-      locale = if host_locales_option? && (args_hash.blank? || args_locale_suffix == default_locale_suffix)
-                 default_locale_suffix
-               elsif host_locales_option? && args_locale_suffix.present?
-                 args_locale_suffix
-               elsif kaller.respond_to?("#{old_name}_#{locale_suffix}_#{suffix}")
-                 locale_suffix
+      locale = if args_locale
+                 args_locale.to_s.underscore
+               elsif kaller.respond_to?("#{old_name}_#{current_locale_name}_#{suffix}")
+                 current_locale_name
                else
-                 default_locale_suffix
+                 I18n.default_locale.to_s.underscore
                end
 
       "#{old_name}_#{locale}_#{suffix}"

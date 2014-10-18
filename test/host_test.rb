@@ -4,7 +4,9 @@ require File.expand_path(File.join(File.dirname(__FILE__), 'test_helper'))
 class TestHostsFromLocale < MiniTest::Unit::TestCase
   include RouteTranslator::TestHelper
   def setup
-    I18n.backend        = I18n::Backend::Simple.new
+    $old_i18n_backend = I18n.backend
+    $old_i18n_load_path = I18n.load_path
+    I18n.backend = I18n::Backend::Simple.new
     I18n.load_path      = [ File.expand_path('../locales/routes.yml', __FILE__) ]
     I18n.reload!
 
@@ -18,7 +20,9 @@ class TestHostsFromLocale < MiniTest::Unit::TestCase
 
   def teardown
     config_host_locales({})
-    I18n.default_locale = :en
+    I18n.backend = $old_i18n_backend
+    I18n.load_path = $old_i18n_load_path
+    I18n.reload!
   end
 
   def test_wildcard_at_beginning_matches
