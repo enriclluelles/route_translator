@@ -579,7 +579,7 @@ class ProductsControllerTest < ActionController::TestCase
   def test_url_helpers_are_included
     #doing it this way because assert_nothing_raised doesn't work on all rails versions
     controller = ProductsController.new
-    controller.request = OpenStruct.new(host: 'example.com') # mocking request
+    controller.request = OpenStruct.new(:host => 'example.com') # mocking request
     %w(product_path product_url product_es_path product_es_url product_native_es_path product_native_es_url).each do |method|
       begin
         controller.send(method)
