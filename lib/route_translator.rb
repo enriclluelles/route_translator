@@ -1,7 +1,4 @@
 require 'active_support'
-require 'action_controller'
-require 'action_mailer'
-require 'action_dispatch'
 
 require File.expand_path('../route_translator/extensions', __FILE__)
 require File.expand_path('../route_translator/translator', __FILE__)
