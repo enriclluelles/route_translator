@@ -28,7 +28,7 @@ module ActionDispatch
           begin
             mapping = Mapping.new(@set, @scope, path, options)
           rescue ArgumentError => e
-            mapping = Mapping.new(@scope, @set, path, options.delete(:defaults) || {}, options.delete(:as), options)
+            mapping = Mapping.build(@scope, @set, URI.parser.escape(path), options.delete(:as), options)
           end
 
           if @localized
