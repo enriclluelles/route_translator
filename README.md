@@ -195,6 +195,8 @@ RouteTranslator.config.host_locales = { 'russia.*' => :ru, '*.com'    => :en } #
 RouteTranslator.config.host_locales = { '*.com'    => :en, 'russia.*' => :ru } # 'russia.com' will have locale :en
 ```
 
+_As Hash are not ordered in Ruby 1.8, use an ActiveSupport::OrderedHash instead._
+
 If `host_locales` option is set, the following options will be forced (even if
 you set to true):
 

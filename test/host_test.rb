@@ -7,19 +7,20 @@ class TestHostsFromLocale < MiniTest::Unit::TestCase
     $old_i18n_backend = I18n.backend
     $old_i18n_load_path = I18n.load_path
     I18n.backend = I18n::Backend::Simple.new
-    I18n.load_path      = [ File.expand_path('../locales/routes.yml', __FILE__) ]
+    I18n.load_path = [ File.expand_path('../locales/routes.yml', __FILE__) ]
     I18n.reload!
 
-    config_host_locales({
-      '*.something.es'           => :es,
-      '*.ru.subdomain.domain.*'  => :ru,
-      'russia.something.net'     => :ru,
-      '*.com'                    => :en
-    })
+    config = host_locales_config_hash
+    config['*.something.es']          = :es
+    config['*.ru.subdomain.domain.*'] = :ru
+    config['russia.something.net']    = :ru
+    config['*.com']                   = :en
+
+    config_host_locales(config)
   end
 
   def teardown
-    config_host_locales({})
+    config_host_locales(ActiveSupport::OrderedHash.new)
     I18n.backend = $old_i18n_backend
     I18n.load_path = $old_i18n_load_path
     I18n.reload!
@@ -58,10 +59,16 @@ class TestHostsFromLocale < MiniTest::Unit::TestCase
   end
 
   def test_precedence_if_more_than_one_match
-    config_host_locales({ 'russia.*'  => :ru, '*.com' => :en })
+    config = host_locales_config_hash
+    config['russia.*'] = :ru
+    config['*.com'] = :en
+    config_host_locales(config)
     assert_equal :ru, RouteTranslator::Host.locale_from_host('russia.com')
 
-    config_host_locales({ '*.com' => :en, 'russia.*'  => :ru })
+    config = host_locales_config_hash
+    config['*.com'] = :en
+    config['russia.*'] = :ru
+    config_host_locales(config)
     assert_equal :en, RouteTranslator::Host.locale_from_host('russia.com')
   end
 
@@ -70,14 +77,13 @@ class TestHostsFromLocale < MiniTest::Unit::TestCase
   end
 
   def test_readme_examples_work
-    config_host_locales(
-      {
-        '*.es'                  => :es, # matches ['domain.es', 'subdomain.domain.es', 'www.long.string.of.subdomains.es'] etc.
-        'ru.wikipedia.*'        => :ru, # matches ['ru.wikipedia.org', 'ru.wikipedia.net', 'ru.wikipedia.com'] etc.
-        '*.subdomain.domain.*'  => :ru, # matches ['subdomain.domain.org', 'www.subdomain.domain.net'] etc.
-        'news.bbc.co.uk'        => :en, # matches ['news.bbc.co.uk'] only
-      }
-    )
+    config = host_locales_config_hash
+    config['*.es']                  = :es # matches ['domain.es', 'subdomain.domain.es', 'www.long.string.of.subdomains.es'] etc.
+    config['ru.wikipedia.*']        = :ru # matches ['ru.wikipedia.org', 'ru.wikipedia.net', 'ru.wikipedia.com'] etc.
+    config['*.subdomain.domain.*']  = :ru # matches ['subdomain.domain.org', 'www.subdomain.domain.net'] etc.
+    config['news.bbc.co.uk']        = :en # matches ['news.bbc.co.uk'] only
+
+    config_host_locales(config)
 
     examples_1 = ['domain.es', 'subdomain.domain.es', 'www.long.string.of.subdomains.es']
     examples_2 = ['ru.wikipedia.org', 'ru.wikipedia.net', 'ru.wikipedia.com']

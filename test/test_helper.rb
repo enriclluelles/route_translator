@@ -59,7 +59,15 @@ module RouteTranslator
     end
 
     def config_host_locales(hash)
-      RouteTranslator.config.host_locales = hash.with_indifferent_access
+      RouteTranslator.config.host_locales = hash
+    end
+
+    def host_locales_config_hash
+      if RUBY_VERSION < '1.9'
+        ::ActiveSupport::OrderedHash.new
+      else
+        ::Hash.new
+      end
     end
 
     def path_string(route)

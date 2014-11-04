@@ -21,7 +21,7 @@ module RouteTranslator
     @config.generate_unlocalized_routes         ||= false
     @config.locale_param_key                    ||= :locale
     @config.generate_unnamed_unlocalized_routes ||= false
-    @config.host_locales                        ||= {}.with_indifferent_access
+    @config.host_locales                        ||= ActiveSupport::OrderedHash.new
     yield @config if block
     resolve_config_conflicts
     @config
@@ -33,7 +33,6 @@ module RouteTranslator
       @config.generate_unnamed_unlocalized_routes = false
       @config.force_locale                        = false
       @config.hide_locale                         = false
-      @config.host_locales                        = @config.host_locales.with_indifferent_access
     end
   end
 

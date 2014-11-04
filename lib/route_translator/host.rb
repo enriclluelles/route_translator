@@ -1,12 +1,12 @@
 module RouteTranslator
   module Host
     def self.locale_from_host(host)
-      matches = RouteTranslator.config.host_locales.detect {|key, locale| host =~ regex_for(key) }
-      matched_locale = if matches && host_match = matches.first
-                         locale   = RouteTranslator.config.host_locales[host_match].to_sym
-                         locale if I18n.available_locales.include?(locale)
-                       end
-      matched_locale || I18n.default_locale
+      locales = RouteTranslator.config.host_locales.reduce([]) do |locales, (pattern, locale)|
+        locales << locale.to_sym if host =~ regex_for(pattern)
+        locales
+      end
+      locales &= I18n.available_locales
+      (locales.first || I18n.default_locale).to_sym
     end
 
     def self.regex_for(host_string)
