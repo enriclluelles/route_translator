@@ -1,33 +1,26 @@
 #encoding: utf-8
-require File.expand_path(File.join(File.dirname(__FILE__), 'test_helper'))
+require File.expand_path('../test_helper', __FILE__)
 
 class PeopleController < ActionController::Base;  end
 class ProductsController < ActionController::Base;  end
 
 class TranslateRoutesTest < ActionController::TestCase
+
   include ActionDispatch::Assertions::RoutingAssertions
-  include RouteTranslator::TestHelper
+  include RouteTranslator::AssertionHelper
+  include RouteTranslator::ConfigurationHelper
+  include RouteTranslator::I18nHelper
+  include RouteTranslator::RoutesHelper
 
   def setup
-    $old_i18n_backend = I18n.backend
-    $old_i18n_load_path = I18n.load_path
+    setup_config
+    setup_i18n
     @routes = ActionDispatch::Routing::RouteSet.new
-    I18n.backend = I18n::Backend::Simple.new
-    I18n.load_path = [ File.expand_path('../locales/routes.yml', __FILE__) ]
-    I18n.reload!
-    I18n.locale = I18n.default_locale
   end
 
   def teardown
-    I18n.backend = $old_i18n_backend
-    I18n.load_path = $old_i18n_load_path
-    I18n.reload!
-    config_force_locale false
-    config_hide_locale false
-    config_generate_unlocalized_routes false
-    config_default_locale_settings("en")
-    config_generate_unnamed_unlocalized_routes false
-    config_host_locales({})
+    teardown_i18n
+    teardown_config
   end
 
   def test_unnamed_root_route
@@ -543,16 +536,17 @@ class TranslateRoutesTest < ActionController::TestCase
 end
 
 class ProductsControllerTest < ActionController::TestCase
+
+  include RouteTranslator::ConfigurationHelper
+  include RouteTranslator::I18nHelper
   include ActionDispatch::Assertions::RoutingAssertions
-  include RouteTranslator::TestHelper
+  include RouteTranslator::RoutesHelper
 
   def setup
+    setup_config
+    setup_i18n
+
     @routes = ActionDispatch::Routing::RouteSet.new
-    $old_i18n_backend = I18n.backend
-    $old_i18n_load_path = I18n.load_path
-    I18n.backend = I18n::Backend::Simple.new
-    I18n.load_path = [ File.expand_path('../locales/routes.yml', __FILE__) ]
-    I18n.reload!
 
     config_default_locale_settings 'es'
     config_host_locales({:es => 'es'})
@@ -565,15 +559,8 @@ class ProductsControllerTest < ActionController::TestCase
   end
 
   def teardown
-    config_force_locale false
-    config_hide_locale false
-    config_generate_unlocalized_routes false
-    config_default_locale_settings("en")
-    config_generate_unnamed_unlocalized_routes false
-    config_host_locales({})
-    I18n.backend = $old_i18n_backend
-    I18n.load_path = $old_i18n_load_path
-    I18n.reload!
+    teardown_i18n
+    teardown_config
   end
 
   def test_url_helpers_are_included

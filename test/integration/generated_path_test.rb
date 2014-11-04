@@ -1,11 +1,9 @@
 #encoding: utf-8
 require File.expand_path('../../test_helper', __FILE__)
-require File.expand_path('../../support/integration_helper', __FILE__)
 
 class GeneratedPathTest < integration_test_suite_parent_class
 
-  include RouteTranslator::TestHelper
-  # include ActionDispatch::Assertions::TagAssertions
+  include RouteTranslator::ConfigurationHelper
 
   def test_path_generated
     get '/show'

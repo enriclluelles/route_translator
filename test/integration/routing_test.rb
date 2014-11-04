@@ -1,10 +1,9 @@
 #encoding: utf-8
 require File.expand_path('../../test_helper', __FILE__)
-require File.expand_path('../../support/integration_helper', __FILE__)
 
 class RoutingTest < integration_test_suite_parent_class
 
-  include RouteTranslator::TestHelper
+  include RouteTranslator::ConfigurationHelper
 
   def test_set_locale_from_params
     config_default_locale_settings 'en'

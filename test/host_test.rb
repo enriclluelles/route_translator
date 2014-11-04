@@ -1,14 +1,15 @@
 #encoding: utf-8
-require File.expand_path(File.join(File.dirname(__FILE__), 'test_helper'))
+require File.expand_path('../test_helper', __FILE__)
 
 class TestHostsFromLocale < MiniTest::Unit::TestCase
-  include RouteTranslator::TestHelper
+
+  include RouteTranslator::ConfigurationHelper
+  include RouteTranslator::I18nHelper
+  include RouteTranslator::RoutesHelper
+
   def setup
-    $old_i18n_backend = I18n.backend
-    $old_i18n_load_path = I18n.load_path
-    I18n.backend = I18n::Backend::Simple.new
-    I18n.load_path = [ File.expand_path('../locales/routes.yml', __FILE__) ]
-    I18n.reload!
+    setup_config
+    setup_i18n
 
     config = host_locales_config_hash
     config['*.something.es']          = :es
@@ -20,10 +21,8 @@ class TestHostsFromLocale < MiniTest::Unit::TestCase
   end
 
   def teardown
-    config_host_locales(ActiveSupport::OrderedHash.new)
-    I18n.backend = $old_i18n_backend
-    I18n.load_path = $old_i18n_load_path
-    I18n.reload!
+    teardown_i18n
+    teardown_config
   end
 
   def test_wildcard_at_beginning_matches
