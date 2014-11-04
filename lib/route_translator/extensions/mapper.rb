@@ -27,7 +27,7 @@ module ActionDispatch
 
           begin
             mapping = Mapping.new(@set, @scope, path, options)
-          rescue ArgumentError => e
+          rescue ArgumentError
             mapping = Mapping.new(@scope, @set, path, options.delete(:defaults) || {}, options.delete(:as), options)
           end
 
