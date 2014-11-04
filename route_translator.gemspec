@@ -17,5 +17,8 @@ Gem::Specification.new do |s|
   s.test_files = `git ls-files test`.split($\)
   s.require_paths = ["lib"]
 
+  s.add_runtime_dependency("activesupport", ">= 3.0", "< 5.0")
+  s.add_runtime_dependency("actionpack",    ">= 3.0", "< 5.0")
+
   s.add_development_dependency("pry")
 end
