@@ -1,5 +1,7 @@
 script: "bundle exec rake test"
 rvm:
+  - 1.8.7
+  - jruby-18mode
   - 1.9.3
   - jruby-19mode
   - 2.0.0
@@ -9,6 +11,8 @@ gemfile:
   - gemfiles/Gemfile.rails-3.0.x
   - gemfiles/Gemfile.rails-3.1.x
   - gemfiles/Gemfile.rails-3.2.x
+  - gemfiles/Gemfile.rails-4.0.x
+  - gemfiles/Gemfile.rails-4.1.x
   - Gemfile
 matrix:
   exclude:
@@ -16,5 +20,13 @@ matrix:
       gemfile: Gemfile
     - rvm: jruby-18mode
       gemfile: Gemfile
+    - rvm: 1.8.7
+      gemfile: gemfiles/Gemfile.rails-4.1.x
+    - rvm: jruby-18mode
+      gemfile: gemfiles/Gemfile.rails-4.1.x
+    - rvm: 1.8.7
+      gemfile: gemfiles/Gemfile.rails-4.0.x
+    - rvm: jruby-18mode
+      gemfile: gemfiles/Gemfile.rails-4.0.x
   allow_failures:
     - rvm: rbx-2
