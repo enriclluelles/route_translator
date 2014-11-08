@@ -24,7 +24,6 @@ class TranslateRoutesTest < ActionController::TestCase
   end
 
   def test_unnamed_root_route
-    config_default_locale_settings 'en'
     draw_routes do
       localized do
         root :to => 'people#index'
@@ -140,8 +139,6 @@ class TranslateRoutesTest < ActionController::TestCase
   end
 
   def test_unnamed_untranslated_route
-    config_default_locale_settings 'en'
-
     draw_routes do
       localized do
         get 'foo', :to => 'people#index'
@@ -168,7 +165,6 @@ class TranslateRoutesTest < ActionController::TestCase
   end
 
   def test_unnamed_translated_route_on_non_default_locale
-    config_default_locale_settings 'en'
     draw_routes do
       localized do
         get 'people', :to => 'people#index'
@@ -180,8 +176,6 @@ class TranslateRoutesTest < ActionController::TestCase
   end
 
   def test_named_translated_route_with_prefix_must_have_locale_as_static_segment
-    config_default_locale_settings 'en'
-
     draw_routes do
       localized do
         get 'people', :to => 'people#index'
@@ -258,11 +252,8 @@ class TranslateRoutesTest < ActionController::TestCase
       end
     end
 
-    config_default_locale_settings 'en'
-
     assert_routing '/people', :controller => 'people', :action => 'index', :locale => 'en'
     assert_routing '/es/gente', :controller => 'people', :action => 'index', :locale => 'es'
-
 
     assert_helpers_include :people_en, :people_es, :people
   end
@@ -308,8 +299,6 @@ class TranslateRoutesTest < ActionController::TestCase
   end
 
   def test_i18n_based_translations_setting_locales
-    config_default_locale_settings 'en'
-
     draw_routes do
       localized do
         get 'people', :to => 'people#index', :as => 'people'
@@ -325,8 +314,6 @@ class TranslateRoutesTest < ActionController::TestCase
 
   def test_translations_depend_on_available_locales
     available_locales = I18n.available_locales
-    config_default_locale_settings 'en'
-
     begin
       I18n.available_locales = [:es, :en, :fr]
 
@@ -375,8 +362,6 @@ class TranslateRoutesTest < ActionController::TestCase
   end
 
   def test_force_locale
-    I18n.locale = 'en'
-    config_default_locale_settings 'en'
     config_force_locale true
 
     draw_routes do
@@ -395,8 +380,6 @@ class TranslateRoutesTest < ActionController::TestCase
   end
 
   def test_generate_unlocalized_routes
-    I18n.locale = 'en'
-    config_default_locale_settings 'en'
     config_generate_unlocalized_routes true
 
     draw_routes do
@@ -415,8 +398,6 @@ class TranslateRoutesTest < ActionController::TestCase
   end
 
   def test_generate_unnamed_unlocalized_routes
-    I18n.locale = 'en'
-    config_default_locale_settings 'en'
     config_generate_unnamed_unlocalized_routes true
 
     draw_routes do
@@ -436,9 +417,6 @@ class TranslateRoutesTest < ActionController::TestCase
   end
 
   def test_blank_localized_routes
-    I18n.locale = 'en'
-    config_default_locale_settings 'en'
-
     draw_routes do
       localized do
         get 'people/blank', :to => 'people#index', :as => 'people'
@@ -490,7 +468,6 @@ class TranslateRoutesTest < ActionController::TestCase
   end
 
   def test_config_hide_locale
-    config_default_locale_settings 'en'
     config_hide_locale true
 
     draw_routes do
@@ -533,6 +510,26 @@ class TranslateRoutesTest < ActionController::TestCase
   def test_action_view_gets_locale_suffix_helper
     ActionView::Base.instance_methods.include?('locale_suffix')
   end
+
+  # See https://github.com/enriclluelles/route_translator/issues/69
+  def test_no_side_effects
+    draw_routes do
+      localized do
+        resources :people
+      end
+
+      scope "(:locale)", :locale => /(en|es)/ do
+        get '*id' => 'products#show', :as => 'product'
+      end
+    end
+
+    assert_routing '/es/gente', :controller => 'people', :action => 'index', :locale => 'es'
+    assert_routing '/people', :controller => 'people', :action => 'index', :locale => 'en'
+
+    assert_routing '/es/path/to/a/product', :controller => 'products', :action => 'show', :locale => 'es', :id => 'path/to/a/product'
+    assert_routing '/path/to/another/product', :controller => 'products', :action => 'show', :id => 'path/to/another/product'
+  end
+
 end
 
 class ProductsControllerTest < ActionController::TestCase
