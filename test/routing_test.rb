@@ -374,9 +374,10 @@ class TranslateRoutesTest < ActionController::TestCase
     assert_unrecognized_route '/people', :controller => 'people', :action => 'index'
     assert_equal '/en/people', @routes.url_helpers.people_en_path
     assert_equal '/en/people', @routes.url_helpers.people_path
-    I18n.locale = 'es'
-    # The dynamic route maps to the current locale
-    assert_equal '/es/gente', @routes.url_helpers.people_path
+    I18n.with_locale :es do
+      # The dynamic route maps to the current locale
+      assert_equal '/es/gente', @routes.url_helpers.people_path
+    end
   end
 
   def test_generate_unlocalized_routes
@@ -392,9 +393,11 @@ class TranslateRoutesTest < ActionController::TestCase
     assert_routing '/people', :controller => 'people', :action => 'index'
     assert_equal '/en/people', @routes.url_helpers.people_en_path
     assert_equal '/people', @routes.url_helpers.people_path
-    I18n.locale = 'es'
-    # The dynamic route maps to the default locale, not the current
-    assert_equal '/people', @routes.url_helpers.people_path
+
+    I18n.with_locale :es do
+      # The dynamic route maps to the default locale, not the current
+      assert_equal '/people', @routes.url_helpers.people_path
+    end
   end
 
   def test_generate_unnamed_unlocalized_routes
@@ -411,9 +414,10 @@ class TranslateRoutesTest < ActionController::TestCase
     assert_equal '/en/people', @routes.url_helpers.people_en_path
     assert_equal '/en/people', @routes.url_helpers.people_path
 
-    I18n.locale = 'es'
-    # The dynamic route maps to the current locale
-    assert_equal '/es/gente', @routes.url_helpers.people_path
+    I18n.with_locale :es do
+      # The dynamic route maps to the current locale
+      assert_equal '/es/gente', @routes.url_helpers.people_path
+    end
   end
 
   def test_blank_localized_routes
@@ -423,32 +427,35 @@ class TranslateRoutesTest < ActionController::TestCase
       end
     end
 
-    I18n.locale = 'en'
-    assert_routing '/people/blank', :controller => 'people', :action => 'index', :locale => 'en'
-    assert_equal '/people/blank', @routes.url_helpers.people_en_path
+    I18n.with_locale :en do
+      assert_routing '/people/blank', :controller => 'people', :action => 'index', :locale => 'en'
+      assert_equal '/people/blank', @routes.url_helpers.people_en_path
+    end
 
-    I18n.locale = 'es'
-    assert_routing '/es/gente', :controller => 'people', :action => 'index', :locale => 'es'
-    assert_equal '/es/gente', @routes.url_helpers.people_es_path
+    I18n.with_locale :es do
+      assert_routing '/es/gente', :controller => 'people', :action => 'index', :locale => 'es'
+      assert_equal '/es/gente', @routes.url_helpers.people_es_path
+    end
   end
 
   def test_path_helper_arguments
     config_default_locale_settings 'es'
-    I18n.locale = 'es'
-    config_host_locales({ '*.es' => 'es', '*.com' => 'en' })
+    I18n.with_locale :es do
+      config_host_locales({ '*.es' => 'es', '*.com' => 'en' })
 
-    draw_routes do
-      localized do
-        resources :products
+      draw_routes do
+        localized do
+          resources :products
+        end
       end
-    end
 
-    assert_equal '/productos',                           @routes.url_helpers.products_path
-    assert_equal '/productos/some_product',              @routes.url_helpers.product_path('some_product')
-    assert_equal '/productos/some_product?some=param',   @routes.url_helpers.product_path('some_product', :some => 'param')
-    assert_equal '/en/products',                         @routes.url_helpers.products_path(:locale => 'en')
-    assert_equal '/en/products/some_product',            @routes.url_helpers.product_path('some_product', :locale => 'en')
-    assert_equal '/en/products/some_product?some=param', @routes.url_helpers.product_path('some_product', :locale => 'en', :some => 'param')
+      assert_equal '/productos',                           @routes.url_helpers.products_path
+      assert_equal '/productos/some_product',              @routes.url_helpers.product_path('some_product')
+      assert_equal '/productos/some_product?some=param',   @routes.url_helpers.product_path('some_product', :some => 'param')
+      assert_equal '/en/products',                         @routes.url_helpers.products_path(:locale => 'en')
+      assert_equal '/en/products/some_product',            @routes.url_helpers.product_path('some_product', :locale => 'en')
+      assert_equal '/en/products/some_product?some=param', @routes.url_helpers.product_path('some_product', :locale => 'en', :some => 'param')
+    end
   end
 
   def test_dont_add_locale_to_routes_if_local_param_present
