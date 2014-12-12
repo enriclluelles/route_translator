@@ -4,30 +4,24 @@ module ActionController
   class Base
     around_filter :set_locale_from_url
 
-    def set_locale_from_url(&block)
-      with_host_locale { I18n.with_locale(params[RouteTranslator.locale_param_key], &block) }
-    end
-
-    private
-
-    def with_host_locale(&block)
-      host_locale = RouteTranslator::Host.locale_from_host(request.host)
-      begin
-        if host_locale
-          original_default         = I18n.default_locale
-          original_locale          = I18n.locale
-
-          I18n.default_locale = host_locale
-          I18n.locale         = host_locale
-        end
-
-        yield
-
-      ensure
-        I18n.default_locale = original_default if host_locale
-        I18n.locale         = original_locale  if host_locale
+    def set_locale_from_url
+      tmp_default_locale = RouteTranslator::Host.locale_from_host(request.host)
+      if tmp_default_locale
+        current_default_locale = I18n.default_locale
+        I18n.default_locale    = tmp_default_locale
       end
-    end
 
+      tmp_locale = params[RouteTranslator.locale_param_key] || tmp_default_locale
+      if tmp_locale
+        current_locale = I18n.locale
+        I18n.locale    = tmp_locale
+      end
+
+      yield
+
+    ensure
+      I18n.default_locale = current_default_locale if tmp_default_locale
+      I18n.locale = current_locale if tmp_locale
+    end
   end
 end
