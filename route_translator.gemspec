@@ -12,6 +12,7 @@ Gem::Specification.new do |s|
 
   s.description = %q{Translates the Rails routes of your application into the languages defined in your locale files}
   s.summary = %q{Translate your Rails routes in a simple manner}
+  s.license = 'MIT'
 
   s.files = `git ls-files lib`.split($\)
   s.test_files = `git ls-files test`.split($\)
