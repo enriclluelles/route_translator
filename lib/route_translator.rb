@@ -11,7 +11,7 @@ module RouteTranslator
 
   Configuration = Struct.new(:force_locale, :hide_locale,
                              :generate_unlocalized_routes, :locale_param_key,
-                             :generate_unnamed_unlocalized_routes,
+                             :generate_unnamed_unlocalized_routes, :available_locales,
                              :host_locales)
 
   def self.config(&block)
@@ -22,6 +22,7 @@ module RouteTranslator
     @config.locale_param_key                    ||= :locale
     @config.generate_unnamed_unlocalized_routes ||= false
     @config.host_locales                        ||= ActiveSupport::OrderedHash.new
+    @config.available_locales                   ||= nil
     yield @config if block
     resolve_config_conflicts
     @config

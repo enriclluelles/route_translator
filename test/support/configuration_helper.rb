@@ -39,6 +39,10 @@ module RouteTranslator
       RouteTranslator.config.host_locales = hash
     end
 
+    def config_available_locales(arr)
+      RouteTranslator.config.available_locales = arr
+    end
+
     def host_locales_config_hash
       if RUBY_VERSION < '1.9'
         ::ActiveSupport::OrderedHash.new
