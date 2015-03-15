@@ -65,6 +65,8 @@ Quick Start
 
       localized do
         resources :cars
+
+        get 'pricing', to: 'home#pricing', as: :pricing
       end
     end
     ```
@@ -76,10 +78,12 @@ Quick Start
       routes:
         cars: coches
         new: nuevo
+        pricing: precios
     fr:
       routes:
         cars: voitures
         new: nouveau
+        pricing: prix
     ```
 
 4.  Your routes are translated! Here's the output of your `rake routes` now:
