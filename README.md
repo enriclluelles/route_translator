@@ -8,7 +8,7 @@ RouteTranslator is a gem to allow you to manage the translations of your app rou
 
 It started as a fork of the awesome [translate_routes](https://github.com/raul/translate_routes) plugin by [Raúl Murciano](https://github.com/raul).
 
-Right now it works with all the different flavours of rails 3-4 (3.0, 3.1, 3.2, 4.0, 4.1, 4.2).
+Right now it works with all the different flavours of rails 3-4 (3.2, 4.0, 4.1, 4.2).
 
 
 Quick Start
@@ -123,7 +123,7 @@ Quick Start
     In :production environment, you should either set `config.i18n.fallbacks = false` or set up translations for your routes in every languages.
 
 5.  Your I18n.locale will be set up automatically from the url param when it's available.
-    
+
     To disable it add this to your controller:
 
     ```ruby
@@ -144,26 +144,26 @@ end
 
 ### Available Configurations
 
-* **force_locale**  
-  Set this options to `true` to force the locale to be added to all generated route paths, even for the default locale.  
+* **force_locale**
+  Set this options to `true` to force the locale to be added to all generated route paths, even for the default locale.
   Defaults to `false`.
-* **hide_locale**  
-  Set this options to `true` to force the locale to be hidden on generated route paths.  
+* **hide_locale**
+  Set this options to `true` to force the locale to be hidden on generated route paths.
   Defaults to `false`.
-* **generate_unlocalized_routes**  
-  Set this option to `true` to add translated routes without deleting original unlocalized versions.  
-  Autosets `force_locale=true`.  
+* **generate_unlocalized_routes**
+  Set this option to `true` to add translated routes without deleting original unlocalized versions.
+  Autosets `force_locale=true`.
   Defaults to `false`.
-* **generate_unnamed_unlocalized_routes**  
+* **generate_unnamed_unlocalized_routes**
   Set this option to `true` to add the behavior of **force_locale**, but with a named default route which behaves as if **generate_unlocalized_routes** was `true`.
-  `root_path` will redirect to `/en` or `/es` depending on the value of `I18n.locale`.  
+  `root_path` will redirect to `/en` or `/es` depending on the value of `I18n.locale`.
   Defaults to `false`.
-* **locale_param_key**  
-  The param key that will be used to set the locale to the newly generated routes.  
+* **locale_param_key**
+  The param key that will be used to set the locale to the newly generated routes.
   Defaults to `:locale`
-* **host_locales**  
+* **host_locales**
   Optional hash to set `I18n.default_locale` based on `request.host`.
-  Useful for apps accepting requests from more than one domain.  
+  Useful for apps accepting requests from more than one domain.
   See below for more details.
 
 ### Host-based Locale
@@ -179,7 +179,7 @@ Unless you specified the `force_locale` configuration option to `true`, that loc
 Here are a few examples of possible mappings:
 
 ```ruby
-RouteTranslator.config.host_locales = 
+RouteTranslator.config.host_locales =
 {                                # Matches:
   '*.es'                 => :es, # TLD:         ['domain.es', 'subdomain.domain.es', 'www.long.string.of.subdomains.es'] etc.
   'ru.wikipedia.*'       => :ru, # Subdomain:   ['ru.wikipedia.org', 'ru.wikipedia.net', 'ru.wikipedia.com'] etc.
