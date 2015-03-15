@@ -537,6 +537,39 @@ class TranslateRoutesTest < ActionController::TestCase
     assert_routing '/path/to/another/product', :controller => 'products', :action => 'show', :id => 'path/to/another/product'
   end
 
+
+  def test_config_available_locales
+    config_available_locales [:en, :ru]
+
+    draw_routes do
+      localized do
+        resources :people
+      end
+    end
+
+    assert_routing URI.escape('/ru/люди'), :controller => 'people', :action => 'index', :locale => 'ru'
+    assert_routing '/people', :controller => 'people', :action => 'index', :locale => 'en'
+    assert_unrecognized_route '/es/gente', :controller => 'people', :action => 'index', :locale => 'es'
+
+    config_available_locales nil
+  end
+
+  def test_config_available_locales_handles_strings
+    config_available_locales %w( en ru )
+
+    draw_routes do
+      localized do
+        resources :people
+      end
+    end
+
+    assert_routing URI.escape('/ru/люди'), :controller => 'people', :action => 'index', :locale => 'ru'
+    assert_routing '/people', :controller => 'people', :action => 'index', :locale => 'en'
+    assert_unrecognized_route '/es/gente', :controller => 'people', :action => 'index', :locale => 'es'
+
+    config_available_locales nil
+  end
+
 end
 
 class ProductsControllerTest < ActionController::TestCase
