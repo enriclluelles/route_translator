@@ -40,7 +40,7 @@ module RouteTranslator
         new_conditions[:path_info] = translate_path(conditions[:path_info], locale)
         new_conditions[:parsed_path_info] = ActionDispatch::Journey::Parser.new.parse(new_conditions[:path_info]) if conditions[:parsed_path_info]
         if new_conditions[:required_defaults] && !new_conditions[:required_defaults].include?(RouteTranslator.locale_param_key)
-          new_conditions[:required_defaults] << RouteTranslator.locale_param_key if new_conditions[:required_defaults]
+          new_conditions[:required_defaults] << RouteTranslator.locale_param_key
         end
         new_defaults = defaults.merge(RouteTranslator.locale_param_key => locale.to_s.gsub('native_', ''))
         new_requirements = requirements.merge(RouteTranslator.locale_param_key => locale.to_s)
