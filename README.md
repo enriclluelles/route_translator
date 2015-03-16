@@ -2,7 +2,8 @@ RouteTranslator
 ===============
 
 [![Gem Version](https://badge.fury.io/rb/route_translator.svg)](http://badge.fury.io/rb/route_translator)
-[![Build Status](https://secure.travis-ci.org/enriclluelles/route_translator.png)](http://travis-ci.org/enriclluelles/route_translator)
+[![Build Status](https://travis-ci.org/enriclluelles/route_translator.svg?branch=master)](https://travis-ci.org/enriclluelles/route_translator)
+[![Code Climate](https://codeclimate.com/github/enriclluelles/route_translator/badges/gpa.svg)](https://codeclimate.com/github/enriclluelles/route_translator)
 
 RouteTranslator is a gem to allow you to manage the translations of your app routes with a simple dictionary format.
 
@@ -198,8 +199,6 @@ In the case of a host matching more than once, the order in which the matchers a
 RouteTranslator.config.host_locales = { 'russia.*' => :ru, '*.com'    => :en } # 'russia.com' will have locale :ru
 RouteTranslator.config.host_locales = { '*.com'    => :en, 'russia.*' => :ru } # 'russia.com' will have locale :en
 ```
-
-_As Hash are not ordered in Ruby 1.8, use an ActiveSupport::OrderedHash instead._
 
 If `host_locales` option is set, the following options will be forced (even if you set to true):
 
