@@ -1,13 +1,22 @@
 es:
   routes:
+
     people: gente
     products: productos
     tr_param: tr_parametro
+    favourites: favoritos
     blank: ""
+    controllers:
+      people:
+        favourites: fans
 
 ru:
   routes:
     people: люди
+    favourites: избранное
+    controllers:
+      people:
+        favourites: кандидаты
 
 en:
   m: m #Adding this here just to have en in I18n.available_locales
