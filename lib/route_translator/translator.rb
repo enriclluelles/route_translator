@@ -34,6 +34,7 @@ module RouteTranslator
 
     def self.translations_for(app, conditions, requirements, defaults, route_name, anchor, route_set, &block)
       add_untranslated_helpers_to_controllers_and_views(route_name, route_set.named_routes)
+      @scope = [:routes, :controllers].concat defaults[:controller].split('/')[0...-1].map(&:to_sym)
 
       available_locales.each do |locale|
         new_conditions = conditions.dup
@@ -121,7 +122,10 @@ module RouteTranslator
 
     def self.translate_string(str, locale)
       locale = "#{locale}".gsub('native_', '')
-      res    = I18n.translate(str, :scope => :routes, :locale => locale, :default => str)
+      res = I18n.translate(str, scope: @scope, :locale => locale)
+      if ((res.include? "translation missing") || res.is_a?(Hash))
+        res = I18n.translate(str, :scope => :routes, :locale => locale, :default => str)
+      end
       URI.escape(res)
     end
 
