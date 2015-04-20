@@ -170,6 +170,11 @@ end
   Optional hash to set `I18n.default_locale` based on `request.host`.
   Useful for apps accepting requests from more than one domain.
   See below for more details.
+* **disable_fallback**
+  Set this option to `true` to create only the routes for each locale that have translations.
+  For example if we have `/examples` and a translation is not provided for ES, a route helper of `examples_es` will not be created.
+  Defaults to `false`.
+  Useful when one uses this with a locale route constraint, so non-ES routes can 404 on a Spanish website.
 
 ### Host-based Locale
 
