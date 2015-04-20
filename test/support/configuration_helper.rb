@@ -43,6 +43,10 @@ module RouteTranslator
       RouteTranslator.config.available_locales = arr
     end
 
+    def config_disable_fallback(boolean)
+      RouteTranslator.config.disable_fallback = boolean
+    end
+
     def host_locales_config_hash
       if RUBY_VERSION < '1.9'
         ::ActiveSupport::OrderedHash.new

@@ -37,7 +37,12 @@ module RouteTranslator
 
       available_locales.each do |locale|
         new_conditions = conditions.dup
-        new_conditions[:path_info] = translate_path(conditions[:path_info], locale)
+        begin
+          new_conditions[:path_info] = translate_path(conditions[:path_info], locale)
+        rescue I18n::MissingTranslationData => e
+          raise e unless RouteTranslator.config.disable_fallback
+          next
+        end
         new_conditions[:parsed_path_info] = ActionDispatch::Journey::Parser.new.parse(new_conditions[:path_info]) if conditions[:parsed_path_info]
         if new_conditions[:required_defaults] && !new_conditions[:required_defaults].include?(RouteTranslator.locale_param_key)
           new_conditions[:required_defaults] << RouteTranslator.locale_param_key
@@ -121,7 +126,13 @@ module RouteTranslator
 
     def self.translate_string(str, locale)
       locale = "#{locale}".gsub('native_', '')
-      res    = I18n.translate(str, :scope => :routes, :locale => locale, :default => str)
+      opts = {:scope => :routes, :locale => locale}
+      if RouteTranslator.config.disable_fallback && locale.to_s != I18n.default_locale.to_s
+        opts[:fallback] = true
+      else
+        opts[:default] = str
+      end
+      res    = I18n.translate(str, opts)
       URI.escape(res)
     end
 
