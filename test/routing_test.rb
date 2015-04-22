@@ -570,6 +570,22 @@ class TranslateRoutesTest < ActionController::TestCase
     config_available_locales nil
   end
 
+  def test_disable_fallback_does_not_draw_non_default_routes
+    config_disable_fallback(true)
+
+    draw_routes do
+      localized do
+        get 'tr_param', :to => 'people#index', :as => 'people'
+      end
+    end
+
+    config_disable_fallback(false)
+
+    assert_routing '/tr_param', :controller => 'people', :action => 'index', :locale => 'en'
+    assert_routing '/es/tr_parametro', :controller => 'people', :action => 'index', :locale => 'es'
+    assert_unrecognized_route '/ru/tr_param', :controller => 'people', :action => 'index', :locale => 'ru'
+  end
+
 end
 
 class ProductsControllerTest < ActionController::TestCase
