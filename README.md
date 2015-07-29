@@ -135,6 +135,28 @@ Quick Start
     skip_around_filter :set_locale_from_url
     ```
 
+Generating translated URLs
+-------------
+
+If you would like to generate localised URL's in all availabel locales to display alternative versions of current page in the footer, you can use the following syntax.
+
+```ruby
+<% I18n.available_locales.each do |locale| %>
+  <%= link_to locale, url_for(locale: locale.to_s, only_path: true) %>
+<% end %>
+```
+Bear in mind mandatory conversion of `I18n.available_locales` symbols to string (`locale.to_s`) in the example above. Adding `only_path` will generate relative URL's instead of absolute ones:
+
+```ruby
+url_for(locale: locale.to_s, only_path: true)
+```
+
+To generate URL for a different page you can specifiy controller's action in the `url_for` call:
+
+```ruby
+url_for(controller: '...', action: '...', locale: '...', only_path: true)
+```
+
 Configuration
 -------------
 
@@ -215,6 +237,7 @@ If `host_locales` option is set, the following options will be forced (even if y
 ```
 
 This is to avoid odd behaviour brought about by route conflicts and because `host_locales` forces and hides the host-locale dynamically.
+
 
 Contributing
 ------------
