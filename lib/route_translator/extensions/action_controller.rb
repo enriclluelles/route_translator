@@ -10,6 +10,12 @@ module ActionController
         current_default_locale = I18n.default_locale
         I18n.default_locale    = tmp_default_locale
       end
+      
+      if !session[:redirected_to_accept_language]
+        tmp_locale = http_accept_language.compatible_language_from(I18n.available_locales) || tmp_default_locale
+        session[:redirected_to_accept_language] = true
+        return redirect_to url_for(locale: tmp_locale.to_s)
+      end
 
       tmp_locale = params[RouteTranslator.locale_param_key] || tmp_default_locale
       if tmp_locale
