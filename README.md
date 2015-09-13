@@ -175,6 +175,10 @@ end
   For example if we have `/examples` and a translation is not provided for ES, a route helper of `examples_es` will not be created.
   Defaults to `false`.
   Useful when one uses this with a locale route constraint, so non-ES routes can 404 on a Spanish website.
+* **path_separator**
+  Set this option to force a different path separator (like `-` instead of `/`).
+  Useful if you have edited `ActionDispatch::Routing::SEPARATORS`.
+  This must be a single character which is not used (without escaping) in parameters.
 
 ### Host-based Locale
 

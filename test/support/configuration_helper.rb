@@ -8,6 +8,7 @@ module RouteTranslator
       config_generate_unlocalized_routes false
       config_generate_unnamed_unlocalized_routes false
       config_host_locales(host_locales_config_hash)
+      config_path_separator '/'
 
       config_default_locale_settings(:en)
     end
@@ -45,6 +46,10 @@ module RouteTranslator
 
     def config_disable_fallback(boolean)
       RouteTranslator.config.disable_fallback = boolean
+    end
+
+    def config_path_separator(char)
+      RouteTranslator.config.path_separator = char
     end
 
     def host_locales_config_hash
