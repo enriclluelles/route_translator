@@ -24,4 +24,11 @@ module ActionController
       I18n.locale = current_locale if tmp_locale
     end
   end
+
+  class TestCase
+    include ActionController::UrlFor
+
+    delegate :env, :request, :to => :@controller
+    def _routes; @routes; end
+  end
 end
