@@ -29,6 +29,11 @@ module RouteTranslator
         helper_container.__send__(:define_method, new_helper_name) do |*args|
           __send__(Translator.route_name_for(args, old_name, suffix, self), *args)
         end
+
+        # Including the named routes helpers module
+        [ActionController::TestCase, ActionView::TestCase, ActionMailer::TestCase].each do |klass|
+          klass.__send__(:include, helper_container)
+        end
       end
     end
 
