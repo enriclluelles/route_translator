@@ -15,6 +15,6 @@ gemfile:
 matrix:
   exclude:
     - rvm: 2.2
-      gemfile: gemfiles/rails_3.2.gemfile
+      gemfile: gemfiles/Gemfile.rails-3.2.x
   allow_failures:
     - rvm: rbx-2
