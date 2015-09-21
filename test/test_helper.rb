@@ -11,6 +11,7 @@ end
 
 require "rails"
 require "action_controller/railtie"
+require "action_mailer/railtie"
 
 require 'route_translator'
 

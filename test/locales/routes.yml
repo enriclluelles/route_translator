@@ -1,6 +1,5 @@
 es:
   routes:
-
     people: gente
     products: productos
     tr_param: tr_parametro

@@ -29,6 +29,11 @@ module RouteTranslator
         helper_container.__send__(:define_method, new_helper_name) do |*args|
           __send__(Translator.route_name_for(args, old_name, suffix, self), *args)
         end
+
+        # Including the named routes helpers module
+        [ActionController::TestCase, ActionView::TestCase, ActionMailer::TestCase].each do |klass|
+          klass.__send__(:include, helper_container)
+        end
       end
     end
 
@@ -38,7 +43,12 @@ module RouteTranslator
 
       available_locales.each do |locale|
         new_conditions = conditions.dup
-        new_conditions[:path_info] = translate_path(conditions[:path_info], locale)
+        begin
+          new_conditions[:path_info] = translate_path(conditions[:path_info], locale)
+        rescue I18n::MissingTranslationData => e
+          raise e unless RouteTranslator.config.disable_fallback
+          next
+        end
         new_conditions[:parsed_path_info] = ActionDispatch::Journey::Parser.new.parse(new_conditions[:path_info]) if conditions[:parsed_path_info]
         if new_conditions[:required_defaults] && !new_conditions[:required_defaults].include?(RouteTranslator.locale_param_key)
           new_conditions[:required_defaults] << RouteTranslator.locale_param_key
@@ -122,9 +132,15 @@ module RouteTranslator
 
     def self.translate_string(str, locale)
       locale = "#{locale}".gsub('native_', '')
-      res = I18n.translate(str, scope: @scope, :locale => locale)
+      opts = {:scope => @scope, :locale => locale}
+      if RouteTranslator.config.disable_fallback && locale.to_s != I18n.default_locale.to_s
+        opts[:fallback] = true
+      end
+      res = I18n.translate(str, opts)
       if ((res.include? "translation missing") || res.is_a?(Hash))
-        res = I18n.translate(str, :scope => :routes, :locale => locale, :default => str)
+        opts[:scope] = :routes
+        opts[:default] = str unless opts[:fallback]
+        res  = I18n.translate(str, opts)
       end
       URI.escape(res)
     end
