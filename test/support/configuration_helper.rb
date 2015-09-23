@@ -1,7 +1,5 @@
-
 module RouteTranslator
   module ConfigurationHelper
-
     def config_reset
       config_force_locale false
       config_hide_locale false
@@ -48,12 +46,7 @@ module RouteTranslator
     end
 
     def host_locales_config_hash
-      if RUBY_VERSION < '1.9'
-        ::ActiveSupport::OrderedHash.new
-      else
-        ::Hash.new
-      end
+      ::Hash.new
     end
-
   end
 end
