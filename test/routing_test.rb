@@ -106,19 +106,19 @@ class TranslateRoutesTest < ActionController::TestCase
     assert_routing({ path: '/productos/1', method: 'PUT' }, controller: 'products', action: 'update', id: '1', locale: 'es')
   end
 
-  def test_deep_translation
+  def test_nested_translation
     config_default_locale_settings 'es'
 
     draw_routes do
       localized do
-        get 'people/favourites', :to => 'people/products#favourites'
-        get 'favourites',        :to => 'products#favourites'
+        get 'people/favourites', to: 'people/products#favourites'
+        get 'favourites',        to: 'products#favourites'
       end
     end
-    assert_routing '/gente/fans', :controller => 'people/products', :action => 'favourites', :locale => 'es'
-    assert_routing '/favoritos', :controller => 'products', :action => 'favourites', :locale => 'es'
-    assert_routing URI.escape('/ru/люди/кандидаты'), :controller => 'people/products', :action => 'favourites', :locale => 'ru'
-    assert_routing URI.escape('/ru/избранное'), :controller => 'products', :action => 'favourites', :locale => 'ru'
+    assert_routing '/gente/fans', controller: 'people/products', action: 'favourites', locale: 'es'
+    assert_routing '/favoritos', controller: 'products', action: 'favourites', locale: 'es'
+    assert_routing URI.escape('/ru/люди/кандидаты'), controller: 'people/products', action: 'favourites', locale: 'ru'
+    assert_routing URI.escape('/ru/избранное'), controller: 'products', action: 'favourites', locale: 'ru'
   end
 
   def test_utf8_characters

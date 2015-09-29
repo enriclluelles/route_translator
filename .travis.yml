@@ -1,4 +1,4 @@
-script: "bundle exec rake test"
+language: ruby
 sudo: false
 rvm:
   - 1.9.3
@@ -8,13 +8,13 @@ rvm:
   - 2.2
   - rbx-2
 gemfile:
-  - gemfiles/Gemfile.rails-3.2.x
-  - gemfiles/Gemfile.rails-4.0.x
-  - gemfiles/Gemfile.rails-4.1.x
-  - Gemfile
+  - gemfiles/rails_3.2.gemfile
+  - gemfiles/rails_4.0.gemfile
+  - gemfiles/rails_4.1.gemfile
+  - gemfiles/rails_4.2.gemfile
 matrix:
   exclude:
     - rvm: 2.2
-      gemfile: gemfiles/Gemfile.rails-3.2.x
+      gemfile: gemfiles/rails_3.2.gemfile
   allow_failures:
     - rvm: rbx-2
