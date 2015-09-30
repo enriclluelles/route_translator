@@ -1,4 +1,3 @@
-require 'byebug'
 module RouteTranslator
   module Translator
     # Add standard route helpers for default locale e.g.
