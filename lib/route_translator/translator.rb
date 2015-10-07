@@ -39,7 +39,7 @@ module RouteTranslator
 
     def self.translations_for(app, conditions, requirements, defaults, route_name, anchor, route_set, &block)
       add_untranslated_helpers_to_controllers_and_views(route_name, route_set.named_routes)
-      @scope = [:routes, :controllers].concat defaults[:controller].split('/')[0...-1].map(&:to_sym)
+      @scope = [:routes, :controllers].concat defaults[:controller].split('/').map(&:to_sym)
 
       available_locales.each do |locale|
         new_conditions = conditions.dup
