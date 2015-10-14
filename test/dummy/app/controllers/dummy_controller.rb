@@ -8,4 +8,7 @@ class DummyController < ActionController::Base
     # Pass
   end
 
+  def native
+    render :text => show_path
+  end
 end
