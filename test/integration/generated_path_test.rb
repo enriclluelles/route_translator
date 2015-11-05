@@ -54,4 +54,9 @@ class GeneratedPathTest < integration_test_suite_parent_class
     assert_tag :tag => "a", :attributes => { :href => "/prefixed_optional/p-12" }
   end
 
+  def test_path_translated_with_suffix
+    get '/10-suffix'
+    assert_response :success
+    assert_equal(response.body, "10")
+  end
 end

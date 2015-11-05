@@ -122,7 +122,10 @@ module RouteTranslator
     # segment is blank, begins with a ":" (param key) or "*" (wildcard),
     # the segment is returned untouched
     def self.translate_path_segment(segment, locale)
-      return segment if segment.blank? || segment.include?(':') || segment.starts_with?('(') || segment.starts_with?('*')
+      return segment if segment.blank?
+      named_param, hyphenized = segment.split('-'.freeze, 2) if segment.starts_with?(':'.freeze)
+      return "#{named_param}-#{translate_path_segment(hyphenized.dup, locale)}" if hyphenized
+      return segment if segment.starts_with?('('.freeze) || segment.starts_with?('*'.freeze) || segment.include?(':'.freeze)
 
       appended_part = segment.slice!(/(\()$/)
       match = TRANSLATABLE_SEGMENT.match(segment)[1] if TRANSLATABLE_SEGMENT.match(segment)
