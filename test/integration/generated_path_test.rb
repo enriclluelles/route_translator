@@ -34,4 +34,24 @@ class GeneratedPathTest < integration_test_suite_parent_class
     assert_tag :tag => "a", :attributes => { :href => "/es/mostrar" }
   end
 
+  def test_with_optionals
+    get '/optional'
+    assert_response :success
+    assert_tag :tag => "a", :attributes => { :href => "/optional" }
+
+    get '/optional/12'
+    assert_response :success
+    assert_tag :tag => "a", :attributes => { :href => "/optional/12" }
+  end
+  
+  def test_with_prefixed_optionals
+    get '/prefixed_optional'
+    assert_response :success
+    assert_tag :tag => "a", :attributes => { :href => "/prefixed_optional" }
+
+    get '/prefixed_optional/p-12'
+    assert_response :success
+    assert_tag :tag => "a", :attributes => { :href => "/prefixed_optional/p-12" }
+  end
+
 end
