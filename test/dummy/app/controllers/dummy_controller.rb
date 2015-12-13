@@ -12,4 +12,9 @@ class DummyController < ActionController::Base
     # Pass
   end
 
+  def suffix
+    #pass
+    render text: params[:id]
+  end
+
 end
