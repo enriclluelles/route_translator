@@ -43,7 +43,7 @@ class GeneratedPathTest < integration_test_suite_parent_class
     assert_response :success
     assert_tag :tag => "a", :attributes => { :href => "/optional/12" }
   end
-  
+
   def test_with_prefixed_optionals
     get '/prefixed_optional'
     assert_response :success
