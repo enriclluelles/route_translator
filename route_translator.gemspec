@@ -1,5 +1,8 @@
 # encoding: utf-8
-require File.expand_path('../lib/route_translator/version', __FILE__)
+$:.push File.expand_path('../lib', __FILE__)
+
+# Maintain your gem's version:
+require 'route_translator/version'
 
 Gem::Specification.new do |s|
   s.name = "route_translator"
@@ -21,5 +24,6 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'activesupport', '>= 3.2', '< 5.0'
   s.add_runtime_dependency 'actionpack',    '>= 3.2', '< 5.0'
 
-  s.add_development_dependency 'pry', '~> 0.10.1'
+  s.add_development_dependency 'appraisal', '~> 2.1'
+  s.add_development_dependency 'pry', '~> 0.10.3'
 end
