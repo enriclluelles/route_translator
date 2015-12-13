@@ -30,3 +30,5 @@ end
 Dir[File.expand_path('../support/*.rb', __FILE__)].each do |helper|
   require helper
 end
+
+Minitest::Test = Minitest::Unit::TestCase unless defined?(Minitest::Test)
