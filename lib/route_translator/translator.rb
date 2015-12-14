@@ -83,20 +83,22 @@ module RouteTranslator
 
     # Translates a path and adds the locale prefix.
     def self.translate_path(path, locale)
+      sep = RouteTranslator.config.path_separator
       new_path = path.dup
-      final_optional_segments = new_path.slice!(/(\([^\/]+\))$/)
-      translated_segments = new_path.split(/\/|\./).map{ |seg| translate_path_segment(seg, locale) }.select{ |seg| !seg.blank? }
+      final_optional_segments = new_path.slice!(/(\([^#{sep}]+\))$/)
+      segments = new_path.split(/\/|\.|#{sep}/)
+      translated_segments = segments.map{ |seg| translate_path_segment(seg, locale) }.select{ |seg| !seg.blank? }
 
       if display_locale?(locale) && !locale_param_present?(new_path)
         translated_segments.unshift(locale.to_s.downcase)
       end
 
       joined_segments = translated_segments.inject do |memo, segment|
-        separator = segment == ':format' ? '.' : '/'
+        separator = segment == ':format' ? '.' : sep
         memo << separator << segment
       end
 
-      "/#{joined_segments}#{final_optional_segments}".gsub(/\/\(\//, '(/')
+      "/#{joined_segments}#{final_optional_segments}".gsub(/#{sep}\(#{sep}/, "(#{sep}")
     end
 
     def self.display_locale?(locale)

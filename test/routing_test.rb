@@ -75,6 +75,38 @@ class TranslateRoutesTest < ActionController::TestCase
     assert_routing '/es/productos/a', :controller => 'products', :action => 'index', :locale => 'es', :tr_param => 'a'
   end
 
+  def test_dynamic_segments_dont_get_translated_dash_separator
+    ActionDispatch::Routing::SEPARATORS << "-" unless ActionDispatch::Routing::SEPARATORS.include?("-")
+    config_path_separator '-'
+    draw_routes do
+      localized do
+        get 'products-:tr_param', :to => 'products#index', :constraints => { :tr_param => /\w/ }
+      end
+    end
+    assert_routing '/es-productos-a', :controller => 'products', :action => 'index', :locale => 'es', :tr_param => 'a'
+  end
+
+  def test_dynamic_segments_in_the_middle
+    draw_routes do
+      localized do
+        get 'products/:tr_param/units', :to => 'products#units', :constraints => { :tr_param => /\w+/ }
+      end
+    end
+    assert_routing '/es/productos/a/unidades', :controller => 'products', :action => 'units', :locale => 'es', :tr_param => 'a'
+  end
+
+  def test_dynamic_segments_with_dash_separator_and_hide_locale
+    ActionDispatch::Routing::SEPARATORS << "-" unless ActionDispatch::Routing::SEPARATORS.include?("-")
+    config_hide_locale true
+    config_path_separator '-'
+    draw_routes do
+      localized do
+        get 'products-:tr_param-units', :to => 'products#units', :constraints => { :tr_param => /\w+/ }
+      end
+    end
+    assert_routing '/productos-a-unidades', :controller => 'products', :action => 'units', :locale => 'es', :tr_param => 'a'
+  end
+
   def test_wildcards_dont_get_translated
     draw_routes do
       localized do

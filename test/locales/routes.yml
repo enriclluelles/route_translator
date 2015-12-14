@@ -1,6 +1,7 @@
 es:
   routes:
     people: gente
+    units: unidades
     products: productos
     tr_param: tr_parametro
     blank: ""
