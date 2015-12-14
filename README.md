@@ -1,10 +1,10 @@
-RouteTranslator
-===============
+# RouteTranslator
 
 [![Gem Version](https://badge.fury.io/rb/route_translator.svg)](http://badge.fury.io/rb/route_translator)
 [![Build Status](https://travis-ci.org/enriclluelles/route_translator.svg?branch=master)](https://travis-ci.org/enriclluelles/route_translator)
 [![Dependency Status](https://gemnasium.com/enriclluelles/route_translator.svg)](https://gemnasium.com/enriclluelles/route_translator)
 [![Code Climate](https://codeclimate.com/github/enriclluelles/route_translator/badges/gpa.svg)](https://codeclimate.com/github/enriclluelles/route_translator)
+[![Coverage Status](https://coveralls.io/repos/enriclluelles/route_translator/badge.svg?branch=master&service=github)](https://coveralls.io/github/enriclluelles/route_translator?branch=master)
 
 RouteTranslator is a gem to allow you to manage the translations of your app routes with a simple dictionary format.
 
@@ -13,8 +13,8 @@ It started as a fork of the awesome [translate_routes](https://github.com/raul/t
 Right now it works with all the different flavours of rails 3-4 (3.2, 4.0, 4.1, 4.2).
 
 
-Quick Start
------------
+
+## Quick Start
 
 1.  If you have this `routes.rb` file originally:
 
@@ -136,8 +136,9 @@ Quick Start
     skip_around_filter :set_locale_from_url
     ```
 
-Configuration
--------------
+
+
+## Configuration
 
 You can configure RouteTranslator via an initializer or using the different environment config files.
 
@@ -147,6 +148,8 @@ RouteTranslator.config do |config|
   config.locale_param_key = :my_locale
 end
 ```
+
+
 
 ### Available Configurations
 
@@ -176,6 +179,8 @@ end
   For example if we have `/examples` and a translation is not provided for ES, a route helper of `examples_es` will not be created.
   Defaults to `false`.
   Useful when one uses this with a locale route constraint, so non-ES routes can 404 on a Spanish website.
+
+
 
 ### Host-based Locale
 
@@ -217,9 +222,10 @@ If `host_locales` option is set, the following options will be forced (even if y
 
 This is to avoid odd behaviour brought about by route conflicts and because `host_locales` forces and hides the host-locale dynamically.
 
-Contributing
-------------
 
-Bring it!
-Send us a pull request.
-Don't worry about styling or small details, we are open to discussion.
+
+## Contributing
+
+Please read through our [contributing guidelines](CONTRIBUTING.md). Included are directions for opening issues, coding standards, and notes on development.
+
+More over, if your pull request contains patches or features, you must include relevant unit tests.
