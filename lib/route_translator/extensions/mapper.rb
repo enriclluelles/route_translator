@@ -13,8 +13,8 @@ module ActionDispatch
         def add_route(action, options) # :nodoc:
           path = path_for_action(action, options.delete(:path))
 
-          if action.to_s =~ /^[\w\/]+$/
-            options[:action] ||= action unless action.to_s.include?("/")
+          if action.to_s =~ %r{^[\w\/]+$}
+            options[:action] ||= action unless action.to_s.include?('/')
           else
             action = nil
           end
@@ -27,7 +27,7 @@ module ActionDispatch
 
           begin
             mapping = Mapping.new(@set, @scope, path, options)
-          rescue ArgumentError => e
+          rescue ArgumentError
             mapping = Mapping.build(@scope, @set, URI.parser.escape(path), options.delete(:as), options)
           end
 
@@ -39,7 +39,7 @@ module ActionDispatch
         end
       else
         module Base
-          def match(path, options=nil)
+          def match(path, options = nil)
             mapping = Mapping.new(@set, @scope, path, options || {})
             app, conditions, requirements, defaults, as, anchor = mapping.to_route
             if @localized

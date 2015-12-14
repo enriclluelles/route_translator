@@ -1,4 +1,17 @@
-#encoding: utf-8
+# coding: utf-8
+
+# Configure Rails Environment
+ENV['RAILS_ENV'] = 'test'
+
+if ENV['CI']
+  require 'coveralls'
+  Coveralls.wear!
+else
+  require 'simplecov'
+  SimpleCov.start 'rails' do
+    add_filter %w(version.rb initializer.rb)
+  end
+end
 
 require 'minitest/autorun'
 require 'minitest/mock'
