@@ -9,12 +9,12 @@ module ActionDispatch
         @localized = false
       end
 
-      if instance_methods.map(&:to_s).include?('add_route')
+      if instance_methods.map(&:to_s).include?('add_route'.freeze)
         def add_route(action, options) # :nodoc:
           path = path_for_action(action, options.delete(:path))
 
-          if action.to_s =~ /^[\w\/]+$/
-            options[:action] ||= action unless action.to_s.include?("/")
+          if action.to_s =~ %r{^[\w\/]+$}.freeze
+            options[:action] ||= action unless action.to_s.include?('/'.freeze)
           else
             action = nil
           end
@@ -27,7 +27,7 @@ module ActionDispatch
 
           begin
             mapping = Mapping.new(@set, @scope, path, options)
-          rescue ArgumentError => e
+          rescue ArgumentError
             mapping = Mapping.build(@scope, @set, URI.parser.escape(path), options.delete(:as), options)
           end
 
@@ -39,7 +39,7 @@ module ActionDispatch
         end
       else
         module Base
-          def match(path, options=nil)
+          def match(path, options = nil)
             mapping = Mapping.new(@set, @scope, path, options || {})
             app, conditions, requirements, defaults, as, anchor = mapping.to_route
             if @localized

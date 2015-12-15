@@ -39,6 +39,6 @@ module RouteTranslator
   end
 
   def self.locale_param_key
-    self.config.locale_param_key
+    config.locale_param_key
   end
 end
