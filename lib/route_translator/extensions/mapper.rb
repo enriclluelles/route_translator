@@ -9,12 +9,12 @@ module ActionDispatch
         @localized = false
       end
 
-      if instance_methods.map(&:to_s).include?('add_route')
+      if instance_methods.map(&:to_s).include?('add_route'.freeze)
         def add_route(action, options) # :nodoc:
           path = path_for_action(action, options.delete(:path))
 
-          if action.to_s =~ %r{^[\w\/]+$}
-            options[:action] ||= action unless action.to_s.include?('/')
+          if action.to_s =~ %r{^[\w\/]+$}.freeze
+            options[:action] ||= action unless action.to_s.include?('/'.freeze)
           else
             action = nil
           end
