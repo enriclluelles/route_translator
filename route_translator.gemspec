@@ -14,7 +14,7 @@ Gem::Specification.new do |spec|
   spec.homepage      = %q(http://github.com/enriclluelles/route_translator)
   spec.license       = 'MIT'
 
-  spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(gemfiles|test|spec|features)/}) }
+  spec.files         = `git ls-files -z -- {CHANGELOG.md,LICENSE,README.md,lib/**/*.rb}`.split("\x0")
   spec.require_paths = ['lib']
 
   spec.add_runtime_dependency 'activesupport', '>= 3.2', '< 5.0'
