@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.2.1 (2015-12-15)
+
+* Fix: gemspec
+
 ## 4.2.0 (2015-12-15)
 
 * Style update to match RuboCop recommandations
