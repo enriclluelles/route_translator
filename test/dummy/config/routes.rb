@@ -11,6 +11,7 @@ Dummy::Application.routes.draw do
     get ':id-suffix', to: 'dummy#suffix'
   end
 
+  get 'native', to: 'dummy#native'
   root to: 'dummy#dummy'
 
   mount DummyMountedApp.new => '/dummy_mounted_app'

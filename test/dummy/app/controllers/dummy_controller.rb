@@ -17,4 +17,7 @@ class DummyController < ActionController::Base
     render text: params[:id]
   end
 
+  def native
+    render :text => show_path
+  end
 end

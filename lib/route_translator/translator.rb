@@ -160,6 +160,8 @@ module RouteTranslator
 
       locale = if args_locale
                  args_locale.to_s.underscore
+               elsif kaller.respond_to?("#{old_name}_native_#{current_locale_name}_#{suffix}")
+                 "native_#{current_locale_name}"
                elsif kaller.respond_to?("#{old_name}_#{current_locale_name}_#{suffix}")
                  current_locale_name
                else
