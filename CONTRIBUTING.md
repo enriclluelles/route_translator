@@ -17,7 +17,7 @@ We only accept issues that are bug reports or feature requests. Bugs must be iso
 
 ## Key branches
 
-- `master` is the latest, deployed version. **Never make pull requests against this branch.**
+- `master` is the latest, deployed version.
 - `develop` is the official development branch for the next release.
 
 Take a look at [git-flow, A successful Git branching model](http://nvie.com/posts/a-successful-git-branching-model/)
@@ -26,10 +26,11 @@ Take a look at [git-flow, A successful Git branching model](http://nvie.com/post
 
 ## Pull requests
 
-- Try to submit pull requests against the `develop` branch for easier merging
+- If your PR fixes bugs or documentation, pull against the `master` branch
+- If your PR includes new features, pull against the `develop` branch
 - Try not to pollute your pull request with unintended changes--keep them simple and small
 - **Test.** If you find a bug, write at first a failing test case and then fix it.
-
+- We are open to discussion. If you have troubles or questions, feel free to start a new issue
 
 
 ## Coding standards
