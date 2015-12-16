@@ -2,7 +2,6 @@
 require File.expand_path('../../test_helper', __FILE__)
 
 class RoutingTest < integration_test_suite_parent_class
-
   include RouteTranslator::ConfigurationHelper
 
   def test_set_locale_from_params
@@ -15,8 +14,7 @@ class RoutingTest < integration_test_suite_parent_class
 
   def test_mounted_apps_work_with_correct_path
     get '/dummy_mounted_app'
-    assert_equal "Good", @response.body
+    assert_equal 'Good', @response.body
     assert_response :success
   end
-
 end

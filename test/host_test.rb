@@ -2,7 +2,6 @@
 require File.expand_path('../test_helper', __FILE__)
 
 class TestHostsFromLocale < Minitest::Test
-
   include RouteTranslator::ConfigurationHelper
   include RouteTranslator::I18nHelper
   include RouteTranslator::RoutesHelper

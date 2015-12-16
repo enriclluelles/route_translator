@@ -1,5 +1,3 @@
-# coding: utf-8
-
 # Configure Rails Environment
 ENV['RAILS_ENV'] = 'test'
 
@@ -17,14 +15,10 @@ require 'minitest/autorun'
 require 'minitest/mock'
 
 require 'i18n'
-begin
-  I18n.enforce_available_locales = true
-rescue NoMethodError
-end
 
-require "rails"
-require "action_controller/railtie"
-require "action_mailer/railtie"
+require 'rails'
+require 'action_controller/railtie'
+require 'action_mailer/railtie'
 
 require 'route_translator'
 

@@ -1,16 +1,13 @@
-
 require 'i18n'
+require 'action_controller/railtie'
+
 begin
-  I18n.enforce_available_locales = true
-rescue NoMethodError
+  require 'active_resource/railtie'
+rescue LoadError
+  ''
 end
 
-require "action_controller/railtie"
-begin
-require "active_resource/railtie"
-rescue LoadError
-end
-require "route_translator"
+require 'route_translator'
 
 module Dummy
   class Application < Rails::Application

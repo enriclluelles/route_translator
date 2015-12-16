@@ -2,11 +2,10 @@
 require File.expand_path('../../test_helper', __FILE__)
 
 class HostLocalesTest < integration_test_suite_parent_class
-
   include RouteTranslator::ConfigurationHelper
 
   def setup
-    config_host_locales('*.es' => 'es', 'ru.*.com' => 'ru')
+    config_host_locales '*.es' => 'es', 'ru.*.com' => 'ru'
     Dummy::Application.reload_routes!
   end
 
@@ -14,7 +13,6 @@ class HostLocalesTest < integration_test_suite_parent_class
     config_host_locales({})
     Dummy::Application.reload_routes!
   end
-
 
   def test_root_path
     ## root of es com

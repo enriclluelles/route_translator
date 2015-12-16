@@ -1,5 +1,10 @@
 # Changelog
 
+## Master (unreleased)
+
+* Fix: native path generation with host_locale (#95)
+* Improve tests
+
 ## 4.2.1 (2015-12-15)
 
 * Fix: gemspec
