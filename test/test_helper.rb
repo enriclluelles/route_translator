@@ -1,30 +1,24 @@
-# coding: utf-8
-
 # Configure Rails Environment
 ENV['RAILS_ENV'] = 'test'
 
 if ENV['CI']
   require 'coveralls'
   Coveralls.wear!
-else
-  require 'simplecov'
-  SimpleCov.start 'rails' do
-    add_filter %w(version.rb initializer.rb)
-  end
+end
+
+require 'simplecov'
+SimpleCov.start 'rails' do
+  add_filter %w(version.rb)
 end
 
 require 'minitest/autorun'
 require 'minitest/mock'
 
 require 'i18n'
-begin
-  I18n.enforce_available_locales = true
-rescue NoMethodError
-end
 
-require "rails"
-require "action_controller/railtie"
-require "action_mailer/railtie"
+require 'rails'
+require 'action_controller/railtie'
+require 'action_mailer/railtie'
 
 require 'route_translator'
 

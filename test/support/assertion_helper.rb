@@ -1,12 +1,10 @@
-
 module RouteTranslator
   module AssertionHelper
-
     def assert_helpers_include(*helpers)
       controller = ActionController::Base.new
       view = ActionView::Base.new
       helpers.each do |helper|
-        ['url', 'path'].each do |suffix|
+        %w(url path).each do |suffix|
           [controller, view].each { |obj| assert_respond_to obj, "#{helper}_#{suffix}".to_sym }
         end
       end
@@ -17,11 +15,10 @@ module RouteTranslator
       assert_raise ActionController::RoutingError do
         begin
           assert_routing route_path, options
-        rescue Minitest::Assertion => m
-          raise ActionController::RoutingError.new("")
+        rescue Minitest::Assertion
+          raise ActionController::RoutingError, ''
         end
       end
     end
-
   end
 end

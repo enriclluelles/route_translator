@@ -1,7 +1,6 @@
 class DummyController < ActionController::Base
-
   def dummy
-    render :text => I18n.locale
+    render text: I18n.locale
   end
 
   def show
@@ -13,8 +12,11 @@ class DummyController < ActionController::Base
   end
 
   def suffix
-    #pass
+    # Pass
     render text: params[:id]
   end
 
+  def native
+    render text: show_path
+  end
 end
