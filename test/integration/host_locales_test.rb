@@ -56,4 +56,17 @@ class HostLocalesTest < integration_test_suite_parent_class
     assert_response :success
   end
 
+  def test_generated_path
+    ## native es route on es com
+    host! 'www.testapp.es'
+    get '/native'
+    assert_equal '/mostrar', @response.body
+    assert_response :success
+
+    ## native ru route on ru com
+    host! 'ru.testapp.com'
+    get '/native'
+    assert_equal URI.escape('/показывать'), @response.body
+    assert_response :success
+  end
 end
