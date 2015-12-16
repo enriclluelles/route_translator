@@ -1,6 +1,6 @@
 # Changelog
 
-## Master (unreleased)
+## 4.2.2 (2015-12-16)
 
 * Fix: native path generation with host_locale (#95)
 * Improve tests
