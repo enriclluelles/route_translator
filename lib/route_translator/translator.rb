@@ -88,7 +88,7 @@ module RouteTranslator
       final_optional_segments = new_path.slice!(%r{(\([^\/]+\))$})
       translated_segments = new_path.split(%r{\/|\.}).map { |seg| translate_path_segment(seg, locale) }.select { |seg| !seg.blank? }
 
-      if display_locale?(locale) && !locale_param_present?(new_path)
+      if (path == '/' && !default_locale?(locale)) || (display_locale?(locale) && !locale_param_present?(new_path))
         translated_segments.unshift(locale.to_s.downcase)
       end
 
