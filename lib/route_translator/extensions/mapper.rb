@@ -10,16 +10,16 @@ module ActionDispatch
         @localized = false
       end
 
-      def add_route(action, controller, options, _path, to, via, formatted, anchor, options_constraints) # :nodoc:
-        path = path_for_action(action, _path)
-        raise ArgumentError, "path is required" if path.blank?
+      def add_route(action, controller, options, original_path, to, via, formatted, anchor, options_constraints) # :nodoc:
+        path = path_for_action(action, original_path)
+        fail ArgumentError, 'path is required' if path.blank?
 
         action = action.to_s
 
         default_action = options.delete(:action) || @scope[:action]
 
-        if action =~ /^[\w\-\/]+$/
-          default_action ||= action.tr('-', '_') unless action.include?("/")
+        if action =~ %r{^[\w\-\/]+$}
+          default_action ||= action.tr('-', '_') unless action.include?('/')
         else
           action = nil
         end
