@@ -5,7 +5,7 @@ AllCops:
   RunRailsCops: true
 
 Metrics/AbcSize:
-  Max: 42.73 # TODO: Lower to 15
+  Max: 36.58 # TODO: Lower to 15
   Exclude:
     - 'test/**/*'
 
@@ -14,7 +14,7 @@ Metrics/ClassLength:
     - 'test/**/*'
 
 Metrics/CyclomaticComplexity:
-  Max: 10 # TODO: Lower to 6
+  Max: 9 # TODO: Lower to 6
 
 Metrics/LineLength:
   Enabled: false
@@ -23,13 +23,13 @@ Metrics/MethodLength:
   Max: 24
 
 Metrics/ModuleLength:
-  Max: 131 # TODO: Lower to 100
+  Max: 126 # TODO: Lower to 100
 
 Metrics/ParameterLists:
-  Max: 8 # TODO: Lower to 5
+  Max: 8
 
 Metrics/PerceivedComplexity:
-  Max: 11 # TODO: Lower to 7
+  Max: 9 # TODO: Lower to 7
 
 Style/Documentation:
   Enabled: false

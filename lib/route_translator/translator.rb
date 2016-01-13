@@ -58,11 +58,6 @@ module RouteTranslator
         new_route_name = nil if new_route_name && route_set.named_routes.routes[new_route_name.to_sym] # TODO: Investigate this :(
         block.call(app, new_conditions, new_requirements, new_defaults, new_route_name, anchor)
       end
-      if RouteTranslator.config.generate_unnamed_unlocalized_routes
-        block.call(app, conditions, requirements, defaults, nil, anchor)
-      elsif RouteTranslator.config.generate_unlocalized_routes
-        block.call(app, conditions, requirements, defaults, route_name, anchor)
-      end
     end
 
     private

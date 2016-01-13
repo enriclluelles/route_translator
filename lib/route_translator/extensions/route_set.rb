@@ -7,6 +7,12 @@ module ActionDispatch
         RouteTranslator::Translator.translations_for(app, conditions, requirements, defaults, as, anchor, self) do |*translated_args|
           add_route(*translated_args)
         end
+
+        if RouteTranslator.config.generate_unnamed_unlocalized_routes
+          add_route app, conditions, requirements, defaults, nil, anchor
+        elsif RouteTranslator.config.generate_unlocalized_routes
+          add_route app, conditions, requirements, defaults, as, anchor
+        end
       end
     end
   end
