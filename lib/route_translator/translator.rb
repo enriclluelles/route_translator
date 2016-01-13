@@ -46,18 +46,15 @@ module RouteTranslator
           next
         end
 
-        translated_path_ast = ::ActionDispatch::Journey::Parser.parse(translated_path)
+        translated_options = options.dup
 
-        if !options.include?(RouteTranslator.locale_param_key)
-          options.merge! RouteTranslator.locale_param_key => locale.to_s.gsub('native_', '')
+        unless translated_options.include?(RouteTranslator.locale_param_key)
+          translated_options.merge! RouteTranslator.locale_param_key => locale.to_s.gsub('native_', '')
         end
-        options_constraints.merge! RouteTranslator.locale_param_key => locale.to_s
 
         translated_name = translate_name(name, locale, route_set.named_routes.send(:routes))
 
-        translated_mapping = ::ActionDispatch::Routing::Mapper::Mapping.build(scope, route_set, translated_path_ast, controller, default_action, to, via, formatted, options_constraints, anchor, options)
-
-        yield translated_mapping, translated_path_ast, translated_name, anchor
+        yield translated_name, translated_path, translated_options
       end
     end
 
