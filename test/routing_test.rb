@@ -625,14 +625,11 @@ class ProductsControllerTest < ActionController::TestCase
   end
 
   def test_url_helpers_are_included
-    # doing it this way because assert_nothing_raised doesn't work on all rails versions
     controller = ProductsController.new
-    controller.request = OpenStruct.new(host: 'example.com') # mocking request
+    controller.request = ActionController::TestRequest.create
     %w(product_path product_url product_es_path product_es_url product_native_es_path product_native_es_url).each do |method|
-      begin
+      assert_nothing_raised NameError do
         controller.send(method)
-      rescue StandardError => e
-        raise e if e.is_a?(NameError) # swallow anything that isn't a NameError
       end
     end
   end
