@@ -1,7 +1,7 @@
 # coding: utf-8
 require File.expand_path('../../test_helper', __FILE__)
 
-class HostLocalesTest < integration_test_suite_parent_class
+class HostLocalesTest < ActionDispatch::IntegrationTest
   include RouteTranslator::ConfigurationHelper
 
   def setup

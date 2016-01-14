@@ -1,7 +1,7 @@
 # coding: utf-8
 require File.expand_path('../../test_helper', __FILE__)
 
-class LocaleSegmentProcTest < integration_test_suite_parent_class
+class LocaleSegmentProcTest < ActionDispatch::IntegrationTest
   include RouteTranslator::ConfigurationHelper
 
   def teardown

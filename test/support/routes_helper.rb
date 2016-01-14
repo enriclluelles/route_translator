@@ -21,12 +21,6 @@ module RouteTranslator
       @routes.routes.detect { |r| r.name == name }
     end
 
-    def formatted_root_route?
-      b = ActionPack::VERSION::MAJOR == 3 && ActionPack::VERSION::MINOR > 0
-      b ||= ActionPack::VERSION::MAJOR == 4
-      !b
-    end
-
     def print_routes(route_set)
       all_routes = route_set.routes
 
