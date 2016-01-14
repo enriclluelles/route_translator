@@ -10,14 +10,9 @@ module RouteTranslator
       end
     end
 
-    # Hack for compatibility between Rails 4 and Rails 3
     def assert_unrecognized_route(route_path, options)
-      assert_raise ActionController::RoutingError do
-        begin
-          assert_routing route_path, options
-        rescue Minitest::Assertion
-          raise ActionController::RoutingError, ''
-        end
+      assert_raise Minitest::Assertion do
+        assert_routing route_path, options
       end
     end
   end

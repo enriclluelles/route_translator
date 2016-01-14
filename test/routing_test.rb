@@ -266,13 +266,8 @@ class TranslateRoutesTest < ActionController::TestCase
       end
     end
 
-    if formatted_root_route?
-      assert_equal '/(.:format)', path_string(named_route('root_en'))
-      assert_equal '/es(.:format)', path_string(named_route('root_es'))
-    else
-      assert_equal '/', path_string(named_route('root_en'))
-      assert_equal '/es', path_string(named_route('root_es'))
-    end
+    assert_equal '/', path_string(named_route('root_en'))
+    assert_equal '/es', path_string(named_route('root_es'))
   end
 
   def test_route_with_mandatory_format
@@ -477,7 +472,7 @@ class TranslateRoutesTest < ActionController::TestCase
     draw_routes do
       scope 'segment/:locale' do
         localized do
-          resources :products
+          resources :products, only: :show
         end
       end
     end
