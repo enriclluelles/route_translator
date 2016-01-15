@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.2.3 (2016-01-15)
+
+* Minor tweaks
+
 ## 4.2.2 (2015-12-16)
 
 * Fix: native path generation with host_locale (#95)
