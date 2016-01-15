@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module RouteTranslator
   module Translator
     # Add standard route helpers for default locale e.g.
@@ -59,8 +60,6 @@ module RouteTranslator
         block.call(app, new_conditions, new_requirements, new_defaults, new_route_name, anchor)
       end
     end
-
-    private
 
     def self.available_locales
       available_locales = config_locales || I18n.available_locales.dup
@@ -129,7 +128,7 @@ module RouteTranslator
     end
 
     def self.translate_string(str, locale)
-      locale = "#{locale}".gsub('native_', '')
+      locale = locale.to_s.gsub('native_', '')
       opts = { scope: :routes, locale: locale }
       if RouteTranslator.config.disable_fallback && locale.to_s != I18n.default_locale.to_s
         opts[:fallback] = true
@@ -141,7 +140,7 @@ module RouteTranslator
     end
 
     def self.locale_param_present?(path)
-      !(path.split('/').detect { |segment| segment.to_s == ":#{RouteTranslator.locale_param_key}" }.nil?)
+      !path.split('/').detect { |segment| segment.to_s == ":#{RouteTranslator.locale_param_key}" }.nil?
     end
 
     def self.host_locales_option?

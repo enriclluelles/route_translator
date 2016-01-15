@@ -10,8 +10,8 @@ module RouteTranslator
       config_default_locale_settings :en
     end
 
-    alias_method :setup_config, :config_reset
-    alias_method :teardown_config, :config_reset
+    alias setup_config config_reset
+    alias teardown_config config_reset
 
     def config_default_locale_settings(locale)
       I18n.default_locale = locale

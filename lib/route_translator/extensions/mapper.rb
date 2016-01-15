@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'action_dispatch'
 
 module ActionDispatch
@@ -13,7 +14,7 @@ module ActionDispatch
         def add_route(action, options) # :nodoc:
           path = path_for_action(action, options.delete(:path))
 
-          if action.to_s =~ %r{^[\w\/]+$}.freeze
+          if action.to_s =~ %r{^[\w\/]+$}
             options[:action] ||= action unless action.to_s.include?('/'.freeze)
           else
             action = nil
