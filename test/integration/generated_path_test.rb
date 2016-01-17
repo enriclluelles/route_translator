@@ -72,7 +72,7 @@ class GeneratedPathTest < ActionDispatch::IntegrationTest
     config_default_locale_settings 'es'
     config_generate_unlocalized_routes false
 
-    get '/es/engine'
+    get '/engine'
     assert_response :success
     assert_equal(response.body, '/es/blorgh/posts')
   end
