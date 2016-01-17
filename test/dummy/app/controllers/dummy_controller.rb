@@ -19,4 +19,8 @@ class DummyController < ActionController::Base
   def suffix
     render text: params[:id]
   end
+
+  def engine
+    render text: blorgh.posts_path
+  end
 end
