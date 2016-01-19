@@ -1,12 +1,11 @@
-#encoding: utf-8
+# coding: utf-8
 require File.expand_path('../../test_helper', __FILE__)
 
 class HostLocalesTest < integration_test_suite_parent_class
-
   include RouteTranslator::ConfigurationHelper
 
   def setup
-    config_host_locales('*.es' => 'es', 'ru.*.com' => 'ru')
+    config_host_locales '*.es' => 'es', 'ru.*.com' => 'ru'
     Dummy::Application.reload_routes!
   end
 
@@ -14,7 +13,6 @@ class HostLocalesTest < integration_test_suite_parent_class
     config_host_locales({})
     Dummy::Application.reload_routes!
   end
-
 
   def test_root_path
     ## root of es com
@@ -56,4 +54,17 @@ class HostLocalesTest < integration_test_suite_parent_class
     assert_response :success
   end
 
+  def test_generated_path
+    ## native es route on es com
+    host! 'www.testapp.es'
+    get '/native'
+    assert_equal '/mostrar', @response.body
+    assert_response :success
+
+    ## native ru route on ru com
+    host! 'ru.testapp.com'
+    get '/native'
+    assert_equal URI.escape('/показывать'), @response.body
+    assert_response :success
+  end
 end

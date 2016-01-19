@@ -2,9 +2,12 @@ require 'rake'
 require 'rake/testtask'
 require 'rdoc/task'
 require 'bundler/gem_tasks'
+require 'rubocop/rake_task'
+
+RuboCop::RakeTask.new
 
 desc 'Default: run tests.'
-task :default => :test
+task default: [:rubocop, :test]
 
 desc 'Test the translate_routes plugin.'
 Rake::TestTask.new(:test) do |t|

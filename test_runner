@@ -1,9 +1,0 @@
-#!/usr/bin/env bash
-
-shopt -s extglob
-for file in gemfiles/!(*.lock) Gemfile; do
-  echo Using $file
-  BUNDLE_GEMFILE=$file bundle install > /dev/null
-  BUNDLE_GEMFILE=$file bundle exec rake test
-  echo -e "\n\n"
-done
