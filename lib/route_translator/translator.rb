@@ -134,13 +134,13 @@ module RouteTranslator
       if RouteTranslator.config.disable_fallback && locale.to_s != I18n.default_locale.to_s
         opts[:fallback] = true
       end
-      if I18n.exists?([@scope, str].join("."), opts[:locale]) && !I18n.translate(str, opts.merge({scope: @scope})).is_a?(Hash)
-        res = I18n.translate(str, opts.merge({scope: @scope}))
+      if I18n.exists?([@scope, str].join('.'), opts[:locale]) && !I18n.translate(str, opts.merge(scope: @scope)).is_a?(Hash)
+        res = I18n.translate(str, opts.merge(scope: @scope))
       elsif I18n.exists?(str, opts[:locale])
-        res  = I18n.translate(str, opts)
+        res = I18n.translate(str, opts)
       else
         opts[:default] = str unless opts[:fallback]
-        res  = I18n.translate(str, opts)
+        res = I18n.translate(str, opts)
       end
       URI.escape(res)
     end
