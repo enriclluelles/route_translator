@@ -40,6 +40,7 @@ module RouteTranslator
 
     def self.translations_for(app, conditions, requirements, defaults, route_name, anchor, route_set, &block)
       add_untranslated_helpers_to_controllers_and_views(route_name, route_set.named_routes)
+      @scope = [:routes, :controllers].concat defaults[:controller].split('/').map(&:to_sym)
 
       available_locales.each do |locale|
         new_conditions = conditions.dup
@@ -132,10 +133,16 @@ module RouteTranslator
       opts = { scope: :routes, locale: locale }
       if RouteTranslator.config.disable_fallback && locale.to_s != I18n.default_locale.to_s
         opts[:fallback] = true
-      else
-        opts[:default] = str
       end
-      res = I18n.translate(str, opts)
+      res = I18n.translate(str, scope: @scope, locale: locale)
+      if I18n.exists?([@scope, str].join('.'), opts[:locale]) && !I18n.translate(str, opts.merge(scope: @scope)).is_a?(Hash)
+        res = I18n.translate(str, opts.merge(scope: @scope))
+      elsif I18n.exists?(str, opts[:locale])
+        res = I18n.translate(str, opts)
+      else
+        opts[:default] = str unless opts[:fallback]
+        res = I18n.translate(str, opts)
+      end
       URI.escape(res)
     end
 
