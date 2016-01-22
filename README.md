@@ -179,7 +179,8 @@ end
   For example if we have `/examples` and a translation is not provided for ES, a route helper of `examples_es` will not be created.
   Defaults to `false`.
   Useful when one uses this with a locale route constraint, so non-ES routes can 404 on a Spanish website.
-
+* **available_locales**
+  Use this to limit the locales for which URLs should be generated for. Accepts an array of strings or symbols.
 
 
 ### Host-based Locale
