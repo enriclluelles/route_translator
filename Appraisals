@@ -1,5 +1,5 @@
 appraise 'rails-3.2' do
-  gem 'rails', '3.2.22'
+  gem 'rails', '3.2.22.1'
   gem 'minitest', '~> 4.7'
 end
 
@@ -8,9 +8,9 @@ appraise 'rails-4.0' do
 end
 
 appraise 'rails-4.1' do
-  gem 'rails', '4.1.14'
+  gem 'rails', '4.1.14.1'
 end
 
 appraise 'rails-4.2' do
-  gem 'rails', '4.2.5'
+  gem 'rails', '4.2.5.1'
 end
