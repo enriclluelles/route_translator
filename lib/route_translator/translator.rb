@@ -32,7 +32,7 @@ module RouteTranslator
         end
 
         # Including the named routes helpers module
-        [ActionController::TestCase, ActionView::TestCase, ActionMailer::TestCase].each do |klass|
+        [ActionController::TestCase, ActionMailer::TestCase, ActionView::TestCase].each do |klass|
           klass.__send__(:include, helper_container)
         end
       end

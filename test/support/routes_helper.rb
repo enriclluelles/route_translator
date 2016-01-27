@@ -5,8 +5,9 @@ module RouteTranslator
       if @routes.respond_to?(:install_helpers)
         @routes.install_helpers
       else
-        ActionView::Base.send(:include, @routes.url_helpers)
-        ActionController::Base.send(:include, @routes.url_helpers)
+        [ActionController::Base, ActionMailer::Base, ActionView::Base].each do |klass|
+          klass.__send__(:include, @routes.url_helpers)
+        end
       end
     end
 
