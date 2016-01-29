@@ -31,10 +31,13 @@ module RouteTranslator
           __send__(Translator.route_name_for(args, old_name, suffix, self), *args)
         end
 
-        # Including the named routes helpers module
-        [ActionController::TestCase, ActionMailer::TestCase, ActionView::TestCase].each do |klass|
-          klass.__send__(:include, helper_container)
-        end
+        add_helpers_to_test_cases(helper_container)
+      end
+    end
+
+    def self.add_helpers_to_test_cases(helper_container)
+      [ActionController::TestCase, ActionMailer::TestCase, ActionView::TestCase].each do |klass|
+        klass.__send__(:include, helper_container)
       end
     end
 
