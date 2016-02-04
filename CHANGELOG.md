@@ -1,5 +1,10 @@
 # Changelog
 
+## 4.2.4 (2016-02-04)
+
+* Change how helpers are loaded in TestCase
+* Update dependencies
+
 ## 4.2.3 (2016-01-15)
 
 * Minor tweaks
