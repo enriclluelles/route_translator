@@ -35,8 +35,8 @@ module RouteTranslator
 
     module_function
 
-    def translations_for(app, conditions, requirements, defaults, route_name, anchor, route_set)
-      RouteTranslator::Translator::RouteHelpers.add route_name, route_set.named_routes
+    def translations_for(route_set, path, name, options_constraints, options)
+      RouteTranslator::Translator::RouteHelpers.add name, route_set.named_routes
 
       available_locales.each do |locale|
         begin
@@ -47,14 +47,16 @@ module RouteTranslator
         end
 
         translated_options = options.dup
+        translated_options_constraints = options_constraints.dup
 
         unless translated_options.include?(RouteTranslator.locale_param_key)
           translated_options.merge! RouteTranslator.locale_param_key => locale.to_s.gsub('native_', '')
         end
+        translated_options_constraints[RouteTranslator.locale_param_key] = locale.to_s
 
         translated_name = translate_name(name, locale, route_set.named_routes.send(:routes))
 
-        yield translated_name, translated_path, translated_options
+        yield translated_name, translated_path, translated_options_constraints, translated_options
       end
     end
 

@@ -12,7 +12,7 @@ module ActionDispatch
 
       def add_route(action, controller, options, original_path, to, via, formatted, anchor, options_constraints) # :nodoc:
         path = path_for_action(action, original_path)
-        fail ArgumentError, 'path is required' if path.blank?
+        raise ArgumentError, 'path is required' if path.blank?
 
         action = action.to_s
 
