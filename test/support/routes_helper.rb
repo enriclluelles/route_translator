@@ -5,8 +5,8 @@ module RouteTranslator
       if @routes.respond_to?(:install_helpers)
         @routes.install_helpers
       else
-        [ActionController::Base, ActionMailer::Base, ActionView::Base].each do |klass|
-          klass.__send__(:include, @routes.url_helpers)
+        %w(ActionController::Base ActionMailer::Base ActionView::Base).each do |klass|
+          klass.constantize.__send__(:include, @routes.url_helpers) if Kernel.const_defined? klass.split('::').first
         end
       end
     end
