@@ -22,6 +22,8 @@ require 'action_mailer/railtie'
 
 require 'route_translator'
 
+require 'byebug'
+
 module ActionDispatch
   class TestRequest < Request
     def initialize(env = {})

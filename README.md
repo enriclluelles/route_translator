@@ -10,7 +10,7 @@ RouteTranslator is a gem to allow you to manage the translations of your app rou
 
 It started as a fork of the awesome [translate_routes](https://github.com/raul/translate_routes) plugin by [Raúl Murciano](https://github.com/raul).
 
-Right now it works with all the different flavours of rails 3-4 (3.2, 4.0, 4.1, 4.2).
+Right now it works with Rails 5.0
 
 
 
@@ -59,7 +59,7 @@ Right now it works with all the different flavours of rails 3-4 (3.2, 4.0, 4.1, 
 3.  Wrap the groups of routes that you want to translate inside a `localized` block:
 
     ```ruby
-    MyApp::Application.routes.draw do
+    Rails.application.routes.draw do
 
       namespace :admin do
         resources :cars
@@ -133,7 +133,7 @@ Right now it works with all the different flavours of rails 3-4 (3.2, 4.0, 4.1, 
     To disable it add this to your controller:
 
     ```ruby
-    skip_around_filter :set_locale_from_url
+    skip_around_action :set_locale_from_url
     ```
 
 
