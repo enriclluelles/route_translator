@@ -37,7 +37,7 @@ module RouteTranslator
 
     def self.add_helpers_to_test_cases(helper_container)
       %w(ActionController::TestCase ActionMailer::TestCase ActionView::TestCase).each do |klass|
-        klass.constantize.__send__(:include, helper_container) if Kernel.const_defined? klass
+        klass.constantize.__send__(:include, helper_container) if Kernel.const_defined? klass.split('::').first
       end
     end
 

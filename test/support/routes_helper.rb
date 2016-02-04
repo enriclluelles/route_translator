@@ -6,7 +6,7 @@ module RouteTranslator
         @routes.install_helpers
       else
         %w(ActionController::Base ActionMailer::Base ActionView::Base).each do |klass|
-          klass.constantize.__send__(:include, @routes.url_helpers) if Kernel.const_defined? klass
+          klass.constantize.__send__(:include, @routes.url_helpers) if Kernel.const_defined? klass.split('::').first
         end
       end
     end
