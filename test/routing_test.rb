@@ -552,7 +552,7 @@ class TranslateRoutesTest < ActionController::TestCase
   end
 
   def test_config_available_locales_handles_strings
-    config_available_locales %w( en ru )
+    config_available_locales %w(en ru)
 
     draw_routes do
       localized do

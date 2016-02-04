@@ -10,7 +10,7 @@ class HostLocalesTest < integration_test_suite_parent_class
   end
 
   def teardown
-    config_host_locales({})
+    config_host_locales
     Dummy::Application.reload_routes!
   end
 

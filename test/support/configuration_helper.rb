@@ -5,7 +5,7 @@ module RouteTranslator
       config_hide_locale false
       config_generate_unlocalized_routes false
       config_generate_unnamed_unlocalized_routes false
-      config_host_locales host_locales_config_hash
+      config_host_locales
 
       config_default_locale_settings :en
     end
@@ -33,7 +33,7 @@ module RouteTranslator
       RouteTranslator.config.generate_unnamed_unlocalized_routes = boolean
     end
 
-    def config_host_locales(hash)
+    def config_host_locales(hash = {})
       RouteTranslator.config.host_locales = hash
     end
 
@@ -43,10 +43,6 @@ module RouteTranslator
 
     def config_disable_fallback(boolean)
       RouteTranslator.config.disable_fallback = boolean
-    end
-
-    def host_locales_config_hash
-      ::Hash.new
     end
   end
 end
