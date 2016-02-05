@@ -1,5 +1,9 @@
 # Changelog
 
+## master (unreleased)
+
+* Improve TestCase helpers test
+
 ## 4.2.4 (2016-02-04)
 
 * Change how helpers are loaded in TestCase
