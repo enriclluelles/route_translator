@@ -46,15 +46,13 @@ module RouteTranslator
           next
         end
 
-        translated_options = options.dup
         translated_options_constraints = options_constraints.dup
+        translated_options             = options.dup
 
-        unless translated_options.include?(RouteTranslator.locale_param_key)
-          translated_options.merge! RouteTranslator.locale_param_key => locale.to_s.gsub('native_', '')
-        end
         translated_options_constraints[RouteTranslator.locale_param_key] = locale.to_s
+        translated_options[RouteTranslator.locale_param_key]             = locale.to_s.gsub('native_', '') unless translated_options.include?(RouteTranslator.locale_param_key)
 
-        translated_name = translate_name(name, locale, route_set.named_routes.send(:routes))
+        translated_name = translate_name(name, locale, route_set.named_routes.names)
 
         yield translated_name, translated_path, translated_options_constraints, translated_options
       end
