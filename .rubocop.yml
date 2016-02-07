@@ -13,7 +13,7 @@ Metrics/ClassLength:
     - 'test/**/*'
 
 Metrics/CyclomaticComplexity:
-  Max: 10 # TODO: Lower to 6
+  Max: 9 # TODO: Lower to 6
 
 Metrics/LineLength:
   Enabled: false
@@ -23,11 +23,18 @@ Metrics/MethodLength:
   Exclude:
     - 'test/**/*'
 
+Metrics/ModuleLength:
+  Exclude:
+    - 'test/**/*'
+
 Metrics/ParameterLists:
   Max: 13
 
 Metrics/PerceivedComplexity:
   Max: 10 # TODO: Lower to 7
+
+Rails:
+  Enabled: true
 
 Style/Documentation:
   Enabled: false
