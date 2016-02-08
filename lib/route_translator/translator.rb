@@ -84,16 +84,16 @@ module RouteTranslator
     def self.translate_path(path, locale)
       new_path = path.dup
       final_optional_segments = new_path.slice!(%r{(\([^\/]+\))$})
-      translated_segments = new_path.split(%r{\/|\.}).map { |seg| translate_path_segment(seg, locale) }.select { |seg| !seg.blank? }
+      translated_segments = new_path.split('/').map do |seg|
+        seg.split('.').map { |phrase| translate_path_segment(phrase, locale) }.join('.')
+      end
+      translated_segments.select! { |seg| !seg.blank? }
 
       if display_locale?(locale) && !locale_param_present?(new_path)
         translated_segments.unshift(locale.to_s.downcase)
       end
 
-      joined_segments = translated_segments.inject do |memo, segment|
-        separator = segment == ':format' ? '.' : '/'
-        memo << separator << segment
-      end
+      joined_segments = translated_segments.join('/')
 
       "/#{joined_segments}#{final_optional_segments}".gsub(%r{\/\(\/}, '(/')
     end
