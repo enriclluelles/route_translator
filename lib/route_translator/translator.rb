@@ -87,7 +87,7 @@ module RouteTranslator
       translated_segments = new_path.split('/').map do |seg|
         seg.split('.').map { |phrase| translate_path_segment(phrase, locale) }.join('.')
       end
-      translated_segments.select! { |seg| !seg.blank? }
+      translated_segments.reject!(&:empty?)
 
       if display_locale?(locale) && !locale_param_present?(new_path)
         translated_segments.unshift(locale.to_s.downcase)
@@ -120,7 +120,7 @@ module RouteTranslator
     # segment is blank, begins with a ":" (param key) or "*" (wildcard),
     # the segment is returned untouched
     def self.translate_path_segment(segment, locale)
-      return segment if segment.blank?
+      return segment if segment.empty?
       named_param, hyphenized = segment.split('-'.freeze, 2) if segment.starts_with?(':'.freeze)
       return "#{named_param}-#{translate_path_segment(hyphenized.dup, locale)}" if hyphenized
       return segment if segment.starts_with?('('.freeze) || segment.starts_with?('*'.freeze) || segment.include?(':'.freeze)
