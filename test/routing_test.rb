@@ -298,6 +298,18 @@ class TranslateRoutesTest < ActionController::TestCase
     assert_routing '/people.xml', controller: 'people', action: 'index', format: 'xml', locale: 'en'
   end
 
+  def test_routes_with_dot
+    draw_routes do
+      localized do
+        get 'people/.:name', to: 'people#index'
+        get 'products.:name', to: 'products#index'
+      end
+    end
+
+    assert_routing '/people/.john', controller: 'people', action: 'index', locale: 'en', name: 'john'
+    assert_routing '/products.book', controller: 'products', action: 'index', locale: 'en', name: 'book'
+  end
+
   def test_i18n_based_translations_setting_locales
     draw_routes do
       localized do
