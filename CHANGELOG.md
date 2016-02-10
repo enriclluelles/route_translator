@@ -3,6 +3,7 @@
 ## master (unreleased)
 
 * Improve TestCase helpers test
+* Fix: Generate correct route when a segment is preceded by a dot (#132)
 
 ## 4.2.4 (2016-02-04)
 
