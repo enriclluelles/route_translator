@@ -1,5 +1,10 @@
 # Changelog
 
+## 4.2.5 (2016-02-11)
+
+* Fix: Generate correct route when a segment is preceded by a dot (#132)
+* Improve TestCase helpers test
+
 ## 4.2.4 (2016-02-04)
 
 * Change how helpers are loaded in TestCase
