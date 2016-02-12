@@ -1,16 +1,12 @@
 module RouteTranslator
   module Host
-    def self.locale_from_host(host)
-      locales = RouteTranslator.config.host_locales.each_with_object([]) do |(pattern, locale), result|
-        result << locale.to_sym if host =~ regex_for(pattern)
-      end
-      locales &= I18n.available_locales
-      (locales.first || I18n.default_locale).to_sym
-    end
+    class << self
+      private
 
-    def self.regex_for(host_string)
-      escaped = Regexp.escape(host_string).gsub('\*', '.*?').gsub('\.', '\.?')
-      Regexp.new("^#{escaped}$", Regexp::IGNORECASE)
+      def regex_for(host_string)
+        escaped = Regexp.escape(host_string).gsub('\*', '.*?').gsub('\.', '\.?')
+        Regexp.new("^#{escaped}$", Regexp::IGNORECASE)
+      end
     end
 
     def native_locale?(locale)
@@ -19,6 +15,16 @@ module RouteTranslator
 
     def native_locales
       config.host_locales.values.map { |locale| :"native_#{locale}" }
+    end
+
+    module_function
+
+    def locale_from_host(host)
+      locales = RouteTranslator.config.host_locales.each_with_object([]) do |(pattern, locale), result|
+        result << locale.to_sym if host =~ regex_for(pattern)
+      end
+      locales &= I18n.available_locales
+      (locales.first || I18n.default_locale).to_sym
     end
   end
 end

@@ -4,7 +4,7 @@ AllCops:
     - 'vendor/bundle/**/*'
 
 Metrics/AbcSize:
-  Max: 36.58 # TODO: Lower to 15
+  Max: 35.62 # TODO: Lower to 15
   Exclude:
     - 'test/**/*'
 
@@ -19,13 +19,15 @@ Metrics/LineLength:
   Enabled: false
 
 Metrics/MethodLength:
-  Max: 24
+  Max: 22
+  Exclude:
+    - 'test/**/*'
 
 Metrics/ModuleLength:
-  Max: 129 # TODO: Lower to 100
+  Max: 132 # TODO: Lower to 100
 
 Metrics/ParameterLists:
-  Max: 8
+  Max: 7
 
 Metrics/PerceivedComplexity:
   Max: 9 # TODO: Lower to 7
