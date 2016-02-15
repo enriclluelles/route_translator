@@ -22,8 +22,14 @@ module RouteTranslator
         RouteTranslator.config.host_locales.present?
       end
 
-      def translate_name(n, locale)
-        "#{n}_#{locale.to_s.underscore}" if n.present?
+      def translate_name(name, locale, named_routes_names)
+        return unless name.present?
+        translated_name = "#{name}_#{locale.to_s.underscore}"
+        if named_routes_names.include?(translated_name.to_sym)
+          nil
+        else
+          translated_name
+        end
       end
 
       def translate_conditions(conditions, translated_path)
@@ -57,8 +63,7 @@ module RouteTranslator
 
         new_defaults = defaults.merge(RouteTranslator.locale_param_key => locale.to_s.gsub('native_', ''))
         new_requirements = requirements.merge(RouteTranslator.locale_param_key => locale.to_s)
-        new_route_name = translate_name(route_name, locale)
-        new_route_name = nil if new_route_name && route_set.named_routes.routes[new_route_name.to_sym] # TODO: Investigate this :(
+        new_route_name = translate_name(route_name, locale, route_set.named_routes.routes)
         yield app, new_conditions, new_requirements, new_defaults, new_route_name, anchor
       end
     end
