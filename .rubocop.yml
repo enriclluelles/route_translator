@@ -23,9 +23,6 @@ Metrics/MethodLength:
   Exclude:
     - 'test/**/*'
 
-Metrics/ModuleLength:
-  Max: 132 # TODO: Lower to 100
-
 Metrics/ParameterLists:
   Max: 7
 

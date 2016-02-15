@@ -35,7 +35,7 @@ module RouteTranslator
     @config.locale_param_key                    ||= :locale
     @config.generate_unnamed_unlocalized_routes ||= false
     @config.host_locales                        ||= ActiveSupport::OrderedHash.new
-    @config.available_locales                   ||= nil
+    @config.available_locales                   ||= []
     @config.disable_fallback                    ||= false
     yield @config if block
     resolve_host_locale_config_conflicts unless @config.host_locales.empty?
