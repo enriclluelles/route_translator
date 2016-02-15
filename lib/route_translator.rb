@@ -45,4 +45,14 @@ module RouteTranslator
   def locale_param_key
     config.locale_param_key
   end
+
+  def available_locales
+    locales = config.available_locales
+
+    if locales.any?
+      locales.map(&:to_sym)
+    else
+      I18n.available_locales.dup
+    end
+  end
 end

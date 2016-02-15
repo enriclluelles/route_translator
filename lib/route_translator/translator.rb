@@ -9,21 +9,13 @@ module RouteTranslator
       private
 
       def available_locales
-        locales = config_available_locales
+        locales = RouteTranslator.available_locales
         locales.push(*RouteTranslator.native_locales) if RouteTranslator.native_locales.present?
         # Make sure the default locale is translated in last place to avoid
         # problems with wildcards when default locale is omitted in paths. The
         # default routes will catch all paths like wildcard if it is translated first.
         locales.delete I18n.default_locale
         locales.push I18n.default_locale
-      end
-
-      def config_available_locales
-        if RouteTranslator.config.available_locales.empty?
-          I18n.available_locales.dup
-        else
-          RouteTranslator.config.available_locales.map(&:to_sym)
-        end
       end
 
       def host_locales_option?
