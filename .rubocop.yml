@@ -4,7 +4,7 @@ AllCops:
     - 'vendor/bundle/**/*'
 
 Metrics/AbcSize:
-  Max: 33.14 # TODO: Lower to 15
+  Max: 23.35 # TODO: Lower to 15
   Exclude:
     - 'test/**/*'
 

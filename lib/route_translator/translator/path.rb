@@ -8,18 +8,20 @@ module RouteTranslator
 
         def display_locale?(locale)
           !RouteTranslator.config.hide_locale && !RouteTranslator.native_locale?(locale) &&
-            (!default_locale?(locale) ||
-             RouteTranslator.config.force_locale ||
-             RouteTranslator.config.generate_unlocalized_routes ||
-             RouteTranslator.config.generate_unnamed_unlocalized_routes)
+            (!default_locale?(locale) || config_requires_locale?)
+        end
+
+        def config_requires_locale?
+          config = RouteTranslator.config
+          (config.force_locale || config.generate_unlocalized_routes || config.generate_unnamed_unlocalized_routes).present?
         end
 
         def default_locale?(locale)
-          I18n.default_locale.to_sym == locale.to_sym
+          locale.to_sym == I18n.default_locale.to_sym
         end
 
         def locale_param_present?(path)
-          !path.split('/').detect { |segment| segment.to_s == ":#{RouteTranslator.locale_param_key}" }.nil?
+          path.split('/').include? ":#{RouteTranslator.locale_param_key}"
         end
       end
 
