@@ -6,8 +6,8 @@ require 'route_translator/version'
 Gem::Specification.new do |spec|
   spec.name          = 'route_translator'
   spec.version       = RouteTranslator::VERSION
-  spec.authors       = ['Raul Murciano', 'Enric Lluelles']
-  spec.email         = %q(enric@lluell.es)
+  spec.authors       = ['Geremia Taglialatela', 'Enric Lluelles', 'Raul Murciano']
+  spec.email         = %q(tagliala.dev@gmail.com enric@lluell.es)
 
   spec.summary       = %q(Translate your Rails routes in a simple manner)
   spec.description   = %q(Translates the Rails routes of your application into the languages defined in your locale files)
