@@ -223,7 +223,17 @@ If `host_locales` option is set, the following options will be forced (even if y
 
 This is to avoid odd behaviour brought about by route conflicts and because `host_locales` forces and hides the host-locale dynamically.
 
-
+### Testing
+Testing your controllers with routes-translator is easy, just add a locale parameter for your localized routes. Otherwise, an ActionController::UrlGenerationError will raise.
+```ruby
+describe "GET index" do
+    it 'should respond with success' do
+       get :index, {locale: "fr"}
+       
+       expect(response).to be_success
+    end
+end
+```
 
 ## Contributing
 
