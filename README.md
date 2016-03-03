@@ -225,13 +225,14 @@ This is to avoid odd behaviour brought about by route conflicts and because `hos
 
 ### Testing
 Testing your controllers with routes-translator is easy, just add a locale parameter for your localized routes. Otherwise, an ActionController::UrlGenerationError will raise.
+
 ```ruby
-describe "GET index" do
-    it 'should respond with success' do
-       get :index, {locale: "fr"}
-       
-       expect(response).to be_success
-    end
+describe 'GET index' do
+  it 'should respond with success' do
+    get :index, { locale: 'fr' }
+
+    expect(response).to be_success
+  end
 end
 ```
 
