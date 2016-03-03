@@ -4,7 +4,7 @@
 [![Build Status](https://travis-ci.org/enriclluelles/route_translator.svg?branch=master)](https://travis-ci.org/enriclluelles/route_translator)
 [![Dependency Status](https://gemnasium.com/enriclluelles/route_translator.svg)](https://gemnasium.com/enriclluelles/route_translator)
 [![Code Climate](https://codeclimate.com/github/enriclluelles/route_translator/badges/gpa.svg)](https://codeclimate.com/github/enriclluelles/route_translator)
-[![Coverage Status](https://coveralls.io/repos/enriclluelles/route_translator/badge.svg?branch=master&service=github)](https://coveralls.io/github/enriclluelles/route_translator?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/enriclluelles/route_translator/badge.svg?branch=master)](https://coveralls.io/github/enriclluelles/route_translator?branch=master)
 
 RouteTranslator is a gem to allow you to manage the translations of your app routes with a simple dictionary format.
 
@@ -225,13 +225,14 @@ This is to avoid odd behaviour brought about by route conflicts and because `hos
 
 ### Testing
 Testing your controllers with routes-translator is easy, just add a locale parameter for your localized routes. Otherwise, an ActionController::UrlGenerationError will raise.
+
 ```ruby
-describe "GET index" do
-    it 'should respond with success' do
-       get :index, {locale: "fr"}
-       
-       expect(response).to be_success
-    end
+describe 'GET index' do
+  it 'should respond with success' do
+    get :index, { locale: 'fr' }
+
+    expect(response).to be_success
+  end
 end
 ```
 

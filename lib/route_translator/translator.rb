@@ -1,157 +1,74 @@
 # frozen_string_literal: true
+
+require File.expand_path('../translator/route_helpers', __FILE__)
+require File.expand_path('../translator/path', __FILE__)
+
 module RouteTranslator
   module Translator
-    # Add standard route helpers for default locale e.g.
-    #   I18n.locale = :de
-    #   people_path -> people_de_path
-    #   I18n.locale = :fr
-    #   people_path -> people_fr_path
-    def self.add_untranslated_helpers_to_controllers_and_views(old_name, named_route_collection)
-      if named_route_collection.respond_to?(:url_helpers_module)
-        url_helpers_module = named_route_collection.url_helpers_module
-        path_helpers_module = named_route_collection.path_helpers_module
-        url_helpers_list = named_route_collection.helper_names
-        path_helpers_list = named_route_collection.helper_names
-      else
-        url_helpers_module = named_route_collection.module
-        path_helpers_module = named_route_collection.module
-        url_helpers_list = named_route_collection.helpers
-        path_helpers_list = named_route_collection.helpers
+    class << self
+      private
+
+      def available_locales
+        locales = RouteTranslator.available_locales
+        locales.push(*RouteTranslator.native_locales) if RouteTranslator.native_locales.present?
+        # Make sure the default locale is translated in last place to avoid
+        # problems with wildcards when default locale is omitted in paths. The
+        # default routes will catch all paths like wildcard if it is translated first.
+        locales.delete I18n.default_locale
+        locales.push I18n.default_locale
       end
 
-      [
-        ['path', path_helpers_module, path_helpers_list],
-        ['url', url_helpers_module, url_helpers_list]
-      ].each do |suffix, helper_container, helper_list|
-        new_helper_name = "#{old_name}_#{suffix}"
+      def host_locales_option?
+        RouteTranslator.config.host_locales.present?
+      end
 
-        helper_list.push(new_helper_name.to_sym) unless helper_list.include?(new_helper_name.to_sym)
+      def translate_name(name, locale, named_routes_names)
+        return unless name.present?
+        translated_name = "#{name}_#{locale.to_s.underscore}"
+        if named_routes_names.include?(translated_name.to_sym)
+          nil
+        else
+          translated_name
+        end
+      end
 
-        helper_container.__send__(:define_method, new_helper_name) do |*args|
-          __send__(Translator.route_name_for(args, old_name, suffix, self), *args)
+      def translate_conditions(conditions, translated_path)
+        translated_conditions = conditions.dup
+
+        translated_conditions[:path_info] = translated_path
+        translated_conditions[:parsed_path_info] = ActionDispatch::Journey::Parser.new.parse(translated_conditions[:path_info]) if conditions[:parsed_path_info]
+
+        if translated_conditions[:required_defaults] && !translated_conditions[:required_defaults].include?(RouteTranslator.locale_param_key)
+          translated_conditions[:required_defaults] << RouteTranslator.locale_param_key
         end
 
-        add_helpers_to_test_cases(helper_container)
+        translated_conditions
       end
     end
 
-    def self.add_helpers_to_test_cases(helper_container)
-      %w(ActionController ActionMailer ActionView).each do |klass_name|
-        next unless Module.const_defined?(klass_name)
-        klass_name.constantize::TestCase.__send__(:include, helper_container)
-      end
-    end
+    module_function
 
-    def self.translations_for(app, conditions, requirements, defaults, route_name, anchor, route_set, &block)
-      add_untranslated_helpers_to_controllers_and_views(route_name, route_set.named_routes)
+    def translations_for(app, conditions, requirements, defaults, route_name, anchor, route_set)
+      RouteTranslator::Translator::RouteHelpers.add route_name, route_set.named_routes
 
       available_locales.each do |locale|
-        new_conditions = conditions.dup
         begin
-          new_conditions[:path_info] = translate_path(conditions[:path_info], locale)
+          translated_path = RouteTranslator::Translator::Path.translate(conditions[:path_info], locale)
         rescue I18n::MissingTranslationData => e
           raise e unless RouteTranslator.config.disable_fallback
           next
         end
-        new_conditions[:parsed_path_info] = ActionDispatch::Journey::Parser.new.parse(new_conditions[:path_info]) if conditions[:parsed_path_info]
-        if new_conditions[:required_defaults] && !new_conditions[:required_defaults].include?(RouteTranslator.locale_param_key)
-          new_conditions[:required_defaults] << RouteTranslator.locale_param_key
-        end
+
+        new_conditions = translate_conditions(conditions, translated_path)
+
         new_defaults = defaults.merge(RouteTranslator.locale_param_key => locale.to_s.gsub('native_', ''))
         new_requirements = requirements.merge(RouteTranslator.locale_param_key => locale.to_s)
-        new_route_name = translate_name(route_name, locale)
-        new_route_name = nil if new_route_name && route_set.named_routes.routes[new_route_name.to_sym] # TODO: Investigate this :(
-        block.call(app, new_conditions, new_requirements, new_defaults, new_route_name, anchor)
+        new_route_name = translate_name(route_name, locale, route_set.named_routes.routes)
+        yield app, new_conditions, new_requirements, new_defaults, new_route_name, anchor
       end
     end
 
-    def self.available_locales
-      available_locales = config_locales || I18n.available_locales.dup
-      available_locales.push(*RouteTranslator.native_locales) if RouteTranslator.native_locales.present?
-      # Make sure the default locale is translated in last place to avoid
-      # problems with wildcards when default locale is omitted in paths. The
-      # default routes will catch all paths like wildcard if it is translated first.
-      available_locales.push(available_locales.delete(I18n.default_locale))
-    end
-
-    def self.config_locales
-      if RouteTranslator.config.available_locales
-        RouteTranslator.config.available_locales.map(&:to_sym)
-      end
-    end
-
-    # Translates a path and adds the locale prefix.
-    def self.translate_path(path, locale)
-      new_path = path.dup
-      final_optional_segments = new_path.slice!(%r{(\([^\/]+\))$})
-      translated_segments = new_path.split('/').map do |seg|
-        seg.split('.').map { |phrase| translate_path_segment(phrase, locale) }.join('.')
-      end
-      translated_segments.reject!(&:empty?)
-
-      if display_locale?(locale) && !locale_param_present?(new_path)
-        translated_segments.unshift(locale.to_s.downcase)
-      end
-
-      joined_segments = translated_segments.join('/')
-
-      "/#{joined_segments}#{final_optional_segments}".gsub(%r{\/\(\/}, '(/')
-    end
-
-    def self.display_locale?(locale)
-      !RouteTranslator.config.hide_locale && !RouteTranslator.native_locale?(locale) &&
-        (!default_locale?(locale) ||
-         RouteTranslator.config.force_locale ||
-         RouteTranslator.config.generate_unlocalized_routes ||
-         RouteTranslator.config.generate_unnamed_unlocalized_routes)
-    end
-
-    def self.translate_name(n, locale)
-      "#{n}_#{locale.to_s.underscore}" if n.present?
-    end
-
-    def self.default_locale?(locale)
-      I18n.default_locale.to_sym == locale.to_sym
-    end
-
-    # Tries to translate a single path segment. If the path segment
-    # contains sth. like a optional format "people(.:format)", only
-    # "people" will be translated, if there is no translation, the path
-    # segment is blank, begins with a ":" (param key) or "*" (wildcard),
-    # the segment is returned untouched
-    def self.translate_path_segment(segment, locale)
-      return segment if segment.empty?
-      named_param, hyphenized = segment.split('-'.freeze, 2) if segment.starts_with?(':'.freeze)
-      return "#{named_param}-#{translate_path_segment(hyphenized.dup, locale)}" if hyphenized
-      return segment if segment.starts_with?('('.freeze) || segment.starts_with?('*'.freeze) || segment.include?(':'.freeze)
-
-      appended_part = segment.slice!(/(\()$/)
-      match = TRANSLATABLE_SEGMENT.match(segment)[1] if TRANSLATABLE_SEGMENT.match(segment)
-
-      (translate_string(match, locale) || segment) + appended_part.to_s
-    end
-
-    def self.translate_string(str, locale)
-      locale = locale.to_s.gsub('native_', '')
-      opts = { scope: :routes, locale: locale }
-      if RouteTranslator.config.disable_fallback && locale.to_s != I18n.default_locale.to_s
-        opts[:fallback] = true
-      else
-        opts[:default] = str
-      end
-      res = I18n.translate(str, opts)
-      URI.escape(res)
-    end
-
-    def self.locale_param_present?(path)
-      !path.split('/').detect { |segment| segment.to_s == ":#{RouteTranslator.locale_param_key}" }.nil?
-    end
-
-    def self.host_locales_option?
-      RouteTranslator.config.host_locales.present?
-    end
-
-    def self.route_name_for(args, old_name, suffix, kaller)
+    def route_name_for(args, old_name, suffix, kaller)
       args_hash           = args.detect { |arg| arg.is_a?(Hash) }
       args_locale         = host_locales_option? && args_hash && args_hash[:locale]
       current_locale_name = I18n.locale.to_s.underscore

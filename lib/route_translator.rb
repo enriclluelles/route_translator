@@ -14,23 +14,10 @@ module RouteTranslator
                              :generate_unnamed_unlocalized_routes, :available_locales,
                              :host_locales, :disable_fallback)
 
-  def self.config(&block)
-    @config                                     ||= Configuration.new
-    @config.force_locale                        ||= false
-    @config.hide_locale                         ||= false
-    @config.generate_unlocalized_routes         ||= false
-    @config.locale_param_key                    ||= :locale
-    @config.generate_unnamed_unlocalized_routes ||= false
-    @config.host_locales                        ||= ActiveSupport::OrderedHash.new
-    @config.available_locales                   ||= nil
-    @config.disable_fallback                    ||= false
-    yield @config if block
-    resolve_config_conflicts
-    @config
-  end
+  class << self
+    private
 
-  def self.resolve_config_conflicts
-    if @config.host_locales.present?
+    def resolve_host_locale_config_conflicts
       @config.generate_unlocalized_routes         = false
       @config.generate_unnamed_unlocalized_routes = false
       @config.force_locale                        = false
@@ -38,7 +25,34 @@ module RouteTranslator
     end
   end
 
-  def self.locale_param_key
+  module_function
+
+  def config(&block)
+    @config                                     ||= Configuration.new
+    @config.force_locale                        ||= false
+    @config.hide_locale                         ||= false
+    @config.generate_unlocalized_routes         ||= false
+    @config.locale_param_key                    ||= :locale
+    @config.generate_unnamed_unlocalized_routes ||= false
+    @config.host_locales                        ||= ActiveSupport::OrderedHash.new
+    @config.available_locales                   ||= []
+    @config.disable_fallback                    ||= false
+    yield @config if block
+    resolve_host_locale_config_conflicts unless @config.host_locales.empty?
+    @config
+  end
+
+  def locale_param_key
     config.locale_param_key
+  end
+
+  def available_locales
+    locales = config.available_locales
+
+    if locales.any?
+      locales.map(&:to_sym)
+    else
+      I18n.available_locales.dup
+    end
   end
 end
