@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.3.0 (2016-03-03)
+
+* Refactor translator module
+
 ## 4.2.5 (2016-02-11)
 
 * Fix: Generate correct route when a segment is preceded by a dot (#132)
