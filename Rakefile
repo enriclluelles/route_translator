@@ -13,7 +13,7 @@ desc 'Test the translate_routes plugin.'
 Rake::TestTask.new(:test) do |t|
   t.libs << 'lib'
   t.pattern = 'test/**/*_test.rb'
-  t.verbose = true
+  t.warning = false
 end
 
 desc 'Generate documentation for the translate_routes plugin.'
