@@ -1,5 +1,10 @@
 # Changelog
 
+## 4.4.0 (dev)
+
+* Using AS::Concern instead of monkey patching ActionController
+* Update development dependencies
+
 ## 4.3.0 (2016-03-03)
 
 * Refactor translator module
