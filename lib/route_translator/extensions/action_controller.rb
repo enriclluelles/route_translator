@@ -46,5 +46,7 @@ module RouteTranslator
   end
 end
 
-ActionController::Base.send :include, RouteTranslator::Controller
-ActionController::TestCase.send :include, RouteTranslator::TestCase
+ActiveSupport.on_load(:action_controller) do
+  ActionController::Base.send :include, RouteTranslator::Controller
+  ActionController::TestCase.send :include, RouteTranslator::TestCase
+end
