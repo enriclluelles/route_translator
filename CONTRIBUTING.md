@@ -33,11 +33,12 @@ Take a look at [git-flow, A successful Git branching model](http://nvie.com/post
 - We are open to discussion. If you have troubles or questions, feel free to start a new issue
 
 
+
 ## Coding standards
 
 ### Ruby
 
-- [Ruby Styleguide](https://github.com/styleguide/ruby)
+- [Ruby Styleguide](https://github.com/bbatsov/ruby-style-guide)
 
 
 
