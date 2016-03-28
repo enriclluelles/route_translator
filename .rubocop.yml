@@ -36,11 +36,4 @@ Style/Documentation:
   Enabled: false
 
 Style/SpaceAroundOperators:
-  AllowForAlignment:
-    - '='
-    - '=>'
-    - '||='
-
-Style/UnneededPercentQ:
-  Exclude:
-    - 'route_translator.gemspec'
+  AllowForAlignment: true
