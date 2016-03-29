@@ -48,3 +48,40 @@ class TestCaseHelpersTest < MiniTest::Test
     assert test_case.respond_to?(:new_person_en_path)
   end
 end
+
+class TestController < ActionController::Base
+  def test
+    render text: nil
+  end
+end
+
+class TestControllerTest < ActionController::TestCase
+  include RouteTranslator::ConfigurationHelper
+  include RouteTranslator::RoutesHelper
+
+  def setup
+    setup_config
+
+    @routes = ActionDispatch::Routing::RouteSet.new
+
+    config_default_locale_settings 'en'
+
+    draw_routes do
+      get :test, to: 'test#test'
+    end
+  end
+
+  def teardown
+    teardown_config
+  end
+
+  def test_responds_to__routes
+    assert _routes
+  end
+
+  def test_application_controller_test_case
+    get :test
+
+    assert_response :success
+  end
+end
