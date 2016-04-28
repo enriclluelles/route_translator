@@ -7,8 +7,8 @@ rvm:
   - jruby-19mode
   - 2.0
   - 2.1.10
-  - 2.2.4
-  - 2.3.0
+  - 2.2.5
+  - 2.3.1
   - rbx-2
 gemfile:
   - gemfiles/rails_3.2.gemfile
@@ -29,9 +29,9 @@ matrix:
       gemfile: gemfiles/rails_4.1.gemfile
     - rvm: jruby-19mode
       gemfile: gemfiles/rails_4.2.gemfile
-    - rvm: 2.2.4
+    - rvm: 2.2.5
       gemfile: gemfiles/rails_3.2.gemfile
-    - rvm: 2.3.0
+    - rvm: 2.3.1
       gemfile: gemfiles/rails_3.2.gemfile
   allow_failures:
     - rvm: rbx-2
