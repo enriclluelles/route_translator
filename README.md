@@ -181,7 +181,9 @@ end
   Useful when one uses this with a locale route constraint, so non-ES routes can 404 on a Spanish website.
 * **available_locales**
   Use this to limit the locales for which URLs should be generated for. Accepts an array of strings or symbols.
-
+* **locale_segment_proc**
+  The locale segment of the url will by default be `locale.to_s.downcase`
+  You can supply your own mechanism via a Proc that takes `locale` as an argument, e.g. `config.locale_segment_proc = ->(locale) {|locale| locale.to_s.upcase }`
 
 ### Host-based Locale
 

@@ -13,3 +13,8 @@ ru:
   routes:
     dummy: манекен
     show: показывать
+
+de-AT:
+  routes:
+    dummy: Attrappe
+    show: anzeigen
