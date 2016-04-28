@@ -6,6 +6,9 @@ module RouteTranslator
       config_generate_unlocalized_routes false
       config_generate_unnamed_unlocalized_routes false
       config_host_locales
+      config_available_locales []
+      config_disable_fallback false
+      config_locale_segment_proc false
 
       config_default_locale_settings :en
     end
@@ -43,6 +46,10 @@ module RouteTranslator
 
     def config_disable_fallback(boolean)
       RouteTranslator.config.disable_fallback = boolean
+    end
+
+    def config_locale_segment_proc(a_proc)
+      RouteTranslator.config.locale_segment_proc = a_proc
     end
   end
 end
