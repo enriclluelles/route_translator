@@ -2,6 +2,7 @@
 
 ## 4.4.0 (dev)
 
+* Support custom locale path segments, i.e. /uk/en/widgets
 * Using AS::Concern instead of monkey patching ActionController
 * Update development dependencies
 
