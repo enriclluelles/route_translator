@@ -10,7 +10,7 @@ module RouteTranslator
 
       def available_locales
         locales = RouteTranslator.available_locales
-        locales.push(*RouteTranslator.native_locales) if RouteTranslator.native_locales.present?
+        locales.concat(RouteTranslator.native_locales) if RouteTranslator.native_locales.present?
         # Make sure the default locale is translated in last place to avoid
         # problems with wildcards when default locale is omitted in paths. The
         # default routes will catch all paths like wildcard if it is translated first.
