@@ -1,6 +1,6 @@
 # Changelog
 
-## 5.0.0.dev (unreleased)
+## 5.0.0 (2016-07-01)
 
 * Rails 5 compatibility
 
