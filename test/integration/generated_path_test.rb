@@ -1,8 +1,9 @@
 # coding: utf-8
 require File.expand_path('../../test_helper', __FILE__)
 
-class GeneratedPathTest < integration_test_suite_parent_class
+class GeneratedPathTest < ActionDispatch::IntegrationTest
   include RouteTranslator::ConfigurationHelper
+  include RouteTranslator::RoutesHelper
 
   def setup
     setup_config
@@ -15,13 +16,13 @@ class GeneratedPathTest < integration_test_suite_parent_class
   def test_path_generated
     get '/show'
     assert_response :success
-    assert_tag tag: 'a', attributes: { href: '/show' }
+    assert_select 'a[href="/show"]'
   end
 
   def test_path_translated
     get '/es/mostrar'
     assert_response :success
-    assert_tag tag: 'a', attributes: { href: '/es/mostrar' }
+    assert_select 'a[href="/es/mostrar"]'
   end
 
   def test_path_translated_after_force
@@ -29,7 +30,7 @@ class GeneratedPathTest < integration_test_suite_parent_class
 
     get '/es/mostrar'
     assert_response :success
-    assert_tag tag: 'a', attributes: { href: '/es/mostrar' }
+    assert_select 'a[href="/es/mostrar"]'
   end
 
   def test_path_translated_while_generate_unlocalized_routes
@@ -38,27 +39,27 @@ class GeneratedPathTest < integration_test_suite_parent_class
 
     get '/es/mostrar'
     assert_response :success
-    assert_tag tag: 'a', attributes: { href: '/es/mostrar' }
+    assert_select 'a[href="/es/mostrar"]'
   end
 
   def test_with_optionals
     get '/optional'
     assert_response :success
-    assert_tag tag: 'a', attributes: { href: '/optional' }
+    assert_select 'a[href="/optional"]'
 
     get '/optional/12'
     assert_response :success
-    assert_tag tag: 'a', attributes: { href: '/optional/12' }
+    assert_select 'a[href="/optional/12"]'
   end
 
   def test_with_prefixed_optionals
     get '/prefixed_optional'
     assert_response :success
-    assert_tag tag: 'a', attributes: { href: '/prefixed_optional' }
+    assert_select 'a[href="/prefixed_optional"]'
 
     get '/prefixed_optional/p-12'
     assert_response :success
-    assert_tag tag: 'a', attributes: { href: '/prefixed_optional/p-12' }
+    assert_select 'a[href="/prefixed_optional/p-12"]'
   end
 
   def test_path_translated_with_suffix
