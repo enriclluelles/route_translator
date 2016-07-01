@@ -20,7 +20,6 @@ Right now it works with all the different flavours of rails 3-4 (3.2, 4.0, 4.1, 
 
     ```ruby
     MyApp::Application.routes.draw do
-
       namespace :admin do
         resources :cars
       end
@@ -60,7 +59,6 @@ Right now it works with all the different flavours of rails 3-4 (3.2, 4.0, 4.1, 
 
     ```ruby
     MyApp::Application.routes.draw do
-
       namespace :admin do
         resources :cars
       end
@@ -181,6 +179,9 @@ end
   Useful when one uses this with a locale route constraint, so non-ES routes can 404 on a Spanish website.
 * **available_locales**
   Use this to limit the locales for which URLs should be generated for. Accepts an array of strings or symbols.
+* **locale_segment_proc**
+  The locale segment of the url will by default be `locale.to_s.downcase`
+  You can supply your own mechanism via a Proc that takes `locale` as an argument, e.g. `config.locale_segment_proc = ->(locale) { locale.to_s.upcase }`
 
 
 ### Host-based Locale
@@ -197,12 +198,12 @@ Here are a few examples of possible mappings:
 
 ```ruby
 RouteTranslator.config.host_locales =
-{                                # Matches:
-  '*.es'                 => :es, # TLD:         ['domain.es', 'subdomain.domain.es', 'www.long.string.of.subdomains.es'] etc.
-  'ru.wikipedia.*'       => :ru, # Subdomain:   ['ru.wikipedia.org', 'ru.wikipedia.net', 'ru.wikipedia.com'] etc.
-  '*.subdomain.domain.*' => :ru, # Mixture:     ['subdomain.domain.org', 'www.subdomain.domain.net'] etc.
-  'news.bbc.co.uk'       => :en, # Exact match: ['news.bbc.co.uk'] only
-}
+  {                                # Matches:
+    '*.es'                 => :es, # TLD:         ['domain.es', 'subdomain.domain.es', 'www.long.string.of.subdomains.es'] etc.
+    'ru.wikipedia.*'       => :ru, # Subdomain:   ['ru.wikipedia.org', 'ru.wikipedia.net', 'ru.wikipedia.com'] etc.
+    '*.subdomain.domain.*' => :ru, # Mixture:     ['subdomain.domain.org', 'www.subdomain.domain.net'] etc.
+    'news.bbc.co.uk'       => :en, # Exact match: ['news.bbc.co.uk'] only
+  }
 ```
 
 In the case of a host matching more than once, the order in which the matchers are defined will be taken into account, like so:
@@ -229,7 +230,7 @@ Testing your controllers with routes-translator is easy, just add a locale param
 ```ruby
 describe 'GET index' do
   it 'should respond with success' do
-    get :index, { locale: 'fr' }
+    get :index, locale: 'fr'
 
     expect(response).to be_success
   end

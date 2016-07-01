@@ -23,6 +23,16 @@ module RouteTranslator
         def locale_param_present?(path)
           path.split('/').include? ":#{RouteTranslator.locale_param_key}"
         end
+
+        def locale_segment(locale)
+          if RouteTranslator.config.locale_segment_proc
+            locale_segment_proc = RouteTranslator.config.locale_segment_proc
+
+            locale_segment_proc.to_proc.call(locale)
+          else
+            locale.to_s.downcase
+          end
+        end
       end
 
       module_function
@@ -37,7 +47,7 @@ module RouteTranslator
         translated_segments.reject!(&:empty?)
 
         if display_locale?(locale) && !locale_param_present?(new_path)
-          translated_segments.unshift(locale.to_s.downcase)
+          translated_segments.unshift(locale_segment(locale))
         end
 
         joined_segments = translated_segments.join('/')

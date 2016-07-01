@@ -34,6 +34,7 @@ class TranslateRoutesTest < ActionController::TestCase
 
     assert_routing '/', controller: 'people', action: 'index', locale: 'en'
     assert_routing '/es', controller: 'people', action: 'index', locale: 'es'
+    assert_routing '/de-at', controller: 'people', action: 'index', locale: 'de-AT'
   end
 
   def test_params

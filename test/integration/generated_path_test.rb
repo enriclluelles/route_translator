@@ -4,6 +4,14 @@ require File.expand_path('../../test_helper', __FILE__)
 class GeneratedPathTest < integration_test_suite_parent_class
   include RouteTranslator::ConfigurationHelper
 
+  def setup
+    setup_config
+  end
+
+  def teardown
+    teardown_config
+  end
+
   def test_path_generated
     get '/show'
     assert_response :success

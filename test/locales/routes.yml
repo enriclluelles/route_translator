@@ -9,5 +9,12 @@ ru:
   routes:
     people: люди
 
+de-AT:
+  routes:
+    people: Menschen
+    products: Produkten
+    tr_param: tr_parameter
+    blank: ""
+
 en:
   m: m #Adding this here just to have en in I18n.available_locales

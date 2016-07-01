@@ -11,6 +11,7 @@ Dummy::Application.routes.draw do
     get ':id-suffix', to: 'dummy#suffix'
   end
 
+  get 'partial_caching', to: 'dummy#partial_caching'
   get 'native', to: 'dummy#native'
   root to: 'dummy#dummy'
 

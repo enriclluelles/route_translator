@@ -1,5 +1,11 @@
 # Changelog
 
+## 4.4.0 (2016-07-01)
+
+* Support custom locale path segments, i.e. /uk/en/widgets
+* Using AS::Concern instead of monkey patching ActionController
+* Update development dependencies
+
 ## 4.3.0 (2016-03-03)
 
 * Refactor translator module
