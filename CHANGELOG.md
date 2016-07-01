@@ -1,5 +1,9 @@
 # Changelog
 
+## 5.0.0.dev (unreleased)
+
+* Rails 5 compatibility
+
 ## 4.4.0 (2016-07-01)
 
 * Support custom locale path segments, i.e. /uk/en/widgets
