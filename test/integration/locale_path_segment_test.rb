@@ -18,7 +18,7 @@ class LocaleSegmentProcTest < ActionDispatch::IntegrationTest
   def test_generate_without_locale_segment_proc
     get '/de-at/anzeigen' # show
     assert_response :success
-    assert_tag tag: 'a', attributes: { href: '/de-at/anzeigen' }
+    assert_select 'a[href="/de-at/anzeigen"]', 1
   end
 
   def test_recognize_with_locale_segment_proc
@@ -36,7 +36,7 @@ class LocaleSegmentProcTest < ActionDispatch::IntegrationTest
     # not the default downcase
     get '/de-AT/anzeigen' # show
     assert_response :success
-    assert_tag tag: 'a', attributes: { href: '/de-AT/anzeigen' }
+    assert_select 'a[href="/de-AT/anzeigen"]', 1
   end
 
   # IKEA style "www.ikea.com/gb/en"
