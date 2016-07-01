@@ -20,22 +20,10 @@ module RouteTranslator
       #   I18n.locale = :fr
       #   people_path -> people_fr_path
       def add(old_name, named_route_collection)
-        if named_route_collection.respond_to?(:url_helpers_module)
-          url_helpers_module = named_route_collection.url_helpers_module
-          path_helpers_module = named_route_collection.path_helpers_module
-          url_helpers_list = named_route_collection.helper_names
-          path_helpers_list = named_route_collection.helper_names
-        else
-          url_helpers_module = named_route_collection.module
-          path_helpers_module = named_route_collection.module
-          url_helpers_list = named_route_collection.helpers
-          path_helpers_list = named_route_collection.helpers
-        end
+        helper_list = named_route_collection.helper_names
 
-        [
-          ['path', path_helpers_module, path_helpers_list],
-          ['url', url_helpers_module, url_helpers_list]
-        ].each do |suffix, helper_container, helper_list|
+        %w(path url).each do |suffix|
+          helper_container = named_route_collection.send(:"#{suffix}_helpers_module")
           new_helper_name = "#{old_name}_#{suffix}"
 
           helper_list.push(new_helper_name.to_sym) unless helper_list.include?(new_helper_name.to_sym)

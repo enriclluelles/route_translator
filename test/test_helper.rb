@@ -22,6 +22,8 @@ require 'action_mailer/railtie'
 
 require 'route_translator'
 
+require 'byebug'
+
 module ActionDispatch
   class TestRequest < Request
     def initialize(env = {})
@@ -37,5 +39,3 @@ end
 Dir[File.expand_path('../support/*.rb', __FILE__)].each do |helper|
   require helper
 end
-
-Minitest::Test = Minitest::Unit::TestCase unless defined?(Minitest::Test)

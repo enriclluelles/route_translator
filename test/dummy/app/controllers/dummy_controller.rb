@@ -4,19 +4,19 @@ class DummyController < ActionController::Base
   end
 
   def show
-    # Pass
-  end
-
-  def optional
-    # Pass
-  end
-
-  def suffix
-    # Pass
-    render text: params[:id]
   end
 
   def native
     render text: show_path
+  end
+
+  def optional
+  end
+
+  def prefixed_optional
+  end
+
+  def suffix
+    render text: params[:id]
   end
 end
