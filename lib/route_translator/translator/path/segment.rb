@@ -5,15 +5,29 @@ module RouteTranslator
         class << self
           private
 
-          def translate_string(str, locale)
-            locale = locale.to_s.gsub('native_', '')
-            opts = { scope: :routes, locale: locale }
+          def fallback_options(str, locale)
             if RouteTranslator.config.disable_fallback && locale.to_s != I18n.default_locale.to_s
-              opts[:fallback] = true
+              { fallback: true }
             else
-              opts[:default] = str
+              { default: str }
             end
+          end
+
+          def translate_string(str, locale, scope)
+            locale = locale.to_s.gsub('native_', '')
+            handler = proc { |exception| exception }
+            default_opts = { scope: scope, locale: locale }
+
+            opts = default_opts.merge(exception_handler: handler)
             res = I18n.translate(str, opts)
+
+            if res.is_a?(I18n::MissingTranslation) || res.is_a?(Hash)
+              opts = default_opts
+                     .merge(scope: :routes)
+                     .merge(fallback_options(str, locale))
+              res = I18n.translate(str, opts)
+            end
+
             URI.escape(res)
           end
         end
@@ -26,16 +40,16 @@ module RouteTranslator
         # "people(.:format)", only "people" will be translated.
         # If there is no translation, the path segment is blank, begins with a
         # ":" (param key) or "*" (wildcard), the segment is returned untouched.
-        def translate(segment, locale)
+        def translate(segment, locale, scope)
           return segment if segment.empty?
           named_param, hyphenized = segment.split('-'.freeze, 2) if segment.starts_with?(':'.freeze)
-          return "#{named_param}-#{translate(hyphenized.dup, locale)}" if hyphenized
+          return "#{named_param}-#{translate(hyphenized.dup, locale, scope)}" if hyphenized
           return segment if segment.starts_with?('('.freeze) || segment.starts_with?('*'.freeze) || segment.include?(':'.freeze)
 
           appended_part = segment.slice!(/(\()$/)
           match = TRANSLATABLE_SEGMENT.match(segment)[1] if TRANSLATABLE_SEGMENT.match(segment)
 
-          (translate_string(match, locale) || segment) + appended_part.to_s
+          (translate_string(match, locale, scope) || segment) + appended_part.to_s
         end
       end
     end

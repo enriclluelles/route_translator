@@ -237,6 +237,37 @@ describe 'GET index' do
 end
 ```
 
+### Translations for similar routes with different namespaces
+
+If you have routes that (partially) share names in one locale, but must be translated differently in another locale, for example:
+
+```ruby
+  get 'people/favourites', to: 'people/products#favourites'
+  get 'favourites',        to: 'products#favourites'
+```
+
+Then it is possible to provide different translations for common parts of those routes by
+scoping translations by a controller's namespace:
+
+```yml
+es:
+  routes:
+    favourites: favoritos
+    controllers:
+      people:
+        products:
+          favourites: fans
+```
+
+Routes will be translated as in:
+
+```
+people_products_favourites_es GET  /people/products/fans(.:format)       people/products#favourites {:locale=>"es"}
+       products_favourites_es GET  /products/favoritos(.:format)         products#favourites {:locale=>"es"}
+```
+
+The gem will lookup translations under `controllers` scope first and then lookup translations under `routes` scope.
+
 ## Contributing
 
 Please read through our [contributing guidelines](CONTRIBUTING.md). Included are directions for opening issues, coding standards, and notes on development.

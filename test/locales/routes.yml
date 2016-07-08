@@ -3,11 +3,21 @@ es:
     people: gente
     products: productos
     tr_param: tr_parametro
+    favourites: favoritos
     blank: ""
+    controllers:
+      people:
+        products:
+          favourites: fans
 
 ru:
   routes:
     people: люди
+    favourites: избранное
+    controllers:
+      people:
+        products:
+          favourites: кандидаты
 
 de-AT:
   routes:

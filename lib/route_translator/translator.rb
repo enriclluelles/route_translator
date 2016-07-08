@@ -2,11 +2,24 @@
 
 require File.expand_path('../translator/route_helpers', __FILE__)
 require File.expand_path('../translator/path', __FILE__)
+require File.expand_path('../route', __FILE__)
 
 module RouteTranslator
   module Translator
     class << self
       private
+
+      def translated_attributes(locale, translated_path, route)
+        translated_options_constraints = route.options_constraints.dup
+        translated_options             = route.options.dup
+
+        translated_options_constraints[RouteTranslator.locale_param_key] = locale.to_s
+        translated_options[RouteTranslator.locale_param_key]             = locale.to_s.gsub('native_', '') unless translated_options.include?(RouteTranslator.locale_param_key)
+
+        translated_name = translate_name(route.name, locale, route.route_set.named_routes.names)
+
+        [translated_name, translated_path, translated_options_constraints, translated_options]
+      end
 
       def available_locales
         locales = RouteTranslator.available_locales
@@ -35,26 +48,18 @@ module RouteTranslator
 
     module_function
 
-    def translations_for(route_set, path, name, options_constraints, options)
-      RouteTranslator::Translator::RouteHelpers.add name, route_set.named_routes
+    def translations_for(route)
+      RouteTranslator::Translator::RouteHelpers.add route.name, route.route_set.named_routes
 
       available_locales.each do |locale|
         begin
-          translated_path = RouteTranslator::Translator::Path.translate(path, locale)
+          translated_path = RouteTranslator::Translator::Path.translate(route.path, locale, route.scope)
         rescue I18n::MissingTranslationData => e
           raise e unless RouteTranslator.config.disable_fallback
           next
         end
 
-        translated_options_constraints = options_constraints.dup
-        translated_options             = options.dup
-
-        translated_options_constraints[RouteTranslator.locale_param_key] = locale.to_s
-        translated_options[RouteTranslator.locale_param_key]             = locale.to_s.gsub('native_', '') unless translated_options.include?(RouteTranslator.locale_param_key)
-
-        translated_name = translate_name(name, locale, route_set.named_routes.names)
-
-        yield translated_name, translated_path, translated_options_constraints, translated_options
+        yield translated_attributes(locale, translated_path, route)
       end
     end
 

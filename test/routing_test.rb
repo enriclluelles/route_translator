@@ -7,6 +7,11 @@ end
 class ProductsController < ActionController::Base
 end
 
+module People
+  class ProductsController < ActionController::Base
+  end
+end
+
 class TranslateRoutesTest < ActionController::TestCase
   include ActionDispatch::Assertions::RoutingAssertions
   include RouteTranslator::AssertionHelper
@@ -125,6 +130,22 @@ class TranslateRoutesTest < ActionController::TestCase
     assert_routing '/productos', controller: 'products', action: 'index', locale: 'es'
     assert_routing({ path: '/productos/1', method: 'GET' }, controller: 'products', action: 'show', id: '1', locale: 'es')
     assert_unrecognized_route({ path: '/productos/1', method: 'PUT' }, controller: 'products', action: 'update', id: '1', locale: 'es')
+  end
+
+  def test_namespaced_controllers
+    config_default_locale_settings 'es'
+
+    draw_routes do
+      localized do
+        get 'people/favourites', to: 'people/products#favourites'
+        get 'favourites',        to: 'products#favourites'
+      end
+    end
+
+    assert_routing '/gente/fans', controller: 'people/products', action: 'favourites', locale: 'es'
+    assert_routing '/favoritos', controller: 'products', action: 'favourites', locale: 'es'
+    assert_routing URI.escape('/ru/люди/кандидаты'), controller: 'people/products', action: 'favourites', locale: 'ru'
+    assert_routing URI.escape('/ru/избранное'), controller: 'products', action: 'favourites', locale: 'ru'
   end
 
   def test_unnamed_root_route_without_prefix
