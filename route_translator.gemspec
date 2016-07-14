@@ -21,10 +21,10 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency 'actionpack', '>= 3.2', '< 5.0'
 
   spec.add_development_dependency 'appraisal', '~> 2.1'
-  spec.add_development_dependency 'coveralls', '~> 0.8.13'
+  spec.add_development_dependency 'coveralls', '~> 0.8.14'
   spec.add_development_dependency 'minitest', '>= 4.7.5', '< 6.0.0'
   spec.add_development_dependency 'rails', '>= 3.2', '< 5.0'
   spec.add_development_dependency 'rake', '~> 11.2'
-  spec.add_development_dependency 'rubocop', '~> 0.41.1'
-  spec.add_development_dependency 'simplecov', '~> 0.11.2'
+  spec.add_development_dependency 'rubocop', '~> 0.41.2'
+  spec.add_development_dependency 'simplecov', '~> 0.12.0'
 end
