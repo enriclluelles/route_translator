@@ -3,6 +3,8 @@ module RouteTranslator
     module Path
       module Segment
         class << self
+          private
+
           def translate_string(str, locale)
             locale = locale.to_s.gsub('native_', '')
             opts = { scope: :routes, locale: locale }

@@ -1,5 +1,10 @@
 # Changelog
 
+## 5.0.1 (2016-07-14)
+
+* Add private keyword in Segment module
+* Update development dependencies
+
 ## 5.0.0 (2016-07-01)
 
 * Rails 5 compatibility
