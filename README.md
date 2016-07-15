@@ -1,10 +1,10 @@
 # RouteTranslator
 
 [![Gem Version](https://badge.fury.io/rb/route_translator.svg)](http://badge.fury.io/rb/route_translator)
-[![Build Status](https://travis-ci.org/enriclluelles/route_translator.svg?branch=master)](https://travis-ci.org/enriclluelles/route_translator)
+[![Build Status](https://travis-ci.org/enriclluelles/route_translator.svg?branch=4-stable)](https://travis-ci.org/enriclluelles/route_translator)
 [![Dependency Status](https://gemnasium.com/enriclluelles/route_translator.svg)](https://gemnasium.com/enriclluelles/route_translator)
 [![Code Climate](https://codeclimate.com/github/enriclluelles/route_translator/badges/gpa.svg)](https://codeclimate.com/github/enriclluelles/route_translator)
-[![Coverage Status](https://coveralls.io/repos/github/enriclluelles/route_translator/badge.svg?branch=master)](https://coveralls.io/github/enriclluelles/route_translator?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/enriclluelles/route_translator/badge.svg?branch=4-stable)](https://coveralls.io/github/enriclluelles/route_translator?branch=4-stable)
 
 RouteTranslator is a gem to allow you to manage the translations of your app routes with a simple dictionary format.
 
