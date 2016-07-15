@@ -1,5 +1,10 @@
 # Changelog
 
+## 4.4.1 (2016-07-15)
+
+* Add private keyword in Segment module
+* Update development dependencies
+
 ## 4.4.0 (2016-07-01)
 
 * Support custom locale path segments, i.e. /uk/en/widgets
