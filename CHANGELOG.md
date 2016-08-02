@@ -1,5 +1,10 @@
 # Changelog
 
+## 5.0.2 (2016-08-02)
+
+* Replace around_filter with around_action
+* Update development dependencies
+
 ## 5.0.1 (2016-07-14)
 
 * Add private keyword in Segment module

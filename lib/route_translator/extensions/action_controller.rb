@@ -6,7 +6,7 @@ module RouteTranslator
     extend ActiveSupport::Concern
 
     included do
-      around_filter :set_locale_from_url
+      around_action :set_locale_from_url
     end
 
     private
