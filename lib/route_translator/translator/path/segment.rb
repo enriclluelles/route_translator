@@ -16,17 +16,13 @@ module RouteTranslator
           def translate_string(str, locale, scope)
             locale = locale.to_s.gsub('native_', '')
             handler = proc { |exception| exception }
-            default_opts = { scope: scope, locale: locale }
+            opts = { scope: scope, locale: locale }
 
-            opts = default_opts.merge(exception_handler: handler)
-            res = I18n.translate(str, opts)
-
-            if res.is_a?(I18n::MissingTranslation) || res.is_a?(Hash)
-              opts = default_opts
-                     .merge(scope: :routes)
-                     .merge(fallback_options(str, locale))
-              res = I18n.translate(str, opts)
-            end
+            res = if I18n.translate(str, opts.merge(exception_handler: handler)).is_a?(I18n::MissingTranslation)
+                    I18n.translate(str, opts.merge(scope: :routes).merge(fallback_options(str, locale)).merge(exception_handler: nil))
+                  else
+                    I18n.translate(str, opts.merge(exception_handler: handler))
+                  end
 
             URI.escape(res)
           end
