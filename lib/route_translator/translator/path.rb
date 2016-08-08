@@ -38,11 +38,11 @@ module RouteTranslator
       module_function
 
       # Translates a path and adds the locale prefix.
-      def translate(path, locale)
+      def translate(path, locale, scope)
         new_path = path.dup
         final_optional_segments = new_path.slice!(%r{(\([^\/]+\))$})
         translated_segments = new_path.split('/').map do |seg|
-          seg.split('.').map { |phrase| Segment.translate(phrase, locale) }.join('.')
+          seg.split('.').map { |phrase| Segment.translate(phrase, locale, scope) }.join('.')
         end
         translated_segments.reject!(&:empty?)
 
