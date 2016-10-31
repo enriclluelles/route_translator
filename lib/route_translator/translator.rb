@@ -46,7 +46,7 @@ module RouteTranslator
           next
         end
 
-        translated_options_constraints = options_constraints.dup
+        translated_options_constraints = options_constraints.respond_to?(:call) ? {} : options_constraints.dup
         translated_options             = options.dup
 
         translated_options_constraints[RouteTranslator.locale_param_key] = locale.to_s
