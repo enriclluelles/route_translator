@@ -78,6 +78,16 @@ class TranslateRoutesTest < ActionController::TestCase
     assert_routing '/es/productos/a', controller: 'products', action: 'index', locale: 'es', tr_param: 'a'
   end
 
+  def test_block_constraints_dont_fail
+    assert_nothing_raised NoMethodError do
+      draw_routes do
+        localized do
+          get 'products/:tr_param', to: 'products#index', constraints: -> { true }
+        end
+      end
+    end
+  end
+
   def test_wildcards_dont_get_translated
     draw_routes do
       localized do
