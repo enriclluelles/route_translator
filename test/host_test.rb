@@ -79,24 +79,24 @@ class TestHostsFromLocale < Minitest::Test
 
     config_host_locales config
 
-    examples_1 = ['domain.es', 'subdomain.domain.es', 'www.long.string.of.subdomains.es']
-    examples_2 = ['ru.wikipedia.org', 'ru.wikipedia.net', 'ru.wikipedia.com']
-    examples_3 = ['subdomain.domain.org', 'www.subdomain.domain.net']
-    examples_4 = ['news.bbc.co.uk']
+    examples_es = ['domain.es', 'subdomain.domain.es', 'www.long.string.of.subdomains.es']
+    examples_ru = ['ru.wikipedia.org', 'ru.wikipedia.net', 'ru.wikipedia.com']
+    examples_ru_alt = ['subdomain.domain.org', 'www.subdomain.domain.net']
+    examples_en = ['news.bbc.co.uk']
 
-    examples_1.each do |domain|
+    examples_es.each do |domain|
       assert_equal :es, RouteTranslator::Host.locale_from_host(domain)
     end
 
-    examples_2.each do |domain|
+    examples_ru.each do |domain|
       assert_equal :ru, RouteTranslator::Host.locale_from_host(domain)
     end
 
-    examples_3.each do |domain|
+    examples_ru_alt.each do |domain|
       assert_equal :ru, RouteTranslator::Host.locale_from_host(domain)
     end
 
-    examples_4.each do |domain|
+    examples_en.each do |domain|
       assert_equal :en, RouteTranslator::Host.locale_from_host(domain)
     end
   end

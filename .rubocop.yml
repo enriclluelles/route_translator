@@ -36,6 +36,10 @@ Metrics/PerceivedComplexity:
 Rails:
   Enabled: true
 
+Rails/HttpPositionalArguments:
+  Exclude:
+    - 'test/**/*'
+
 Style/Documentation:
   Enabled: false
 
