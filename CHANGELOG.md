@@ -1,5 +1,10 @@
 # Changelog
 
+## 5.0.3 (2016-11-01)
+
+* Fix issue with callable constraints
+* Update development dependencies
+
 ## 5.0.2 (2016-08-02)
 
 * Replace around_filter with around_action
