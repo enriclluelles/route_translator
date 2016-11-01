@@ -46,11 +46,14 @@ module RouteTranslator
           next
         end
 
-        translated_options_constraints = options_constraints.respond_to?(:call) ? {} : options_constraints.dup
+        translated_options_constraints = options_constraints.dup
         translated_options             = options.dup
 
-        translated_options_constraints[RouteTranslator.locale_param_key] = locale.to_s
-        translated_options[RouteTranslator.locale_param_key]             = locale.to_s.gsub('native_', '') unless translated_options.include?(RouteTranslator.locale_param_key)
+        if translated_options_constraints.respond_to?(:[]=)
+          translated_options_constraints[RouteTranslator.locale_param_key] = locale.to_s
+        end
+
+        translated_options[RouteTranslator.locale_param_key] = locale.to_s.gsub('native_', '') unless translated_options.include?(RouteTranslator.locale_param_key)
 
         translated_name = translate_name(name, locale, route_set.named_routes.names)
 
