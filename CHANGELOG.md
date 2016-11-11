@@ -1,5 +1,9 @@
 # Changelog
 
+## 5.0.4 (2016-11-11)
+
+* Retain value of options_constraints if callable
+
 ## 5.0.3 (2016-11-01)
 
 * Fix issue with callable constraints
