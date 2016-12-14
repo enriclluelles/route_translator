@@ -74,6 +74,6 @@ class GeneratedPathTest < ActionDispatch::IntegrationTest
 
     get '/engine'
     assert_response :success
-    assert_equal(response.body, '/es/blorgh/posts')
+    assert_equal(response.body, '/blorgh/posts')
   end
 end

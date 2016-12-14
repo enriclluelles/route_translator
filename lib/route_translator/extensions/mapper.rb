@@ -41,6 +41,18 @@ module ActionDispatch
           @set.add_route(mapping, ast, as, anchor)
         end
       end
+
+      private
+
+      def define_generate_prefix(app, name)
+        if @localized
+          RouteTranslator::Translator.available_locales.each do |locale|
+            super(app, "#{name}_#{locale.to_s.underscore}")
+          end
+        else
+          super
+        end
+      end
     end
   end
 end

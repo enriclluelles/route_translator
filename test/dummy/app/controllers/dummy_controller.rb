@@ -21,6 +21,6 @@ class DummyController < ActionController::Base
   end
 
   def engine
-    render text: blorgh.posts_path
+    render text: blorgh_es.posts_path
   end
 end

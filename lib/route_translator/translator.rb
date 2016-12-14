@@ -6,8 +6,6 @@ require File.expand_path('../translator/path', __FILE__)
 module RouteTranslator
   module Translator
     class << self
-      private
-
       def available_locales
         locales = RouteTranslator.available_locales
         locales.concat(RouteTranslator.native_locales) if RouteTranslator.native_locales.present?
@@ -17,6 +15,8 @@ module RouteTranslator
         locales.delete I18n.default_locale
         locales.push I18n.default_locale
       end
+
+      private
 
       def host_locales_option?
         RouteTranslator.config.host_locales.present?
