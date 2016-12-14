@@ -4,7 +4,6 @@ Blorgh::Engine.routes.draw do
   resources :posts, only: :index
 end
 
-
 Dummy::Application.routes.draw do
   localized do
     get 'dummy',  to: 'dummy#dummy'

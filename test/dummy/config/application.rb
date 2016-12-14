@@ -6,6 +6,7 @@ begin
 rescue LoadError
   ''
 end
+
 require 'route_translator'
 
 module Dummy
@@ -26,4 +27,3 @@ module Blorgh
     end
   end
 end
-
