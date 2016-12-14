@@ -10,8 +10,11 @@ module ActionDispatch
         @localized = false
       end
 
-      def add_route(action, controller, options, original_path, to, via, formatted, anchor, options_constraints) # :nodoc:
-        path = path_for_action(action, original_path)
+      # rubocop:disable Lint/UnderscorePrefixedVariableName
+      def add_route(action, controller, options, _path, to, via, formatted, anchor, options_constraints) # :nodoc:
+        return super unless @localized
+
+        path = path_for_action(action, _path)
         raise ArgumentError, 'path is required' if path.blank?
 
         action = action.to_s
@@ -35,12 +38,9 @@ module ActionDispatch
 
         mapping = Mapping.build(@scope, @set, ast, controller, default_action, to, via, formatted, options_constraints, anchor, options)
 
-        if @localized
-          @set.add_localized_route(mapping, ast, as, anchor, @scope, path, controller, default_action, to, via, formatted, options_constraints, options)
-        else
-          @set.add_route(mapping, ast, as, anchor)
-        end
+        @set.add_localized_route(mapping, ast, as, anchor, @scope, path, controller, default_action, to, via, formatted, options_constraints, options)
       end
+      # rubocop:enable Lint/UnderscorePrefixedVariableName
     end
   end
 end
