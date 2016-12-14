@@ -20,7 +20,11 @@ class DummyController < ActionController::Base
     render text: params[:id]
   end
 
-  def engine
+  def engine_es
     render text: blorgh_es.posts_path
+  end
+
+  def engine
+    render text: blorgh.posts_path
   end
 end

@@ -17,6 +17,7 @@ Dummy::Application.routes.draw do
 
   get 'partial_caching', to: 'dummy#partial_caching'
   get 'native', to: 'dummy#native'
+  get 'engine_es', to: 'dummy#engine_es'
   get 'engine', to: 'dummy#engine'
   root to: 'dummy#dummy'
 
@@ -25,4 +26,5 @@ Dummy::Application.routes.draw do
   localized do
     mount Blorgh::Engine, at: '/blorgh'
   end
+  mount Blorgh::Engine, at: '/blorgh'
 end
