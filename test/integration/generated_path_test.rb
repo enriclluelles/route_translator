@@ -67,4 +67,22 @@ class GeneratedPathTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_equal(response.body, '10')
   end
+
+  def test_with_engine_inside_localized_block
+    config_default_locale_settings 'es'
+    config_generate_unlocalized_routes false
+
+    get '/engine_es'
+    assert_response :success
+    assert_equal(response.body, '/blorgh/posts')
+  end
+
+  def test_with_engine_outside_localized_block
+    config_default_locale_settings 'es'
+    config_generate_unlocalized_routes false
+
+    get '/engine'
+    assert_response :success
+    assert_equal(response.body, '/blorgh/posts')
+  end
 end
