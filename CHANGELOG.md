@@ -1,5 +1,10 @@
 # Changelog
 
+## 5.0.5 (2016-12-15)
+
+* Fix generated prefix to localized one (#123)
+* Improve Mapper's monkey patch
+
 ## 5.0.4 (2016-11-11)
 
 * Retain value of options_constraints if callable
