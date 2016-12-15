@@ -1,5 +1,9 @@
 require File.join(Dummy::Application.root, 'dummy_mounted_app.rb')
 
+Blorgh::Engine.routes.draw do
+  resources :posts, only: :index
+end
+
 Dummy::Application.routes.draw do
   localized do
     get 'dummy',  to: 'dummy#dummy'
@@ -13,7 +17,14 @@ Dummy::Application.routes.draw do
 
   get 'partial_caching', to: 'dummy#partial_caching'
   get 'native', to: 'dummy#native'
+  get 'engine_es', to: 'dummy#engine_es'
+  get 'engine', to: 'dummy#engine'
   root to: 'dummy#dummy'
 
   mount DummyMountedApp.new => '/dummy_mounted_app'
+
+  localized do
+    mount Blorgh::Engine, at: '/blorgh'
+  end
+  mount Blorgh::Engine, at: '/blorgh'
 end

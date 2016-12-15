@@ -8,16 +8,6 @@ module RouteTranslator
     class << self
       private
 
-      def available_locales
-        locales = RouteTranslator.available_locales
-        locales.concat(RouteTranslator.native_locales) if RouteTranslator.native_locales.present?
-        # Make sure the default locale is translated in last place to avoid
-        # problems with wildcards when default locale is omitted in paths. The
-        # default routes will catch all paths like wildcard if it is translated first.
-        locales.delete I18n.default_locale
-        locales.push I18n.default_locale
-      end
-
       def host_locales_option?
         RouteTranslator.config.host_locales.present?
       end
@@ -34,6 +24,16 @@ module RouteTranslator
     end
 
     module_function
+
+    def available_locales
+      locales = RouteTranslator.available_locales
+      locales.concat(RouteTranslator.native_locales) if RouteTranslator.native_locales.present?
+      # Make sure the default locale is translated in last place to avoid
+      # problems with wildcards when default locale is omitted in paths. The
+      # default routes will catch all paths like wildcard if it is translated first.
+      locales.delete I18n.default_locale
+      locales.push I18n.default_locale
+    end
 
     def translations_for(route_set, path, name, options_constraints, options)
       RouteTranslator::Translator::RouteHelpers.add name, route_set.named_routes
