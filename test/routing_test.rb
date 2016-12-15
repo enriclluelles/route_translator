@@ -173,6 +173,16 @@ class TranslateRoutesTest < ActionController::TestCase
     assert_routing '/foo', controller: 'people', action: 'index', locale: 'en'
   end
 
+  def test_explicitly_unnamed_untranslated_route
+    draw_routes do
+      localized do
+        get 'foo', to: 'people#index', as: nil
+      end
+    end
+
+    assert_routing '/foo', controller: 'people', action: 'index', locale: 'en'
+  end
+
   def test_unnamed_translated_route_on_default_locale
     config_default_locale_settings 'es'
 
