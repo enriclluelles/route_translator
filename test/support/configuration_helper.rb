@@ -5,7 +5,7 @@ module RouteTranslator
       config_hide_locale false
       config_generate_unlocalized_routes false
       config_generate_unnamed_unlocalized_routes false
-      config_host_locales
+      config_host_locales {}
       config_available_locales []
       config_disable_fallback false
       config_locale_segment_proc false
