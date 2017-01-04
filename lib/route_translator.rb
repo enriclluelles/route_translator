@@ -9,19 +9,19 @@ module RouteTranslator
 
   TRANSLATABLE_SEGMENT = /^([-_a-zA-Z0-9]+)(\()?/
 
-  Configuration = Struct.new(:force_locale, :hide_locale,
-                             :generate_unlocalized_routes, :locale_param_key,
-                             :generate_unnamed_unlocalized_routes, :available_locales,
-                             :host_locales, :disable_fallback, :locale_segment_proc)
+  Configuration = Struct.new(:available_locales, :disable_fallback, :force_locale,
+                             :hide_locale, :host_locales, :generate_unlocalized_routes,
+                             :generate_unnamed_unlocalized_routes, :locale_param_key,
+                             :locale_segment_proc)
 
   class << self
     private
 
     def resolve_host_locale_config_conflicts
-      @config.generate_unlocalized_routes         = false
-      @config.generate_unnamed_unlocalized_routes = false
       @config.force_locale                        = false
       @config.hide_locale                         = false
+      @config.generate_unlocalized_routes         = false
+      @config.generate_unnamed_unlocalized_routes = false
     end
   end
 
@@ -29,22 +29,21 @@ module RouteTranslator
 
   def config(&block)
     @config                                     ||= Configuration.new
-    @config.force_locale                        ||= false
-    @config.hide_locale                         ||= false
-    @config.generate_unlocalized_routes         ||= false
-    @config.locale_param_key                    ||= :locale
-    @config.generate_unnamed_unlocalized_routes ||= false
-    @config.host_locales                        ||= ActiveSupport::OrderedHash.new
     @config.available_locales                   ||= []
     @config.disable_fallback                    ||= false
+    @config.force_locale                        ||= false
+    @config.hide_locale                         ||= false
+    @config.host_locales                        ||= ActiveSupport::OrderedHash.new
+    @config.generate_unlocalized_routes         ||= false
+    @config.generate_unnamed_unlocalized_routes ||= false
+    @config.locale_param_key                    ||= :locale
     @config.locale_segment_proc                 ||= nil
-    yield @config if block
-    resolve_host_locale_config_conflicts unless @config.host_locales.empty?
-    @config
-  end
 
-  def locale_param_key
-    config.locale_param_key
+    yield @config if block
+
+    resolve_host_locale_config_conflicts unless @config.host_locales.empty?
+
+    @config
   end
 
   def available_locales
@@ -55,5 +54,9 @@ module RouteTranslator
     else
       I18n.available_locales.dup
     end
+  end
+
+  def locale_param_key
+    config.locale_param_key
   end
 end
