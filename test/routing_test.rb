@@ -611,8 +611,6 @@ class TranslateRoutesTest < ActionController::TestCase
       end
     end
 
-    config_disable_fallback(false)
-
     assert_routing '/tr_param', controller: 'people', action: 'index', locale: 'en'
     assert_routing '/es/tr_parametro', controller: 'people', action: 'index', locale: 'es'
     assert_unrecognized_route '/ru/tr_param', controller: 'people', action: 'index', locale: 'ru'
