@@ -586,8 +586,6 @@ class TranslateRoutesTest < ActionController::TestCase
     assert_routing URI.escape('/ru/люди'), controller: 'people', action: 'index', locale: 'ru'
     assert_routing '/people', controller: 'people', action: 'index', locale: 'en'
     assert_unrecognized_route '/es/gente', controller: 'people', action: 'index', locale: 'es'
-
-    config_available_locales nil
   end
 
   def test_config_available_locales_handles_strings
@@ -602,8 +600,6 @@ class TranslateRoutesTest < ActionController::TestCase
     assert_routing URI.escape('/ru/люди'), controller: 'people', action: 'index', locale: 'ru'
     assert_routing '/people', controller: 'people', action: 'index', locale: 'en'
     assert_unrecognized_route '/es/gente', controller: 'people', action: 'index', locale: 'es'
-
-    config_available_locales nil
   end
 
   def test_disable_fallback_does_not_draw_non_default_routes
@@ -614,8 +610,6 @@ class TranslateRoutesTest < ActionController::TestCase
         get 'tr_param', to: 'people#index', as: 'people'
       end
     end
-
-    config_disable_fallback(false)
 
     assert_routing '/tr_param', controller: 'people', action: 'index', locale: 'en'
     assert_routing '/es/tr_parametro', controller: 'people', action: 'index', locale: 'es'

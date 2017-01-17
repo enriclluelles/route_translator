@@ -1,5 +1,12 @@
 # Changelog
 
+## 5.0.6 (2017-01-17)
+
+* Test against Ruby 2.4.0
+* Update copyright in LICENSE
+* Improve Translator method
+* Minor improvements
+
 ## 5.0.5 (2016-12-15)
 
 * Fix generated prefix to localized one (#123)

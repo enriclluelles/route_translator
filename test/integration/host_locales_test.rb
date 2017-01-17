@@ -10,7 +10,7 @@ class HostLocalesTest < ActionDispatch::IntegrationTest
   end
 
   def teardown
-    config_host_locales
+    config_host_locales {}
     Dummy::Application.reload_routes!
   end
 
