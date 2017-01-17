@@ -17,8 +17,8 @@ Gem::Specification.new do |spec|
   spec.files         = `git ls-files -z -- {CHANGELOG.md,LICENSE,README.md,lib}`.split("\x0")
   spec.require_paths = ['lib']
 
-  spec.add_runtime_dependency 'activesupport', '>= 5.0.0', '< 5.1'
-  spec.add_runtime_dependency 'actionpack', '>= 5.0.0', '< 5.1'
+  spec.add_runtime_dependency 'activesupport', '~> 5.0.0'
+  spec.add_runtime_dependency 'actionpack', '~> 5.0.0'
 
   spec.add_development_dependency 'appraisal', '~> 2.1'
   spec.add_development_dependency 'byebug', '~> 9.0'
