@@ -89,34 +89,42 @@ Right now it works with Rails 5.0
 4.  Your routes are translated! Here's the output of your `rake routes` now:
 
     ```
+            Prefix Verb   URI Pattern                     Controller#Action
         admin_cars GET    /admin/cars(.:format)           admin/cars#index
                    POST   /admin/cars(.:format)           admin/cars#create
      new_admin_car GET    /admin/cars/new(.:format)       admin/cars#new
     edit_admin_car GET    /admin/cars/:id/edit(.:format)  admin/cars#edit
          admin_car GET    /admin/cars/:id(.:format)       admin/cars#show
+                   PATCH  /admin/cars/:id(.:format)       admin/cars#update
                    PUT    /admin/cars/:id(.:format)       admin/cars#update
                    DELETE /admin/cars/:id(.:format)       admin/cars#destroy
-           cars_en GET    /cars(.:format)                 cars#index {:locale=>"en"}
-           cars_es GET    /es/coches(.:format)            cars#index {:locale=>"es"}
            cars_fr GET    /fr/voitures(.:format)          cars#index {:locale=>"fr"}
-                   POST   /cars(.:format)                 cars#create {:locale=>"en"}
-                   POST   /es/coches(.:format)            cars#create {:locale=>"es"}
+           cars_es GET    /es/coches(.:format)            cars#index {:locale=>"es"}
+           cars_en GET    /cars(.:format)                 cars#index {:locale=>"en"}
                    POST   /fr/voitures(.:format)          cars#create {:locale=>"fr"}
-        new_car_en GET    /cars/new(.:format)             cars#new {:locale=>"en"}
-        new_car_es GET    /es/coches/nuevo(.:format)      cars#new {:locale=>"es"}
+                   POST   /es/coches(.:format)            cars#create {:locale=>"es"}
+                   POST   /cars(.:format)                 cars#create {:locale=>"en"}
         new_car_fr GET    /fr/voitures/nouveau(.:format)  cars#new {:locale=>"fr"}
-       edit_car_en GET    /cars/:id/edit(.:format)        cars#edit {:locale=>"en"}
-       edit_car_es GET    /es/coches/:id/edit(.:format)   cars#edit {:locale=>"es"}
+        new_car_es GET    /es/coches/nuevo(.:format)      cars#new {:locale=>"es"}
+        new_car_en GET    /cars/new(.:format)             cars#new {:locale=>"en"}
        edit_car_fr GET    /fr/voitures/:id/edit(.:format) cars#edit {:locale=>"fr"}
-            car_en GET    /cars/:id(.:format)             cars#show {:locale=>"en"}
-            car_es GET    /es/coches/:id(.:format)        cars#show {:locale=>"es"}
+       edit_car_es GET    /es/coches/:id/edit(.:format)   cars#edit {:locale=>"es"}
+       edit_car_en GET    /cars/:id/edit(.:format)        cars#edit {:locale=>"en"}
             car_fr GET    /fr/voitures/:id(.:format)      cars#show {:locale=>"fr"}
-                   PUT    /cars/:id(.:format)             cars#update {:locale=>"en"}
-                   PUT    /es/coches/:id(.:format)        cars#update {:locale=>"es"}
+            car_es GET    /es/coches/:id(.:format)        cars#show {:locale=>"es"}
+            car_en GET    /cars/:id(.:format)             cars#show {:locale=>"en"}
+                   PATCH  /fr/voitures/:id(.:format)      cars#update {:locale=>"fr"}
+                   PATCH  /es/coches/:id(.:format)        cars#update {:locale=>"es"}
+                   PATCH  /cars/:id(.:format)             cars#update {:locale=>"en"}
                    PUT    /fr/voitures/:id(.:format)      cars#update {:locale=>"fr"}
-                   DELETE /cars/:id(.:format)             cars#destroy {:locale=>"en"}
-                   DELETE /es/coches/:id(.:format)        cars#destroy {:locale=>"es"}
+                   PUT    /es/coches/:id(.:format)        cars#update {:locale=>"es"}
+                   PUT    /cars/:id(.:format)             cars#update {:locale=>"en"}
                    DELETE /fr/voitures/:id(.:format)      cars#destroy {:locale=>"fr"}
+                   DELETE /es/coches/:id(.:format)        cars#destroy {:locale=>"es"}
+                   DELETE /cars/:id(.:format)             cars#destroy {:locale=>"en"}
+        pricing_fr GET    /fr/prix(.:format)              home#pricing {:locale=>"fr"}
+        pricing_es GET    /es/precios(.:format)           home#pricing {:locale=>"es"}
+        pricing_en GET    /pricing(.:format)              home#pricing {:locale=>"en"}
     ```
 
     Note that only the routes inside a `localized` block are translated.
@@ -135,6 +143,101 @@ Right now it works with Rails 5.0
     ```
 
 
+### Namespaces
+
+You can translate a namespace route by either its `name` or `path` option:
+
+1.  Wrap the namespaces that you want to translate inside a `localized` block:
+
+    ```ruby
+    Rails.application.routes.draw do
+      localized do
+        namespace :admin do
+          resources :cars, only: :index
+        end
+
+        namespace :sold_cars, path: :sold do
+          resources :cars, only: :index
+        end
+      end
+    end
+    ```
+
+    And add the translations to your locale files, for example:
+
+    ```yml
+    es:
+      routes:
+        admin: administrador
+        cars: coches
+        new: nuevo
+        pricing: precios
+        sold: vendidos
+    fr:
+      routes:
+        admin: administrateur
+        cars: voitures
+        new: nouveau
+        pricing: prix
+        sold: vendues
+    ```
+
+4.  Your namespaces are translated! Here's the output of your `rake routes` now:
+
+    ```
+               Prefix Verb URI Pattern                           Controller#Action
+        admin_cars_fr GET  /fr/administrateur/voitures(.:format) admin/cars#index {:locale=>"fr"}
+        admin_cars_es GET  /es/administrador/coches(.:format)    admin/cars#index {:locale=>"es"}
+        admin_cars_en GET  /admin/cars(.:format)                 admin/cars#index {:locale=>"en"}
+    sold_cars_cars_fr GET  /fr/vendues/voitures(.:format)        sold_cars/cars#index {:locale=>"fr"}
+    sold_cars_cars_es GET  /es/vendidos/coches(.:format)         sold_cars/cars#index {:locale=>"es"}
+    sold_cars_cars_en GET  /sold/cars(.:format)                  sold_cars/cars#index {:locale=>"en"}
+    ```
+
+
+### Inflections
+
+At the moment inflections are not supported, but you can use the following workaround:
+
+```ruby
+localized do
+  resources :categories, path_names: { new: 'new_category' }
+end
+```
+
+```yml
+en:
+  routes:
+    category: category
+    new_category: new
+
+es:
+  routes:
+    category: categoria
+    new_category: nueva
+```
+
+```
+          Prefix Verb   URI Pattern                       Controller#Action
+   categories_es GET    /es/categorias(.:format)          categories#index {:locale=>"es"}
+   categories_en GET    /categories(.:format)             categories#index {:locale=>"en"}
+                 POST   /es/categorias(.:format)          categories#create {:locale=>"es"}
+                 POST   /categories(.:format)             categories#create {:locale=>"en"}
+ new_category_es GET    /es/categorias/nueva(.:format)    categories#new {:locale=>"es"}
+ new_category_en GET    /categories/new(.:format)         categories#new {:locale=>"en"}
+edit_category_es GET    /es/categorias/:id/edit(.:format) categories#edit {:locale=>"es"}
+edit_category_en GET    /categories/:id/edit(.:format)    categories#edit {:locale=>"en"}
+     category_es GET    /es/categorias/:id(.:format)      categories#show {:locale=>"es"}
+     category_en GET    /categories/:id(.:format)         categories#show {:locale=>"en"}
+                 PATCH  /es/categorias/:id(.:format)      categories#update {:locale=>"es"}
+                 PATCH  /categories/:id(.:format)         categories#update {:locale=>"en"}
+                 PUT    /es/categorias/:id(.:format)      categories#update {:locale=>"es"}
+                 PUT    /categories/:id(.:format)         categories#update {:locale=>"en"}
+                 DELETE /es/categorias/:id(.:format)      categories#destroy {:locale=>"es"}
+                 DELETE /categories/:id(.:format)         categories#destroy {:locale=>"en"}
+```
+
+
 
 ## Configuration
 
@@ -146,7 +249,6 @@ RouteTranslator.config do |config|
   config.locale_param_key = :my_locale
 end
 ```
-
 
 
 ### Available Configurations
@@ -224,7 +326,9 @@ If `host_locales` option is set, the following options will be forced (even if y
 
 This is to avoid odd behaviour brought about by route conflicts and because `host_locales` forces and hides the host-locale dynamically.
 
-### Testing
+
+
+## Testing
 Testing your controllers with routes-translator is easy, just add a locale parameter for your localized routes. Otherwise, an ActionController::UrlGenerationError will raise.
 
 ```ruby
@@ -236,6 +340,8 @@ describe 'GET index' do
   end
 end
 ```
+
+
 
 ## Contributing
 
