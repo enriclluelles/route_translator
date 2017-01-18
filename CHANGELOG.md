@@ -1,5 +1,9 @@
 # Changelog
 
+## 5.1.0 (dev)
+
+* Translate controllers with namespaces (#120)
+
 ## 5.0.6 (2017-01-17)
 
 * Test against Ruby 2.4.0
