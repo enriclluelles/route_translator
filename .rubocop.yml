@@ -2,6 +2,7 @@ AllCops:
   Exclude:
     - 'test/dummy/script/**/*'
     - 'vendor/bundle/**/*'
+  TargetRubyVersion: 2.2
 
 Metrics/AbcSize:
   Max: 23.15 # TODO: Lower to 15
