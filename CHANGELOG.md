@@ -1,5 +1,10 @@
 # Changelog
 
+## 5.1.0 (2017-01-24)
+
+* Add: Translate controllers with namespaces (#120)
+* Update development dependencies
+
 ## 5.0.6 (2017-01-17)
 
 * Test against Ruby 2.4.0

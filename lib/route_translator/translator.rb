@@ -2,6 +2,7 @@
 
 require File.expand_path('../translator/route_helpers', __FILE__)
 require File.expand_path('../translator/path', __FILE__)
+require File.expand_path('../route', __FILE__)
 
 module RouteTranslator
   module Translator
@@ -39,8 +40,8 @@ module RouteTranslator
         translated_options_constraints
       end
 
-      def translate_path(path, locale)
-        RouteTranslator::Translator::Path.translate(path, locale)
+      def translate_path(path, locale, scope)
+        RouteTranslator::Translator::Path.translate(path, locale, scope)
       rescue I18n::MissingTranslationData => e
         raise e unless RouteTranslator.config.disable_fallback
       end
@@ -58,16 +59,16 @@ module RouteTranslator
       locales.push I18n.default_locale
     end
 
-    def translations_for(route_set, path, name, options_constraints, options)
-      RouteTranslator::Translator::RouteHelpers.add name, route_set.named_routes
+    def translations_for(route)
+      RouteTranslator::Translator::RouteHelpers.add route.name, route.route_set.named_routes
 
       available_locales.each do |locale|
-        translated_path = translate_path(path, locale)
+        translated_path = translate_path(route.path, locale, route.scope)
         next unless translated_path
 
-        translated_name                = translate_name(name, locale, route_set.named_routes.names)
-        translated_options_constraints = translate_options_constraints(options_constraints, locale)
-        translated_options             = translate_options(options, locale)
+        translated_name                = translate_name(route.name, locale, route.route_set.named_routes.names)
+        translated_options_constraints = translate_options_constraints(route.options_constraints, locale)
+        translated_options             = translate_options(route.options, locale)
 
         yield translated_name, translated_path, translated_options_constraints, translated_options
       end
