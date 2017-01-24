@@ -1,8 +1,9 @@
 # Changelog
 
-## 5.1.0 (dev)
+## 5.1.0 (2017-01-24)
 
-* Translate controllers with namespaces (#120)
+* Add: Translate controllers with namespaces (#120)
+* Update development dependencies
 
 ## 5.0.6 (2017-01-17)
 
