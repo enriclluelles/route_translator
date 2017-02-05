@@ -1,80 +1,84 @@
 # Changelog
 
-## 5.1.0 (2017-01-24)
+## 5.1.0.master / Unreleased
 
-* Add: Translate controllers with namespaces (#120)
-* Update development dependencies
+* [ENHANCEMENT] Follow Vandamme's changelog conventions
 
-## 5.0.6 (2017-01-17)
+## 5.1.0 / 2017-01-24
 
-* Test against Ruby 2.4.0
-* Update copyright in LICENSE
-* Improve Translator method
-* Minor improvements
+* [FEATURE] Translate controllers with namespaces (#120)
+* [ENHANCEMENT] Update development dependencies
 
-## 5.0.5 (2016-12-15)
+## 5.0.6 / 2017-01-17
 
-* Fix generated prefix to localized one (#123)
-* Improve Mapper's monkey patch
+* [PERFORMANCE] Improve Translator method
+* [ENHANCEMENT] Test against Ruby 2.4.0
+* [ENHANCEMENT] Update copyright in LICENSE
+* [ENHANCEMENT] Minor improvements
 
-## 5.0.4 (2016-11-11)
+## 5.0.5 / 2016-12-15
 
-* Retain value of options_constraints if callable
+* [BUGFIX] Fix generated prefix to localized one (#123)
+* [PERFORMANCE] Improve Mapper's monkey patch
 
-## 5.0.3 (2016-11-01)
+## 5.0.4 / 2016-11-11
 
-* Fix issue with callable constraints
-* Update development dependencies
+* [BUGFIX] Retain value of options_constraints if callable
 
-## 5.0.2 (2016-08-02)
+## 5.0.3 / 2016-11-01
 
-* Replace around_filter with around_action
-* Update development dependencies
+* [BUGFIX] Fix issue with callable constraints
+* [ENHANCEMENT] Update development dependencies
 
-## 5.0.1 (2016-07-14)
+## 5.0.2 / 2016-08-02
 
-* Add private keyword in Segment module
-* Update development dependencies
+* [BUGFIX] Replace around_filter with around_action
+* [ENHANCEMENT] Update development dependencies
 
-## 5.0.0 (2016-07-01)
+## 5.0.1 / 2016-07-14
 
-* Rails 5 compatibility
+* [ENHANCEMENT] Add private keyword in Segment module
+* [ENHANCEMENT] Update development dependencies
 
-## 4.4.0 (2016-07-01)
+## 5.0.0 / 2016-07-01
 
-* Support custom locale path segments, i.e. /uk/en/widgets
-* Using AS::Concern instead of monkey patching ActionController
-* Update development dependencies
+* [FEATURE] Rails 5 compatibility
 
-## 4.3.0 (2016-03-03)
+## 4.4.0 / 2016-07-01
 
-* Refactor translator module
+* [FEATURE] Support custom locale path segments, i.e. /uk/en/widgets
+* [ENHANCEMENT] Using AS::Concern instead of monkey patching ActionController
+* [ENHANCEMENT] Update development dependencies
 
-## 4.2.5 (2016-02-11)
+## 4.3.0 / 2016-03-03
 
-* Fix: Generate correct route when a segment is preceded by a dot (#132)
-* Improve TestCase helpers test
+* [PERFORMANCE] Refactor translator module
 
-## 4.2.4 (2016-02-04)
+## 4.2.5 / 2016-02-11
 
-* Change how helpers are loaded in TestCase
-* Update dependencies
+* [BUGFIX] Generate correct route when a segment is preceded by a dot (#132)
+* [ENHANCEMENT] Improve TestCase helpers test
 
-## 4.2.3 (2016-01-15)
+## 4.2.4 / 2016-02-04
 
-* Minor tweaks
+* [BUGFIX] Change how helpers are loaded in TestCase
+* [ENHANCEMENT] Update dependencies
 
-## 4.2.2 (2015-12-16)
+## 4.2.3 / 2016-01-15
 
-* Fix: native path generation with host_locale (#95)
-* Improve tests
+* [PERFORMANCE] Minor tweaks
 
-## 4.2.1 (2015-12-15)
+## 4.2.2 / 2015-12-16
 
-* Fix: gemspec
+* [BUGFIX] Fix native path generation with host_locale (#95)
+* [ENHANCEMENT] Improve tests
 
-## 4.2.0 (2015-12-15)
+## 4.2.1 / 2015-12-15
 
-* Style update to match RuboCop recommandations
-* Fix: permit named_params with suffix (#116)
-* Fix: optional parameters with prefix (#118)
+* [BUGFIX] Fix gemspec
+
+## 4.2.0 / 2015-12-15
+
+* [ENHANCEMENT] Style update to match RuboCop recommandations
+* [BUGFIX] Permit named_params with suffix (#116)
+* [BUGFIX] Fix optional parameters with prefix (#118)
