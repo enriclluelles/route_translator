@@ -667,11 +667,9 @@ class ProductsControllerTest < ActionController::TestCase
 
   def test_url_helpers_are_included
     controller = ProductsController.new
-    controller.request = ActionController::TestRequest.create
+
     %w(product_path product_url product_es_path product_es_url product_native_es_path product_native_es_url).each do |method|
-      assert_nothing_raised NameError do
-        controller.send(method)
-      end
+      assert controller.respond_to? method
     end
   end
 end
