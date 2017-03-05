@@ -28,6 +28,6 @@ class TestHelperTest < ActionView::TestCase
   end
 
   def test_no_private_method_call
-    helper_test_path
+    assert_nothing_raised { helper_test_path }
   end
 end
