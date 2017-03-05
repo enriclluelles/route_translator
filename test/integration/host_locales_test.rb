@@ -9,7 +9,7 @@ class HostLocalesTest < ActionDispatch::IntegrationTest
   end
 
   def teardown
-    config_host_locales {}
+    teardown_config
     Rails.application.reload_routes!
   end
 
@@ -65,5 +65,12 @@ class HostLocalesTest < ActionDispatch::IntegrationTest
     get '/native'
     assert_equal URI.escape('/показывать'), @response.body
     assert_response :success
+  end
+
+  def test_preserve_i18n_locale
+    host! 'www.testapp.es'
+    get '/native'
+
+    assert_equal :en, I18n.locale
   end
 end
