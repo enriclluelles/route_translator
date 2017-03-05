@@ -6,12 +6,12 @@ class HostLocalesTest < ActionDispatch::IntegrationTest
 
   def setup
     config_host_locales '*.es' => 'es', 'ru.*.com' => 'ru'
-    Dummy::Application.reload_routes!
+    Rails.application.reload_routes!
   end
 
   def teardown
     config_host_locales {}
-    Dummy::Application.reload_routes!
+    Rails.application.reload_routes!
   end
 
   def test_root_path
