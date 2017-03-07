@@ -2,7 +2,7 @@ require File.expand_path('../../test_helper', __FILE__)
 
 class HelperTestController < ActionController::Base
   def test
-    render text: nil
+    render plain: nil
   end
 end
 
