@@ -83,7 +83,7 @@ class TranslateRoutesTest < ActionController::TestCase
   end
 
   def test_block_constraints_dont_fail
-    assert_nothing_raised NoMethodError do
+    assert_nothing_raised do
       draw_routes do
         localized do
           get 'products/:tr_param', to: 'products#index', constraints: -> { true }
