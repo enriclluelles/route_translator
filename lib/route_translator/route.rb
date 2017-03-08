@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module RouteTranslator
   class Route
     attr_reader :route_set, :path, :name, :options_constraints, :options, :mapping

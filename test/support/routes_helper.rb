@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module RouteTranslator
   module RoutesHelper
     def draw_routes(&block)

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module RouteTranslator
   module Translator
     module RouteHelpers
