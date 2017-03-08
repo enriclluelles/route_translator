@@ -1,7 +1,10 @@
 # Changelog
 
-## 5.1.0.master / Unreleased
+## 5.2.0 / 2017-03-08
 
+* [FEATURE] Rails 5.1 compatibility
+* [BUGFIX] Do not change I18n.default_locale
+* [ENHANCEMENT] Cleanup test suite
 * [ENHANCEMENT] Follow Vandamme's changelog conventions
 
 ## 5.1.0 / 2017-01-24

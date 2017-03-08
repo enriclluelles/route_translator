@@ -2,7 +2,7 @@ require File.expand_path('../../test_helper', __FILE__)
 
 class HelperTestController < ActionController::Base
   def test
-    render text: nil
+    render plain: nil
   end
 end
 
@@ -28,6 +28,6 @@ class TestHelperTest < ActionView::TestCase
   end
 
   def test_no_private_method_call
-    helper_test_path
+    assert_nothing_raised { helper_test_path }
   end
 end

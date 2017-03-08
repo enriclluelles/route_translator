@@ -1,4 +1,3 @@
-# coding: utf-8
 require File.expand_path('../test_helper', __FILE__)
 
 class PeopleController < ActionController::Base
@@ -84,7 +83,7 @@ class TranslateRoutesTest < ActionController::TestCase
   end
 
   def test_block_constraints_dont_fail
-    assert_nothing_raised NoMethodError do
+    assert_nothing_raised do
       draw_routes do
         localized do
           get 'products/:tr_param', to: 'products#index', constraints: -> { true }
@@ -667,11 +666,9 @@ class ProductsControllerTest < ActionController::TestCase
 
   def test_url_helpers_are_included
     controller = ProductsController.new
-    controller.request = ActionController::TestRequest.create
+
     %w(product_path product_url product_es_path product_es_url product_native_es_path product_native_es_url).each do |method|
-      assert_nothing_raised NameError do
-        controller.send(method)
-      end
+      assert controller.respond_to? method
     end
   end
 end

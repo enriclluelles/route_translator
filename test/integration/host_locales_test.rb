@@ -1,4 +1,3 @@
-# coding: utf-8
 require File.expand_path('../../test_helper', __FILE__)
 
 class HostLocalesTest < ActionDispatch::IntegrationTest
@@ -6,12 +5,12 @@ class HostLocalesTest < ActionDispatch::IntegrationTest
 
   def setup
     config_host_locales '*.es' => 'es', 'ru.*.com' => 'ru'
-    Dummy::Application.reload_routes!
+    Rails.application.reload_routes!
   end
 
   def teardown
-    config_host_locales {}
-    Dummy::Application.reload_routes!
+    teardown_config
+    Rails.application.reload_routes!
   end
 
   def test_root_path
@@ -66,5 +65,12 @@ class HostLocalesTest < ActionDispatch::IntegrationTest
     get '/native'
     assert_equal URI.escape('/показывать'), @response.body
     assert_response :success
+  end
+
+  def test_preserve_i18n_locale
+    host! 'www.testapp.es'
+    get '/native'
+
+    assert_equal :en, I18n.locale
   end
 end

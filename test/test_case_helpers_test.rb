@@ -51,7 +51,7 @@ end
 
 class TestController < ActionController::Base
   def test
-    render text: nil
+    render plain: nil
   end
 end
 

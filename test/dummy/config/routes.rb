@@ -1,10 +1,4 @@
-require File.join(Dummy::Application.root, 'dummy_mounted_app.rb')
-
-Blorgh::Engine.routes.draw do
-  resources :posts, only: :index
-end
-
-Dummy::Application.routes.draw do
+Rails.application.routes.draw do
   localized do
     get 'dummy',  to: 'dummy#dummy'
     get 'show',   to: 'dummy#show'
@@ -27,4 +21,8 @@ Dummy::Application.routes.draw do
     mount Blorgh::Engine, at: '/blorgh'
   end
   mount Blorgh::Engine, at: '/blorgh'
+end
+
+Blorgh::Engine.routes.draw do
+  resources :posts, only: :index
 end
