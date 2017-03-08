@@ -1,6 +1,6 @@
 # Changelog
 
-## 5.2.0.dev / unreleased
+## 5.2.0 / 2017-03-08
 
 * Add: Rails 5.1 compatibility
 * Fix: Do not change I18n.default_locale
