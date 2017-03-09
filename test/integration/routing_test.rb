@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require File.expand_path('../../test_helper', __FILE__)
 
 class RoutingTest < ActionDispatch::IntegrationTest
@@ -8,12 +9,6 @@ class RoutingTest < ActionDispatch::IntegrationTest
 
     get '/es/dummy'
     assert_equal 'es', @response.body
-    assert_response :success
-  end
-
-  def test_mounted_apps_work_with_correct_path
-    get '/dummy_mounted_app'
-    assert_equal 'Good', @response.body
     assert_response :success
   end
 end

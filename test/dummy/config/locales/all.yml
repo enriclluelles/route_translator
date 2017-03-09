@@ -9,6 +9,7 @@ es:
   routes:
     dummy: dummy
     show: mostrar
+    suffix: sufijo
 ru:
   routes:
     dummy: манекен

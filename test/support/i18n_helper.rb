@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module RouteTranslator
   module I18nHelper
     def setup_i18n
