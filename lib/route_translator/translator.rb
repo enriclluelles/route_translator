@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-
 require File.expand_path('../translator/route_helpers', __FILE__)
 require File.expand_path('../translator/path', __FILE__)
 require File.expand_path('../route', __FILE__)
@@ -9,8 +8,9 @@ module RouteTranslator
     class << self
       private
 
-      def host_locales_option?
-        RouteTranslator.config.host_locales.present?
+      def locale_from_args(args)
+        args_hash = args.detect { |arg| arg.is_a?(Hash) }
+        args_hash[:locale] if RouteTranslator.config.host_locales.present? && args_hash
       end
 
       def translate_name(name, locale, named_routes_names)
@@ -75,8 +75,7 @@ module RouteTranslator
     end
 
     def route_name_for(args, old_name, suffix, kaller)
-      args_hash           = args.detect { |arg| arg.is_a?(Hash) }
-      args_locale         = host_locales_option? && args_hash && args_hash[:locale]
+      args_locale         = locale_from_args(args)
       current_locale_name = I18n.locale.to_s.underscore
 
       locale = if args_locale

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require File.expand_path('../../test_helper', __FILE__)
 
 class GeneratedPathTest < ActionDispatch::IntegrationTest
@@ -61,21 +62,15 @@ class GeneratedPathTest < ActionDispatch::IntegrationTest
     assert_select 'a[href="/prefixed_optional/p-12"]'
   end
 
-  def test_path_translated_with_suffix
+  def test_with_suffix
     get '/10-suffix'
     assert_response :success
-    assert_equal(response.body, '10')
+    assert_equal '10', response.body
   end
 
-  def test_with_engine_inside_localized_block
-    get '/engine_es'
+  def test_path_translated_with_suffix
+    get '/es/10-sufijo'
     assert_response :success
-    assert_equal(response.body, '/blorgh/posts')
-  end
-
-  def test_with_engine_outside_localized_block
-    get '/engine'
-    assert_response :success
-    assert_equal(response.body, '/blorgh/posts')
+    assert_equal '10', response.body
   end
 end

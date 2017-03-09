@@ -1,5 +1,10 @@
 # Changelog
 
+## 5.2.1 / 2017-03-09
+
+* [ENHANCEMENT] Use Ruby 2.3's Frozen String Literal Pragma
+* [ENHANCEMENT] Minor improvements
+
 ## 5.2.0 / 2017-03-08
 
 * [FEATURE] Rails 5.1 compatibility

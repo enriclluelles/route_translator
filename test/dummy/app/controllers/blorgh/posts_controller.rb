@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Blorgh
   class PostsController < ActionController::Base
     def index
