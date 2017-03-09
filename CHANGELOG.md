@@ -1,6 +1,6 @@
 # Changelog
 
-## 5.2.1 / unreleased
+## 5.2.1 / 2017-03-09
 
 * [ENHANCEMENT] Use Ruby 2.3's Frozen String Literal Pragma
 * [ENHANCEMENT] Minor improvements
