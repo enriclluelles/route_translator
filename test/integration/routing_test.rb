@@ -11,10 +11,4 @@ class RoutingTest < ActionDispatch::IntegrationTest
     assert_equal 'es', @response.body
     assert_response :success
   end
-
-  def test_mounted_apps_work_with_correct_path
-    get '/dummy_mounted_app'
-    assert_equal 'Good', @response.body
-    assert_response :success
-  end
 end

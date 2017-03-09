@@ -73,16 +73,4 @@ class GeneratedPathTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_equal '10', response.body
   end
-
-  def test_with_engine_inside_localized_block
-    get '/engine_es'
-    assert_response :success
-    assert_equal '/blorgh/posts', response.body
-  end
-
-  def test_with_engine_outside_localized_block
-    get '/engine'
-    assert_response :success
-    assert_equal '/blorgh/posts', response.body
-  end
 end

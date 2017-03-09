@@ -9,9 +9,3 @@ module Dummy
     config.eager_load = false
   end
 end
-
-module Blorgh
-  class Engine < Rails::Engine
-    isolate_namespace Blorgh
-  end
-end
