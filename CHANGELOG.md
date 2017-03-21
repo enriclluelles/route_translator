@@ -1,5 +1,9 @@
 # Changelog
 
+## 5.2.2 / 2017-03-21
+
+* [BUGFIX] Lock maximum Rails version to 5.1.0.beta1
+
 ## 5.2.1 / 2017-03-09
 
 * [ENHANCEMENT] Use Ruby 2.3's Frozen String Literal Pragma
