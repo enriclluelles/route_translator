@@ -11,13 +11,23 @@ module ActionDispatch
           translated_path_ast = ::ActionDispatch::Journey::Parser.parse(translated_path)
           translated_mapping  = ::ActionDispatch::Routing::Mapper::Mapping.build(scope, self, translated_path_ast, controller, default_action, to, via, formatted, translated_options_constraints, anchor, translated_options)
 
-          add_route translated_mapping, translated_path_ast, translated_name, anchor
+          add_route_to_set translated_mapping, translated_path_ast, translated_name, anchor
         end
 
         if RouteTranslator.config.generate_unnamed_unlocalized_routes
-          add_route mapping, path_ast, nil, anchor
+          add_route_to_set mapping, path_ast, nil, anchor
         elsif RouteTranslator.config.generate_unlocalized_routes
+          add_route_to_set mapping, path_ast, name, anchor
+        end
+      end
+
+      private
+
+      def add_route_to_set(mapping, path_ast, name, anchor)
+        if method(:add_route).arity == 4
           add_route mapping, path_ast, name, anchor
+        else
+          add_route mapping, name
         end
       end
     end
