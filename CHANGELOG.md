@@ -2,6 +2,8 @@
 
 ## 5.3.1 / unreleased
 
+* [ENHANCEMENT] Test against latest Ruby versions
+
 ## 5.3.0 / 2017-03-21
 
 * [FEATURE] Rails 5.1.0.rc1 compatibility
