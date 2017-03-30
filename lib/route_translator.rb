@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'active_support'
 
 require File.expand_path('../route_translator/extensions', __FILE__)

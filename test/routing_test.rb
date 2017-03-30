@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require File.expand_path('../test_helper', __FILE__)
 
 class PeopleController < ActionController::Base
@@ -143,7 +144,7 @@ class TranslateRoutesTest < ActionController::TestCase
 
     draw_routes do
       localized do
-        resources :products, only: [:index, :show]
+        resources :products, only: %i(index show)
       end
     end
 
@@ -374,7 +375,7 @@ class TranslateRoutesTest < ActionController::TestCase
   def test_translations_depend_on_available_locales
     available_locales = I18n.available_locales
     begin
-      I18n.available_locales = [:es, :en, :fr]
+      I18n.available_locales = %i(es en fr)
 
       draw_routes do
         localized do
@@ -596,7 +597,7 @@ class TranslateRoutesTest < ActionController::TestCase
   end
 
   def test_config_available_locales
-    config_available_locales [:en, :ru]
+    config_available_locales %i(en ru)
 
     draw_routes do
       localized do

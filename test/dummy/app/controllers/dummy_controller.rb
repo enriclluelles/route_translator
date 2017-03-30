@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class DummyController < ActionController::Base
   def dummy
     render plain: I18n.locale
