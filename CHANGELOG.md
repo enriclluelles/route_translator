@@ -3,6 +3,7 @@
 ## 5.3.1 / unreleased
 
 * [ENHANCEMENT] Test against latest Ruby versions
+* [ENHANCEMENT] Update development dependencies
 
 ## 5.3.0 / 2017-03-21
 
