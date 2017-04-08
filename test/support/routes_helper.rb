@@ -7,7 +7,7 @@ module RouteTranslator
       if @routes.respond_to?(:install_helpers)
         @routes.install_helpers
       else
-        %w(ActionController ActionMailer ActionView).each do |klass_name|
+        %w[ActionController ActionMailer ActionView].each do |klass_name|
           next unless Module.const_defined?(klass_name)
           klass_name.constantize::Base.__send__(:include, @routes.url_helpers)
         end

@@ -9,7 +9,7 @@ require 'rubocop/rake_task'
 RuboCop::RakeTask.new
 
 desc 'Default: run tests.'
-task default: %i(rubocop test)
+task default: %i[rubocop test]
 
 desc 'Test the translate_routes plugin.'
 Rake::TestTask.new(:test) do |t|

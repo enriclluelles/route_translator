@@ -7,7 +7,7 @@ module RouteTranslator
         private
 
         def add_helpers_to_test_cases(helper_container)
-          %w(ActionController ActionMailer ActionView).each do |klass_name|
+          %w[ActionController ActionMailer ActionView].each do |klass_name|
             next unless Module.const_defined?(klass_name)
             klass_name.constantize::TestCase.__send__(:include, helper_container)
           end
@@ -24,7 +24,7 @@ module RouteTranslator
       def add(old_name, named_route_collection)
         helper_list = named_route_collection.helper_names
 
-        %w(path url).each do |suffix|
+        %w[path url].each do |suffix|
           helper_container = named_route_collection.send(:"#{suffix}_helpers_module")
           new_helper_name = "#{old_name}_#{suffix}"
 
