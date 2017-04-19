@@ -1,8 +1,10 @@
 AllCops:
+  DisplayCopNames: true
+  TargetRailsVersion: 5.0
+  TargetRubyVersion: 2.2
   Exclude:
     - 'test/dummy/script/**/*'
     - 'vendor/bundle/**/*'
-  TargetRubyVersion: 2.2
 
 Metrics/AbcSize:
   Max: 23.15 # TODO: Lower to 15
@@ -43,6 +45,10 @@ Rails/HttpPositionalArguments:
 
 Style/Documentation:
   Enabled: false
+
+Style/FileName:
+  Exclude:
+    - Appraisals
 
 # TODO: Remove when targeting Ruby 2.3 because it is already enabled.
 Style/FrozenStringLiteralComment:

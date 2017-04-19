@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'action_controller'
 require 'active_support/concern'
 
@@ -20,7 +21,6 @@ module RouteTranslator
       end
 
       yield
-
     ensure
       I18n.locale = current_locale if tmp_locale
     end

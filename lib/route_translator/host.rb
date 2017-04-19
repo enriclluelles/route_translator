@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module RouteTranslator
   module Host
     class << self
