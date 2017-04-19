@@ -1,6 +1,6 @@
 # Changelog
 
-## 5.3.1 / unreleased
+## 5.3.1 / 2017-04-19
 
 * [ENHANCEMENT] Test against latest Ruby versions
 * [ENHANCEMENT] Update development dependencies
