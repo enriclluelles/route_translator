@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require File.expand_path('../translator/route_helpers', __FILE__)
 require File.expand_path('../translator/path', __FILE__)
 require File.expand_path('../route', __FILE__)

@@ -1,12 +1,12 @@
 language: ruby
 sudo: false
 before_install:
-  - gem update --system 2.6.9
+  - gem update --system 2.6.11
   - gem install bundler -v '~> 1.14'
 rvm:
-  - 2.2.6
-  - 2.3.3
-  - 2.4.0
+  - 2.2.7
+  - 2.3.4
+  - 2.4.1
 gemfile:
   - gemfiles/rails_5.0.gemfile
   - gemfiles/rails_5.1.gemfile

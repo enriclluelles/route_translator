@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module RouteTranslator
   class Route
     attr_reader :route_set, :path, :name, :options_constraints, :options, :mapping
@@ -15,9 +16,9 @@ module RouteTranslator
     def scope
       @scope ||=
         if mapping.defaults[:controller]
-          [:routes, :controllers].concat mapping.defaults[:controller].split('/').map(&:to_sym)
+          %i[routes controllers].concat mapping.defaults[:controller].split('/').map(&:to_sym)
         else
-          [:routes, :controllers]
+          %i[routes controllers]
         end
     end
   end

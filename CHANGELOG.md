@@ -1,5 +1,10 @@
 # Changelog
 
+## 5.3.1 / 2017-04-19
+
+* [ENHANCEMENT] Test against latest Ruby versions
+* [ENHANCEMENT] Update development dependencies
+
 ## 5.3.0 / 2017-03-21
 
 * [FEATURE] Rails 5.1.0.rc1 compatibility

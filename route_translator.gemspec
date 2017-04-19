@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'route_translator/version'
@@ -22,10 +23,10 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency 'appraisal', '~> 2.1'
   spec.add_development_dependency 'byebug', '~> 9.0'
-  spec.add_development_dependency 'coveralls', '~> 0.8.19'
+  spec.add_development_dependency 'coveralls', '~> 0.8.20'
   spec.add_development_dependency 'minitest', '~> 5.10'
   spec.add_development_dependency 'rails', '>= 5.0.0.1', '<= 5.1.0.rc1'
   spec.add_development_dependency 'rake', '~> 12.0'
-  spec.add_development_dependency 'rubocop', '~> 0.47.1'
-  spec.add_development_dependency 'simplecov', '~> 0.12.0'
+  spec.add_development_dependency 'rubocop', '~> 0.48.1'
+  spec.add_development_dependency 'simplecov', '~> 0.14.1'
 end

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module RouteTranslator
   module ConfigurationHelper
     BOOLEAN_OPTIONS = {
