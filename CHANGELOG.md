@@ -1,5 +1,9 @@
 # Changelog
 
+## 5.4.0 / 2017-04-26
+
+* [ENHANCEMENT] Rails 5.1 compatibility
+
 ## 5.3.1 / 2017-04-19
 
 * [ENHANCEMENT] Test against latest Ruby versions
