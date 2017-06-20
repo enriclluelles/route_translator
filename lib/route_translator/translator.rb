@@ -71,7 +71,7 @@ module RouteTranslator
         translated_options_constraints = translate_options_constraints(route.options_constraints, locale)
         translated_options             = translate_options(route.options, locale)
 
-        yield translated_name, translated_path, translated_options_constraints, translated_options
+        yield locale, translated_name, translated_path, translated_options_constraints, translated_options
       end
     end
 

@@ -5,6 +5,7 @@ require 'active_support'
 require File.expand_path('../route_translator/extensions', __FILE__)
 require File.expand_path('../route_translator/translator', __FILE__)
 require File.expand_path('../route_translator/host', __FILE__)
+require File.expand_path('../route_translator/host_path_consistency_lambdas', __FILE__)
 
 module RouteTranslator
   extend RouteTranslator::Host
@@ -14,7 +15,7 @@ module RouteTranslator
   Configuration = Struct.new(:available_locales, :disable_fallback, :force_locale,
                              :hide_locale, :host_locales, :generate_unlocalized_routes,
                              :generate_unnamed_unlocalized_routes, :locale_param_key,
-                             :locale_segment_proc)
+                             :locale_segment_proc, :verify_host_path_consistency)
 
   class << self
     private
@@ -40,6 +41,7 @@ module RouteTranslator
     @config.generate_unnamed_unlocalized_routes ||= false
     @config.locale_param_key                    ||= :locale
     @config.locale_segment_proc                 ||= nil
+    @config.verify_host_path_consistency        ||= false
 
     yield @config if block
 
