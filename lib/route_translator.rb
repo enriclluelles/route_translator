@@ -6,6 +6,7 @@ require File.expand_path('../route_translator/extensions', __FILE__)
 require File.expand_path('../route_translator/translator', __FILE__)
 require File.expand_path('../route_translator/host', __FILE__)
 require File.expand_path('../route_translator/host_path_consistency_lambdas', __FILE__)
+require File.expand_path('../route_translator/locale_sanitizer', __FILE__)
 
 module RouteTranslator
   extend RouteTranslator::Host

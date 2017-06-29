@@ -25,7 +25,7 @@ module RouteTranslator
         translated_options = options.dup
 
         if translated_options.exclude?(RouteTranslator.locale_param_key)
-          translated_options[RouteTranslator.locale_param_key] = locale.to_s.gsub('native_', '')
+          translated_options[RouteTranslator.locale_param_key] = RouteTranslator::LocaleSanitizer.sanitize(locale)
         end
 
         translated_options
