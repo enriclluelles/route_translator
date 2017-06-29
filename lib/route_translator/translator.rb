@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require File.expand_path('../translator/route_helpers', __FILE__)
-require File.expand_path('../translator/path', __FILE__)
-require File.expand_path('../route', __FILE__)
+require 'route_translator/translator/route_helpers'
+require 'route_translator/translator/path'
+require 'route_translator/route'
 
 module RouteTranslator
   module Translator
@@ -25,7 +25,7 @@ module RouteTranslator
         translated_options = options.dup
 
         if translated_options.exclude?(RouteTranslator.locale_param_key)
-          translated_options[RouteTranslator.locale_param_key] = locale.to_s.gsub('native_', '')
+          translated_options[RouteTranslator.locale_param_key] = RouteTranslator::LocaleSanitizer.sanitize(locale)
         end
 
         translated_options
@@ -71,7 +71,7 @@ module RouteTranslator
         translated_options_constraints = translate_options_constraints(route.options_constraints, locale)
         translated_options             = translate_options(route.options, locale)
 
-        yield translated_name, translated_path, translated_options_constraints, translated_options
+        yield locale, translated_name, translated_path, translated_options_constraints, translated_options
       end
     end
 

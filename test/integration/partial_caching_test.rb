@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require File.expand_path('../../test_helper', __FILE__)
+require 'test_helper'
 
 class PartialCachingTest < ActionDispatch::IntegrationTest
   def test_supports_partial_caching

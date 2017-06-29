@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require File.expand_path('../../test_helper', __FILE__)
+require 'test_helper'
 
 class HelperTestController < ActionController::Base
   def test
