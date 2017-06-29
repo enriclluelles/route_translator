@@ -1,5 +1,10 @@
 # Changelog
 
+## 5.5.0.dev / unreleased
+
+* [FEATURE] Add verify_host_path_consistency option (#167)
+* [ENHANCHEMENT] Minor improvements
+
 ## 5.4.1 / 2017-06-01
 
 * [ENHANCEMENT] Update development dependencies
