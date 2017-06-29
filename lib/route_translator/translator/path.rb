@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require File.expand_path('../path/segment', __FILE__)
+require 'route_translator/translator/path/segment'
 
 module RouteTranslator
   module Translator

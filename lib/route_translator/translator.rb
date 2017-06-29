@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require File.expand_path('../translator/route_helpers', __FILE__)
-require File.expand_path('../translator/path', __FILE__)
-require File.expand_path('../route', __FILE__)
+require 'route_translator/translator/route_helpers'
+require 'route_translator/translator/path'
+require 'route_translator/route'
 
 module RouteTranslator
   module Translator

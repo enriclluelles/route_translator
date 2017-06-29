@@ -2,11 +2,11 @@
 
 require 'active_support'
 
-require File.expand_path('../route_translator/extensions', __FILE__)
-require File.expand_path('../route_translator/translator', __FILE__)
-require File.expand_path('../route_translator/host', __FILE__)
-require File.expand_path('../route_translator/host_path_consistency_lambdas', __FILE__)
-require File.expand_path('../route_translator/locale_sanitizer', __FILE__)
+require 'route_translator/extensions'
+require 'route_translator/translator'
+require 'route_translator/host'
+require 'route_translator/host_path_consistency_lambdas'
+require 'route_translator/locale_sanitizer'
 
 module RouteTranslator
   extend RouteTranslator::Host
