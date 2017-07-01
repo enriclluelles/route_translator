@@ -5,7 +5,6 @@ require 'active_support'
 require 'route_translator/extensions'
 require 'route_translator/translator'
 require 'route_translator/host'
-require 'route_translator/host_path_consistency_lambdas'
 require 'route_translator/locale_sanitizer'
 
 module RouteTranslator
@@ -16,7 +15,7 @@ module RouteTranslator
   Configuration = Struct.new(:available_locales, :disable_fallback, :force_locale,
                              :hide_locale, :host_locales, :generate_unlocalized_routes,
                              :generate_unnamed_unlocalized_routes, :locale_param_key,
-                             :locale_segment_proc, :verify_host_path_consistency)
+                             :locale_segment_proc)
 
   class << self
     private
@@ -42,11 +41,10 @@ module RouteTranslator
     @config.generate_unnamed_unlocalized_routes ||= false
     @config.locale_param_key                    ||= :locale
     @config.locale_segment_proc                 ||= nil
-    @config.verify_host_path_consistency        ||= false
 
     yield @config if block
 
-    resolve_host_locale_config_conflicts unless @config.host_locales.empty?
+    resolve_host_locale_config_conflicts if @config.host_locales.present?
 
     @config
   end

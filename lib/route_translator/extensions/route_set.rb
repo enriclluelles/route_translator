@@ -32,8 +32,8 @@ module ActionDispatch
 
         blocks = scope[:blocks] ? scope[:blocks].dup : []
 
-        if RouteTranslator.config.verify_host_path_consistency
-          blocks.push RouteTranslator::HostPathConsistencyLambdas.for_locale(locale)
+        if RouteTranslator.config.host_locales.present?
+          blocks.push RouteTranslator::Host.lambdas_for_locale(locale)
         end
 
         ::ActionDispatch::Routing::Mapper::Mapping.new(route_set, translated_path_ast, defaults, controller, default_action, scope[:module], to, formatted, scope_constraints, blocks, via, translated_options_constraints, anchor, options)

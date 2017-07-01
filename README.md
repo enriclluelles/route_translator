@@ -284,10 +284,6 @@ end
 * **locale_segment_proc**
   The locale segment of the url will by default be `locale.to_s.downcase`
   You can supply your own mechanism via a Proc that takes `locale` as an argument, e.g. `config.locale_segment_proc = ->(locale) { locale.to_s.upcase }`
-* **verify_host_path_consistency**
-  By default, if you use different hosts to translate your application, all translated paths will work on all hosts. Set this option to `true` to force
-  a matching of the host associated locale with the translated path locale as part of the route definition.
-  Defaults to `false`.
 
 ### Host-based Locale
 

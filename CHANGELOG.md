@@ -1,5 +1,11 @@
 # Changelog
 
+## 6.0.0.dev / unreleased
+
+* [BUGFIX] Verify host path consistency by default (#91)
+* [FEATURE] Remove the option to verify host path consistency
+* [ENHANCEMENT] Update development dependencies
+
 ## 5.5.0 / 2017-06-29
 
 * [FEATURE] Add an option to verify host path consistency (#167)

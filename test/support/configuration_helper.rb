@@ -15,7 +15,6 @@ module RouteTranslator
       config_default_locale_settings      :en
       config_host_locales                 {}
       config_locale_segment_proc          false
-      config_verify_host_path_consistency false
 
       BOOLEAN_OPTIONS.each do |option, default_value|
         send(:"config_#{option}", default_value)
@@ -39,10 +38,6 @@ module RouteTranslator
 
     def config_locale_segment_proc(a_proc)
       RouteTranslator.config.locale_segment_proc = a_proc
-    end
-
-    def config_verify_host_path_consistency(value)
-      RouteTranslator.config.verify_host_path_consistency = value
     end
 
     BOOLEAN_OPTIONS.keys.each do |option|
