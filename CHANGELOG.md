@@ -1,5 +1,10 @@
 # Changelog
 
+## 10.0.0.alpha1 / unreleased
+
+* [BUGFIX] Verify host path consistency by default ([#91](https://github.com/enriclluelles/route_translator/issues/91), [#171](https://github.com/enriclluelles/route_translator/issues/171))
+* [FEATURE] Remove the option to verify host path consistency
+
 ## 9.0.0 / 2020-11-07
 
 * [ENHANCEMENT] Check for `empty?` instead of `any?` on available_locales array

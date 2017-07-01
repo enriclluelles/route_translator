@@ -281,7 +281,6 @@ end
 | `host_locales` | Sets `I18n.locale` based on `request.host`. Useful for apps accepting requests from more than one domain. See below for more details | `{}` |
 | `locale_param_key` | The param key used to set the locale to the newly generated routes | `:locale` |
 | `locale_segment_proc` | The locale segment of the url will by default be `locale.to_s.downcase`. You can supply your own mechanism via a Proc that takes `locale` as an argument, e.g. `->(locale) { locale.to_s.upcase }` | `false` |
-| `verify_host_path_consistency` | Forces a matching of the host associated locale with the translated path locale as part of the route definition. By default, if you use different hosts to translate your application, all translated paths will work on all hosts | `false` |
 
 
 ### Host-based Locale

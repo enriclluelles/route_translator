@@ -33,8 +33,8 @@ module ActionDispatch
           options:     scope[:options] ? scope[:options].merge(translated_options) : translated_options
         }
 
-        if RouteTranslator.config.verify_host_path_consistency
-          scope_params[:blocks].push RouteTranslator::HostPathConsistencyLambdas.for_locale(locale)
+        if RouteTranslator.config.host_locales.present?
+          scope_params[:blocks].push RouteTranslator::Host.lambdas_for_locale(locale)
         end
 
         ::ActionDispatch::Routing::Mapper::Mapping.build scope_params, route_set, translated_path_ast, controller, default_action, to, via, formatted, translated_options_constraints, anchor, translated_options

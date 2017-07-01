@@ -5,6 +5,10 @@ module RouteTranslator
     class << self
       private
 
+      def lambdas
+        @lambdas ||= {}
+      end
+
       def regex_for(host_string)
         escaped = Regexp.escape(host_string).gsub('\*', '.*?').gsub('\.', '\.?')
         Regexp.new("^#{escaped}$", Regexp::IGNORECASE)
@@ -27,6 +31,12 @@ module RouteTranslator
       end
       locales &= I18n.available_locales
       locales.first&.to_sym
+    end
+
+    def lambdas_for_locale(locale)
+      sanitized_locale = RouteTranslator::LocaleSanitizer.sanitize(locale)
+
+      lambdas[sanitized_locale] ||= ->(req) { sanitized_locale == RouteTranslator::Host.locale_from_host(req.host).to_s }
     end
   end
 end

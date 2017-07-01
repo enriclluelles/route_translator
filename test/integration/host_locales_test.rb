@@ -36,22 +36,10 @@ class HostLocalesTest < ActionDispatch::IntegrationTest
     assert_equal 'es', @response.body
     assert_response :success
 
-    # ru route on es com
-    host! 'www.testapp.es'
-    get Addressable::URI.normalize_component('/ru/манекен')
-    assert_equal 'ru', @response.body
-    assert_response :success
-
     # native ru route on ru com
     host! 'ru.testapp.com'
     get Addressable::URI.normalize_component('/манекен')
     assert_equal 'ru', @response.body
-    assert_response :success
-
-    # es route on ru com
-    host! 'ru.testapp.com'
-    get '/es/dummy'
-    assert_equal 'es', @response.body
     assert_response :success
   end
 
@@ -74,5 +62,27 @@ class HostLocalesTest < ActionDispatch::IntegrationTest
     get '/native'
 
     assert_equal :en, I18n.locale
+  end
+
+  def test_non_native_path
+    # ru route on es com
+    host! 'www.testapp.es'
+    get Addressable::URI.normalize_component('/ru/манекен')
+    assert_response :not_found
+
+    # es route on ru com
+    host! 'ru.testapp.com'
+    get '/es/dummy'
+    assert_response :not_found
+
+    # unprefixed es route on ru com
+    host! 'ru.testapp.com'
+    get '/dummy'
+    assert_response :not_found
+
+    # unprefixed ru route on es com
+    host! 'www.testapp.es'
+    get Addressable::URI.normalize_component('/манекен')
+    assert_response :not_found
   end
 end
