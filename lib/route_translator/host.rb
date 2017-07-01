@@ -15,14 +15,6 @@ module RouteTranslator
       end
     end
 
-    def native_locale?(locale)
-      locale.to_s.include?('native_')
-    end
-
-    def native_locales
-      config.host_locales.values.map { |locale| :"native_#{locale}" }
-    end
-
     module_function
 
     def locale_from_host(host)
@@ -34,9 +26,7 @@ module RouteTranslator
     end
 
     def lambdas_for_locale(locale)
-      sanitized_locale = RouteTranslator::LocaleSanitizer.sanitize(locale)
-
-      lambdas[sanitized_locale] ||= ->(req) { sanitized_locale == RouteTranslator::Host.locale_from_host(req.host).to_s }
+      lambdas[locale] ||= ->(req) { locale == RouteTranslator::Host.locale_from_host(req.host) }
     end
   end
 end

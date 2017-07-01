@@ -32,8 +32,7 @@ module RouteTranslator
           end
 
           def translate_string(str, locale, scope)
-            sanitized_locale = RouteTranslator::LocaleSanitizer.sanitize(locale)
-            translated_resource = translate_resource(str, sanitized_locale, scope)
+            translated_resource = translate_resource(str, locale.to_s, scope)
 
             Addressable::URI.normalize_component translated_resource
           end

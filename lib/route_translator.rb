@@ -6,7 +6,6 @@ require 'addressable/uri'
 require 'route_translator/extensions'
 require 'route_translator/translator'
 require 'route_translator/host'
-require 'route_translator/locale_sanitizer'
 
 module RouteTranslator
   extend RouteTranslator::Host
@@ -34,7 +33,7 @@ module RouteTranslator
       @config.force_locale                        = false
       @config.generate_unlocalized_routes         = false
       @config.generate_unnamed_unlocalized_routes = false
-      @config.hide_locale                         = false
+      @config.hide_locale                         = true
     end
   end
 
