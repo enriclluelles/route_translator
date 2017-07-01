@@ -64,6 +64,18 @@ class HostLocalesTest < ActionDispatch::IntegrationTest
     assert_equal :en, I18n.locale
   end
 
+  def test_prefixed_path
+    # prefixed es route on es com
+    host! 'www.testapp.es'
+    get '/es/native'
+    assert_response :not_found
+
+    # prefixed ru route on ru com
+    host! 'ru.testapp.com'
+    get '/ru/native'
+    assert_response :not_found
+  end
+
   def test_non_native_path
     # ru route on es com
     host! 'www.testapp.es'

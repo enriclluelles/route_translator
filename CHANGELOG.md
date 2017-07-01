@@ -4,6 +4,7 @@
 
 * [BUGFIX] Verify host path consistency by default (#91)
 * [FEATURE] Remove the option to verify host path consistency
+* [ENHANCEMENT] Avoid duplicate routes when using host_locales (#87)
 * [ENHANCEMENT] Update development dependencies
 
 ## 5.5.0 / 2017-06-29

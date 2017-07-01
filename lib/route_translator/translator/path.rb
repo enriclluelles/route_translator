@@ -9,8 +9,7 @@ module RouteTranslator
         private
 
         def display_locale?(locale)
-          !RouteTranslator.config.hide_locale && !RouteTranslator.native_locale?(locale) &&
-            (!default_locale?(locale) || config_requires_locale?)
+          !RouteTranslator.config.hide_locale && (!default_locale?(locale) || config_requires_locale?)
         end
 
         def config_requires_locale?

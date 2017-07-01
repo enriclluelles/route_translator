@@ -498,23 +498,20 @@ class TranslateRoutesTest < ActionController::TestCase
     end
   end
 
-  def test_path_helper_arguments
+  def test_path_helper_arguments_with_host_locales
     config_default_locale_settings 'es'
-    I18n.with_locale :es do
-      config_host_locales '*.es' => 'es', '*.com' => 'en'
+    config_host_locales '*.es' => 'es', '*.com' => 'en'
 
-      draw_routes do
-        localized do
-          resources :products
-        end
+    draw_routes do
+      localized do
+        resources :products
       end
+    end
 
+    I18n.with_locale :es do
       assert_equal '/productos',                           @routes.url_helpers.products_path
       assert_equal '/productos/some_product',              @routes.url_helpers.product_path('some_product')
       assert_equal '/productos/some_product?some=param',   @routes.url_helpers.product_path('some_product', some: 'param')
-      assert_equal '/en/products',                         @routes.url_helpers.products_path(locale: 'en')
-      assert_equal '/en/products/some_product',            @routes.url_helpers.product_path('some_product', locale: 'en')
-      assert_equal '/en/products/some_product?some=param', @routes.url_helpers.product_path('some_product', locale: 'en', some: 'param')
     end
   end
 
@@ -558,7 +555,6 @@ class TranslateRoutesTest < ActionController::TestCase
     end
 
     assert_recognizes({ controller: 'people', action: 'index', locale: 'es' }, path: 'http://testapp.es/gente',    method: :get)
-    assert_recognizes({ controller: 'people', action: 'index', locale: 'es' }, path: 'http://testapp.es/es/gente', method: :get)
     assert_recognizes({ controller: 'people', action: 'index' },               path: 'http://testapp.es/',         method: :get)
 
     assert_recognizes({ controller: 'people', action: 'index', locale: 'en' }, path: 'http://testapp.com/people',  method: :get)
@@ -652,7 +648,6 @@ class ProductsControllerTest < ActionController::TestCase
     @routes = ActionDispatch::Routing::RouteSet.new
 
     config_default_locale_settings 'es'
-    config_host_locales es: 'es'
 
     draw_routes do
       localized do
@@ -669,7 +664,7 @@ class ProductsControllerTest < ActionController::TestCase
   def test_url_helpers_are_included
     controller = ProductsController.new
 
-    %w[product_path product_url product_es_path product_es_url product_native_es_path product_native_es_url].each do |method|
+    %w[product_path product_url product_es_path product_es_url].each do |method|
       assert controller.respond_to? method
     end
   end
