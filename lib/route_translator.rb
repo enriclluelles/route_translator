@@ -13,7 +13,7 @@ module RouteTranslator
 
   TRANSLATABLE_SEGMENT = /^([-_a-zA-Z0-9]+)(\()?/
 
-  Configuration = Struct.new(:available_locales, :disable_fallback, :force_locale,
+  Configuration = Struct.new(:default_locale, :available_locales, :disable_fallback, :force_locale,
                              :hide_locale, :host_locales, :generate_unlocalized_routes,
                              :generate_unnamed_unlocalized_routes, :locale_param_key,
                              :locale_segment_proc, :verify_host_path_consistency)
@@ -33,6 +33,7 @@ module RouteTranslator
 
   def config(&block)
     @config                                     ||= Configuration.new
+    @config.default_locale                      ||= I18n.default_locale
     @config.available_locales                   ||= []
     @config.disable_fallback                    ||= false
     @config.force_locale                        ||= false
@@ -63,5 +64,13 @@ module RouteTranslator
 
   def locale_param_key
     config.locale_param_key
+  end
+
+  def default_locale
+    config.default_locale
+  end
+
+  def default_locale=(locale)
+    config.default_locale = locale
   end
 end

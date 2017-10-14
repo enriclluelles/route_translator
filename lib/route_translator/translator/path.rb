@@ -19,7 +19,7 @@ module RouteTranslator
         end
 
         def default_locale?(locale)
-          locale.to_sym == I18n.default_locale.to_sym
+          locale.to_sym == RouteTranslator.default_locale.to_sym
         end
 
         def locale_param_present?(path)
