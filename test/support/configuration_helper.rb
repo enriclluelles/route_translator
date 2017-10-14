@@ -30,7 +30,7 @@ module RouteTranslator
     end
 
     def config_default_locale_settings(locale)
-      I18n.default_locale = locale
+      RouteTranslator.config.default_locale = locale
     end
 
     def config_host_locales(hash = {})
