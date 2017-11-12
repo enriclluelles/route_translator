@@ -45,7 +45,7 @@ module RouteTranslator
       RouteTranslator.config.verify_host_path_consistency = value
     end
 
-    BOOLEAN_OPTIONS.keys.each do |option|
+    BOOLEAN_OPTIONS.each_key do |option|
       define_method :"config_#{option}" do |bool|
         RouteTranslator.config.send(:"#{option}=", bool)
       end
