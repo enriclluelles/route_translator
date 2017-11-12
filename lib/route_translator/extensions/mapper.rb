@@ -41,16 +41,6 @@ module ActionDispatch
         @set.add_localized_route(mapping, ast, as, anchor, @scope, path, controller, default_action, to, via, formatted, options_constraints, options)
       end
       # rubocop:enable Lint/UnderscorePrefixedVariableName, Metrics/PerceivedComplexity
-
-      private
-
-      def define_generate_prefix(app, name)
-        return super unless @localized
-
-        RouteTranslator::Translator.available_locales.each do |locale|
-          super(app, "#{name}_#{locale.to_s.underscore}")
-        end
-      end
     end
   end
 end

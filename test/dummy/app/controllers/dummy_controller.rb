@@ -15,14 +15,6 @@ class DummyController < ApplicationController
     render plain: params[:id]
   end
 
-  def engine_es
-    render plain: blorgh_es.posts_path
-  end
-
-  def engine
-    render plain: blorgh.posts_path
-  end
-
   def slash
     render plain: request.env['PATH_INFO']
   end

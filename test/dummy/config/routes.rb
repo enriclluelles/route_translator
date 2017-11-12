@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  mount Blorgh::Engine, at: '/blorgh'
-
   localized do
     get 'dummy',  to: 'dummy#dummy'
     get 'show',   to: 'dummy#show'
@@ -19,15 +17,11 @@ Rails.application.routes.draw do
     namespace :account do
       root to: 'foo#account_root'
     end
-
-    mount Blorgh::Engine, at: '/blorgh'
   end
 
   get 'unlocalized', to: 'dummy#unlocalized'
   get 'partial_caching', to: 'dummy#partial_caching'
   get 'native', to: 'dummy#native'
-  get 'engine_es', to: 'dummy#engine_es'
-  get 'engine', to: 'dummy#engine'
 
   root to: 'dummy#dummy'
 end
