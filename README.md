@@ -362,6 +362,19 @@ people_products_favourites_es GET  /people/products/fans(.:format)       people/
 The gem will lookup translations under `controllers` scope first and then lookup translations under `routes` scope.
 
 
+### Change locale parameter position in the path
+
+If you need complex routing as `/:country/:locale/path/to/some/pages`, you can specify the position of your locale parameter in the following way:
+
+```rb
+scope ':country/:locale' do
+  localized do
+    root to: 'content#homepage'
+  end
+end
+```
+
+
 
 ## Testing
 Testing your controllers with routes-translator is easy, just add a locale parameter for your localized routes. Otherwise, an ActionController::UrlGenerationError will raise.
