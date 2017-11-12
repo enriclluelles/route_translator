@@ -1,5 +1,9 @@
 # Changelog
 
+## 5.5.0.master / unreleased
+
+* [ENHANCEMENT] Update development dependencies
+
 ## 5.5.0 / 2017-06-29
 
 * [FEATURE] Add an option to verify host path consistency (#167)
