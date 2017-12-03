@@ -18,7 +18,7 @@ Metrics/ClassLength:
     - 'test/**/*'
 
 Metrics/CyclomaticComplexity:
-  Max: 9 # TODO: Lower to 6
+  Max: 8 # TODO: Lower to 6
 
 Metrics/LineLength:
   Enabled: false
