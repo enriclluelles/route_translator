@@ -20,4 +20,8 @@ class DummyController < ActionController::Base
   def engine
     render plain: blorgh.posts_path
   end
+
+  def slash
+    render plain: request.env['PATH_INFO']
+  end
 end

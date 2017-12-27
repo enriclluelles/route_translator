@@ -74,4 +74,10 @@ class GeneratedPathTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_equal '10', response.body
   end
+
+  def test_path_with_slash_in_translation
+    get '/es/foo/bar'
+    assert_response :success
+    assert_equal '/es/foo/bar', response.body
+  end
 end

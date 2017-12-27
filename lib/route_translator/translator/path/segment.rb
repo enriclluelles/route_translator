@@ -35,7 +35,8 @@ module RouteTranslator
             sanitized_locale = RouteTranslator::LocaleSanitizer.sanitize(locale)
             translated_resource = translate_resource(str, sanitized_locale, scope)
 
-            CGI.escape translated_resource
+            # restore URI.escape behaviour to avoid breaking change
+            CGI.escape(translated_resource).gsub('%2F', '/')
           end
         end
 
