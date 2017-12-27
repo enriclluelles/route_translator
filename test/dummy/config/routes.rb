@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   localized do
     get 'dummy',  to: 'dummy#dummy'
     get 'show',   to: 'dummy#show'
+    get 'slash',  to: 'dummy#slash'
 
     get 'optional(/:page)',            to: 'dummy#optional', as: :optional
     get 'prefixed_optional(/p-:page)', to: 'dummy#prefixed_optional', as: :prefixed_optional

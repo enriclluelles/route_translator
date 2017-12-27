@@ -10,6 +10,7 @@ es:
     dummy: dummy
     show: mostrar
     suffix: sufijo
+    slash: foo/bar
 ru:
   routes:
     dummy: манекен

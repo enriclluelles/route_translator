@@ -53,6 +53,16 @@ class TranslateRoutesTest < ActionController::TestCase
     assert_routing '/es/productos/product_slug', controller: 'products', action: 'show', locale: 'es', id: 'product_slug'
   end
 
+  def test_slash_in_translation
+    draw_routes do
+      localized do
+        get 'slash', to: 'products#index'
+      end
+    end
+
+    assert_routing '/es/foo/bar', controller: 'products', action: 'index', locale: 'es'
+  end
+
   def test_optional_segments
     draw_routes do
       localized do

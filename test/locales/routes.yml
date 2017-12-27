@@ -5,6 +5,7 @@ es:
     tr_param: tr_parametro
     favourites: favoritos
     blank: ""
+    slash: foo/bar
     controllers:
       people:
         products:
