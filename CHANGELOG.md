@@ -1,5 +1,11 @@
 # Changelog
 
+## 5.5.2 / 2017-12-27
+
+* [BUGFIX] Fix regression with translations containing slashes ([#179](https://github.com/enriclluelles/route_translator/pull/179))
+* [ENHANCEMENT] Test against latest Ruby versions
+* [ENHANCEMENT] Update development dependencies
+
 ## 5.5.1 / 2017-11-14
 
 * [BUGFIX] Change spec to reflect Rails 5.1.3 change in url generation ([#172](https://github.com/enriclluelles/route_translator/issues/172))
