@@ -10,8 +10,6 @@ module RouteTranslator
       generate_unnamed_unlocalized_routes: false
     }.freeze
 
-    # TODO: FALSE POSITIVE bbatsov/rubocop#5221
-    # rubocop:disable Layout/SpaceBeforeBlockBraces
     def config_reset
       config_available_locales            []
       config_default_locale_settings      :en
@@ -23,7 +21,6 @@ module RouteTranslator
         send(:"config_#{option}", default_value)
       end
     end
-    # rubocop:enable Layout/SpaceBeforeBlockBraces
 
     alias setup_config config_reset
     alias teardown_config config_reset
