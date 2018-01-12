@@ -11,6 +11,7 @@ es:
     show: mostrar
     suffix: sufijo
     slash: foo/bar
+    space: foo bar
 ru:
   routes:
     dummy: манекен

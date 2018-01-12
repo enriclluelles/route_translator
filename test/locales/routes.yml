@@ -6,6 +6,7 @@ es:
     favourites: favoritos
     blank: ""
     slash: foo/bar
+    space: foo bar
     controllers:
       people:
         products:

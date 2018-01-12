@@ -63,6 +63,16 @@ class TranslateRoutesTest < ActionController::TestCase
     assert_routing '/es/foo/bar', controller: 'products', action: 'index', locale: 'es'
   end
 
+  def test_space_in_translation
+    draw_routes do
+      localized do
+        get 'space', to: 'products#index'
+      end
+    end
+
+    assert_routing '/es/foo%20bar', controller: 'products', action: 'index', locale: 'es'
+  end
+
   def test_optional_segments
     draw_routes do
       localized do

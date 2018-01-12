@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'addressable/uri'
+
 module RouteTranslator
   module Translator
     module Path
@@ -35,8 +37,9 @@ module RouteTranslator
             sanitized_locale = RouteTranslator::LocaleSanitizer.sanitize(locale)
             translated_resource = translate_resource(str, sanitized_locale, scope)
 
-            # restore URI.escape behaviour to avoid breaking change
-            CGI.escape(translated_resource).gsub('%2F', '/')
+            Addressable::URI.parse(translated_resource).normalize.to_s
+          rescue Addressable::URI::InvalidURIError
+            translated_resource
           end
         end
 

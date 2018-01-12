@@ -24,4 +24,8 @@ class DummyController < ActionController::Base
   def slash
     render plain: request.env['PATH_INFO']
   end
+
+  def space
+    render plain: request.env['PATH_INFO']
+  end
 end
