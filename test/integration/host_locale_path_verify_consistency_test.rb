@@ -22,14 +22,14 @@ class HostLocalePathVerifyConsistencyTest < ActionDispatch::IntegrationTest
     get '/dummy'
     assert_response :success
 
-    get "/#{CGI.escape('манекен')}"
+    get URI.escape('/манекен')
     assert_response :not_found
 
     host! 'ru.testapp.com'
     get '/dummy'
     assert_response :not_found
 
-    get "/#{CGI.escape('манекен')}"
+    get URI.escape('/манекен')
     assert_response :success
   end
 end

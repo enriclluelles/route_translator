@@ -1,5 +1,10 @@
 # Changelog
 
+## 5.5.3 / 2018-01-12
+
+* [BUGFIX] Fix regression with translations containing spaces ([#181](https://github.com/enriclluelles/route_translator/issues/181))
+* [ENHANCEMENT] Update development dependencies
+
 ## 5.5.2 / 2017-12-27
 
 * [BUGFIX] Fix regression with translations containing slashes ([#179](https://github.com/enriclluelles/route_translator/pull/179))
