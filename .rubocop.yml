@@ -5,6 +5,9 @@ AllCops:
   Exclude:
     - 'vendor/bundle/**/*'
 
+Lint/UriEscapeUnescape:
+  Enabled: false
+
 Metrics/AbcSize:
   Max: 23.15 # TODO: Lower to 15
   Exclude:
