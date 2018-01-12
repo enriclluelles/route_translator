@@ -80,4 +80,10 @@ class GeneratedPathTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_equal '/es/foo/bar', response.body
   end
+
+  def test_path_with_space_in_translation
+    get '/es/foo%20bar'
+    assert_response :success
+    assert_equal '/es/foo%20bar', response.body
+  end
 end
