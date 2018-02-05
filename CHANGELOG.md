@@ -1,5 +1,11 @@
 # Changelog
 
+## 5.6.0 / 2018-02-05
+
+* [FEATURE] Add Rails 5.2 compatibility
+* [ENHANCEMENT] Test against latest Ruby versions
+* [ENHANCEMENT] Update development dependencies
+
 ## 5.5.3 / 2018-01-12
 
 * [BUGFIX] Fix regression with translations containing spaces ([#181](https://github.com/enriclluelles/route_translator/issues/181))
