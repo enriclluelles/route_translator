@@ -1,5 +1,10 @@
 # Changelog
 
+## 5.6.1 / unreleased
+
+* [ENHANCEMENT] Update development dependencies
+* [ENHANCEMENT] Test against latest Ruby versions
+
 ## 5.6.0 / 2018-02-05
 
 * [FEATURE] Add Rails 5.2 compatibility
