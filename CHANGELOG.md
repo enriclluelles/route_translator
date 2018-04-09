@@ -1,5 +1,11 @@
 # Changelog
 
+## 5.6.1 / 2018-04-09
+
+* [BUGFIX] Fix overriding ActionController::Live ([#183](https://github.com/enriclluelles/route_translator/pull/183))
+* [ENHANCEMENT] Update development dependencies
+* [ENHANCEMENT] Test against latest Ruby versions
+
 ## 5.6.0 / 2018-02-05
 
 * [FEATURE] Add Rails 5.2 compatibility

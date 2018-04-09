@@ -34,7 +34,7 @@ module RouteTranslator
             __send__(Translator.route_name_for(args, old_name, suffix, self), *args)
           end
 
-          add_helpers_to_test_cases(helper_container)
+          add_helpers_to_test_cases(helper_container) if ENV['RAILS_ENV'] == 'test'
         end
       end
     end
