@@ -8,7 +8,7 @@ module RouteTranslator
       @i18n_locale    = I18n.locale
 
       I18n.backend    = I18n::Backend::Simple.new
-      I18n.load_path  = [File.expand_path('../../locales/routes.yml', __FILE__)]
+      I18n.load_path  = [File.expand_path('../locales/routes.yml', __dir__)]
       I18n.locale     = I18n.default_locale
 
       I18n.reload!
