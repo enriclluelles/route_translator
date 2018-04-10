@@ -18,4 +18,9 @@ matrix:
   allow_failures:
     - rvm: ruby-head
     - gemfile: gemfiles/rails_edge.gemfile
+  exclude:
+    - rvm: 2.2.10
+      gemfile: gemfiles/rails_edge.gemfile
+    - rvm: 2.3.7
+      gemfile: gemfiles/rails_edge.gemfile
   fast_finish: true
