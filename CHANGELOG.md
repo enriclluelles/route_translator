@@ -1,5 +1,9 @@
 # Changelog
 
+## 5.6.3 / 2018-06-07
+
+* [ENHANCEMENT] Update development dependencies
+
 ## 5.6.2 / 2018-04-10
 
 * [ENHANCEMENT] Test against Rails 5.2
