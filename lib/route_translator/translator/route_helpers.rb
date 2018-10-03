@@ -9,6 +9,7 @@ module RouteTranslator
         def add_helpers_to_test_cases(helper_container)
           %w[ActionController ActionMailer ActionView].each do |klass_name|
             next unless Module.const_defined?(klass_name)
+
             klass_name.constantize::TestCase.__send__(:include, helper_container)
           end
         end
