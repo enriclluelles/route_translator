@@ -1,5 +1,9 @@
 # Changelog
 
+## 5.6.4 / 2018-10-03
+
+* [ENHANCEMENT] Update development dependencies
+
 ## 5.6.3 / 2018-06-07
 
 * [ENHANCEMENT] Update development dependencies
