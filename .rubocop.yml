@@ -1,5 +1,4 @@
 AllCops:
-  DisplayCopNames: true
   TargetRailsVersion: 5.0
   TargetRubyVersion: 2.2
   Exclude:
