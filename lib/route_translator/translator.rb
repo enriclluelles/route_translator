@@ -16,6 +16,7 @@ module RouteTranslator
 
       def translate_name(name, locale, named_routes_names)
         return if name.blank?
+
         translated_name = "#{name}_#{locale.to_s.underscore}"
 
         translated_name if named_routes_names.exclude?(translated_name.to_sym)
