@@ -11,7 +11,7 @@ require 'route_translator/locale_sanitizer'
 module RouteTranslator
   extend RouteTranslator::Host
 
-  TRANSLATABLE_SEGMENT = /^([-_a-zA-Z0-9]+)(\()?/
+  TRANSLATABLE_SEGMENT = /^([-_a-zA-Z0-9]+)(\()?/.freeze
 
   Configuration = Struct.new(:available_locales, :disable_fallback, :force_locale,
                              :hide_locale, :host_locales, :generate_unlocalized_routes,

@@ -72,10 +72,10 @@ class TestHostsFromLocale < Minitest::Test
 
   def test_readme_examples_work
     config = {
-      '*.es'                  => :es, # matches ['domain.es', 'subdomain.domain.es', 'www.long.string.of.subdomains.es'] etc.
-      'ru.wikipedia.*'        => :ru, # matches ['ru.wikipedia.org', 'ru.wikipedia.net', 'ru.wikipedia.com'] etc.
-      '*.subdomain.domain.*'  => :ru, # matches ['subdomain.domain.org', 'www.subdomain.domain.net'] etc.
-      'news.bbc.co.uk'        => :en # matches ['news.bbc.co.uk'] only
+      '*.es'                 => :es, # matches ['domain.es', 'subdomain.domain.es', 'www.long.string.of.subdomains.es'] etc.
+      'ru.wikipedia.*'       => :ru, # matches ['ru.wikipedia.org', 'ru.wikipedia.net', 'ru.wikipedia.com'] etc.
+      '*.subdomain.domain.*' => :ru, # matches ['subdomain.domain.org', 'www.subdomain.domain.net'] etc.
+      'news.bbc.co.uk'       => :en # matches ['news.bbc.co.uk'] only
     }
 
     config_host_locales config
