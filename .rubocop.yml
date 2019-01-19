@@ -4,6 +4,10 @@ AllCops:
   Exclude:
     - 'vendor/bundle/**/*'
 
+Layout/AlignHash:
+  EnforcedColonStyle: table
+  EnforcedHashRocketStyle: table
+
 Lint/UriEscapeUnescape:
   Enabled: false
 
@@ -45,6 +49,9 @@ Rails/HttpPositionalArguments:
     - 'test/**/*'
 
 Style/Documentation:
+  Enabled: false
+
+Style/IfUnlessModifier:
   Enabled: false
 
 # TODO: Remove when targeting Ruby 2.3 because it is already enabled.
