@@ -1,5 +1,10 @@
 # Changelog
 
+## 5.7.1 / 2019-02-03
+
+* [ENHANCEMENT] Test against Ruby 2.6.1
+* [ENHANCEMENT] Update development dependencies
+
 ## 5.7.0 / 2019-01-19
 
 * [FEATURE] Add Rails 6.0.0.beta1 compatibility
