@@ -18,15 +18,15 @@ Gem::Specification.new do |spec|
   spec.files         = `git ls-files -z -- {CHANGELOG.md,LICENSE,README.md,lib}`.split("\x0")
   spec.require_paths = ['lib']
 
-  spec.add_runtime_dependency 'actionpack', '>= 5.0.0.1', '<= 6.0.0.beta1'
-  spec.add_runtime_dependency 'activesupport', '>= 5.0.0.1', '<= 6.0.0.beta1'
+  spec.add_runtime_dependency 'actionpack', '>= 5.0.0.1', '<= 6.0.0.beta2'
+  spec.add_runtime_dependency 'activesupport', '>= 5.0.0.1', '<= 6.0.0.beta2'
 
   spec.add_development_dependency 'appraisal', '~> 2.2'
-  spec.add_development_dependency 'byebug', '~> 10.0'
+  spec.add_development_dependency 'byebug', '>= 10.0', '< 12'
   spec.add_development_dependency 'coveralls_reborn', '~> 0.12.0'
   spec.add_development_dependency 'minitest', '~> 5.11'
   spec.add_development_dependency 'rails', '>= 5.0.0.1', '< 6'
   spec.add_development_dependency 'rake', '~> 12.3'
-  spec.add_development_dependency 'rubocop', '~> 0.63.1'
+  spec.add_development_dependency 'rubocop', '~> 0.65.0'
   spec.add_development_dependency 'simplecov', '~> 0.16.1'
 end
