@@ -12,7 +12,7 @@ Lint/UriEscapeUnescape:
   Enabled: false
 
 Metrics/AbcSize:
-  Max: 23.15 # TODO: Lower to 15
+  Max: 23.75 # TODO: Lower to 15
   Exclude:
     - 'test/**/*'
 
