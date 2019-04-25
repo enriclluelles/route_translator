@@ -1,5 +1,10 @@
 # Changelog
 
+## 5.10.0 / 2019-04-25
+
+* [FEATURE] Add Rails 6.0 compatibility
+* [ENHANCEMENT] Test against latest Ruby versions
+
 ## 5.9.0 / 2019-03-14
 
 * [FEATURE] Add Rails 6.0.0.beta3 compatibility
