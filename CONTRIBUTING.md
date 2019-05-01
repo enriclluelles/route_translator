@@ -20,7 +20,7 @@ We only accept issues that are bug reports or feature requests. Bugs must be iso
 - `master` is the latest, deployed version.
 - `develop` is the official development branch for the next release.
 
-Take a look at [git-flow, A successful Git branching model](http://nvie.com/posts/a-successful-git-branching-model/)
+Take a look at [git-flow, A successful Git branching model](https://nvie.com/posts/a-successful-git-branching-model/)
 
 
 

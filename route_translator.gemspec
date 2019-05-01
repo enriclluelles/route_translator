@@ -12,7 +12,7 @@ Gem::Specification.new do |spec|
 
   spec.summary       = 'Translate your Rails routes in a simple manner'
   spec.description   = 'Translates the Rails routes of your application into the languages defined in your locale files'
-  spec.homepage      = 'http://github.com/enriclluelles/route_translator'
+  spec.homepage      = 'https://github.com/enriclluelles/route_translator'
   spec.license       = 'MIT'
 
   spec.files         = `git ls-files -z -- {CHANGELOG.md,LICENSE,README.md,lib}`.split("\x0")
