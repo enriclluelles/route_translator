@@ -12,7 +12,7 @@ Gem::Specification.new do |spec|
 
   spec.summary       = 'Translate your Rails routes in a simple manner'
   spec.description   = 'Translates the Rails routes of your application into the languages defined in your locale files'
-  spec.homepage      = 'http://github.com/enriclluelles/route_translator'
+  spec.homepage      = 'https://github.com/enriclluelles/route_translator'
   spec.license       = 'MIT'
 
   spec.files         = `git ls-files -z -- {CHANGELOG.md,LICENSE,README.md,lib}`.split("\x0")
@@ -25,8 +25,9 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'byebug', '>= 10.0', '< 12'
   spec.add_development_dependency 'coveralls_reborn', '~> 0.12.0'
   spec.add_development_dependency 'minitest', '~> 5.11'
-  spec.add_development_dependency 'rails', '>= 5.0.0.1', '< 6'
+  spec.add_development_dependency 'rails', '>= 5.0.0.1', '< 6.1'
   spec.add_development_dependency 'rake', '~> 12.3'
-  spec.add_development_dependency 'rubocop', '~> 0.67.2'
+  spec.add_development_dependency 'rubocop', '~> 0.68.1'
+  spec.add_development_dependency 'rubocop-performance', '~> 1.1'
   spec.add_development_dependency 'simplecov', '~> 0.16.1'
 end
