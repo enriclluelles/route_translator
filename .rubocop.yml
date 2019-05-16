@@ -3,7 +3,7 @@ require:
 
 AllCops:
   TargetRailsVersion: 5.0
-  TargetRubyVersion: 2.2
+  TargetRubyVersion: 2.3
   Exclude:
     - 'vendor/bundle/**/*'
 
@@ -56,8 +56,3 @@ Style/Documentation:
 
 Style/IfUnlessModifier:
   Enabled: false
-
-# TODO: Remove when targeting Ruby 2.3 because it is already enabled.
-Style/FrozenStringLiteralComment:
-  Enabled: true
-  EnforcedStyle: always
