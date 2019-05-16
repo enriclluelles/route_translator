@@ -1,5 +1,10 @@
 # Changelog
 
+## 6.0.0 / 2019-05-16
+
+* [FEATURE] Drop Ruby 2.2 support
+* [ENHANCEMENT] Update development dependencies
+
 ## 5.10.0 / 2019-04-25
 
 * [FEATURE] Add Rails 6.0 compatibility
