@@ -41,7 +41,7 @@ module RouteTranslator
     @config.generate_unlocalized_routes         ||= false
     @config.generate_unnamed_unlocalized_routes ||= false
     @config.locale_param_key                    ||= :locale
-    @config.locale_segment_proc                 ||= nil
+    @config.locale_segment_proc                 ||= false
     @config.verify_host_path_consistency        ||= false
 
     yield @config if block
