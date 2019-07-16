@@ -1,5 +1,6 @@
 require:
   - rubocop-performance
+  - rubocop-rails
 
 AllCops:
   TargetRailsVersion: 5.0
@@ -43,9 +44,6 @@ Metrics/ParameterLists:
 
 Metrics/PerceivedComplexity:
   Max: 9 # TODO: Lower to 7
-
-Rails:
-  Enabled: true
 
 Rails/HttpPositionalArguments:
   Exclude:

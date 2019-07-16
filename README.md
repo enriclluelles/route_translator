@@ -252,41 +252,19 @@ end
 
 ### Available Configurations
 
-* **force_locale**
-  Set this options to `true` to force the locale to be added to all generated route paths, even for the default locale.
-  Defaults to `false`.
-* **hide_locale**
-  Set this options to `true` to force the locale to be hidden on generated route paths.
-  Defaults to `false`.
-* **generate_unlocalized_routes**
-  Set this option to `true` to add translated routes without deleting original unlocalized versions.
-  Autosets `force_locale=true`.
-  Defaults to `false`.
-* **generate_unnamed_unlocalized_routes**
-  Set this option to `true` to add the behavior of **force_locale**, but with a named default route which behaves as if **generate_unlocalized_routes** was `true`.
-  `root_path` will redirect to `/en` or `/es` depending on the value of `I18n.locale`.
-  Defaults to `false`.
-* **locale_param_key**
-  The param key that will be used to set the locale to the newly generated routes.
-  Defaults to `:locale`
-* **host_locales**
-  Optional hash to set `I18n.default_locale` based on `request.host`.
-  Useful for apps accepting requests from more than one domain.
-  See below for more details.
-* **disable_fallback**
-  Set this option to `true` to create only the routes for each locale that have translations.
-  For example if we have `/examples` and a translation is not provided for ES, a route helper of `examples_es` will not be created.
-  Defaults to `false`.
-  Useful when one uses this with a locale route constraint, so non-ES routes can 404 on a Spanish website.
-* **available_locales**
-  Use this to limit the locales for which URLs should be generated for. Accepts an array of strings or symbols.
-* **locale_segment_proc**
-  The locale segment of the url will by default be `locale.to_s.downcase`
-  You can supply your own mechanism via a Proc that takes `locale` as an argument, e.g. `config.locale_segment_proc = ->(locale) { locale.to_s.upcase }`
-* **verify_host_path_consistency**
-  By default, if you use different hosts to translate your application, all translated paths will work on all hosts. Set this option to `true` to force
-  a matching of the host associated locale with the translated path locale as part of the route definition.
-  Defaults to `false`.
+| Option | Description | Default |
+| ------ | ----------- |-------- |
+| `available_locales` | Limits the locales for which URLs should be generated for. Accepts an array of strings or symbols. When empty, translations will be generated for all `I18n.available_locales` | `[]` |
+| `disable_fallback` | Creates routes only for locales that have translations. For example, if we have `/examples` and a translation is not provided for `es`, the route helper of `examples_es` will not be created. Useful when one uses this with a locale route constraint, so non-`es` routes can return a `404` on a Spanish website | `false` |
+| `force_locale` |  Forces the locale to be added to all generated route paths, even for the default locale |  `false` |
+| `generate_unlocalized_routes` | Adds translated routes without deleting original unlocalized versions. **Note:** Autosets `force_locale` to `true` | `false` |
+| `generate_unnamed_unlocalized_routes` | Adds the behavior of `force_locale`, but with a named default route which behaves as if `generate_unlocalized_routes` was `true`. `root_path` will redirect to `/en` or `/es`, depending on the value of `I18n.locale` | `false` |
+| `hide_locale` | Forces the locale to be hidden on generated route paths | `false` |
+| `host_locales` | Sets `I18n.default_locale` based on `request.host`. Useful for apps accepting requests from more than one domain. See below for more details | `{}` |
+| `locale_param_key` | The param key used to set the locale to the newly generated routes | `:locale` |
+| `locale_segment_proc` | The locale segment of the url will by default be `locale.to_s.downcase`. You can supply your own mechanism via a Proc that takes `locale` as an argument, e.g. `->(locale) { locale.to_s.upcase }` | `false` |
+| `verify_host_path_consistency` | Forces a matching of the host associated locale with the translated path locale as part of the route definition. By default, if you use different hosts to translate your application, all translated paths will work on all hosts | `false` |
+
 
 ### Host-based Locale
 
