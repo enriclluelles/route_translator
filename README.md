@@ -133,13 +133,15 @@ Right now it works with Rails 5.x and Rails 6.0
 
     In :production environment, you should either set `config.i18n.fallbacks = false` or set up translations for your routes in every languages.
 
-5.  Your I18n.locale will be set up automatically from the url param when it's available.
-
-    To disable it add this to your controller:
+5.  If you want to set `I18n.locale` from the url parameter locale, add
+    the following line in your `ApplicationController` or in the controllers
+    that have translated content:
 
     ```ruby
-    skip_around_action :set_locale_from_url
+    around_action :set_locale_from_url
     ```
+
+    Note: you might be tempted to use `before_action` instead of `around_action`: just don't. That could lead to [thread-related issues](https://github.com/enriclluelles/route_translator/issues/44).
 
 
 ### Namespaces
