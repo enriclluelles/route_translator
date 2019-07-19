@@ -28,4 +28,8 @@ class DummyController < ActionController::Base
   def space
     render plain: request.env['PATH_INFO']
   end
+
+  def unlocalized
+    render plain: I18n.locale
+  end
 end

@@ -17,6 +17,7 @@ Rails.application.routes.draw do
     mount Blorgh::Engine, at: '/blorgh'
   end
 
+  get 'unlocalized', to: 'dummy#unlocalized'
   get 'partial_caching', to: 'dummy#partial_caching'
   get 'native', to: 'dummy#native'
   get 'engine_es', to: 'dummy#engine_es'
