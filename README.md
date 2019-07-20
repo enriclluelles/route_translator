@@ -260,7 +260,7 @@ end
 | `generate_unlocalized_routes` | Adds translated routes without deleting original unlocalized versions. **Note:** Autosets `force_locale` to `true` | `false` |
 | `generate_unnamed_unlocalized_routes` | Adds the behavior of `force_locale`, but with a named default route which behaves as if `generate_unlocalized_routes` was `true`. `root_path` will redirect to `/en` or `/es`, depending on the value of `I18n.locale` | `false` |
 | `hide_locale` | Forces the locale to be hidden on generated route paths | `false` |
-| `host_locales` | Sets `I18n.default_locale` based on `request.host`. Useful for apps accepting requests from more than one domain. See below for more details | `{}` |
+| `host_locales` | Sets `I18n.locale` based on `request.host`. Useful for apps accepting requests from more than one domain. See below for more details | `{}` |
 | `locale_param_key` | The param key used to set the locale to the newly generated routes | `:locale` |
 | `locale_segment_proc` | The locale segment of the url will by default be `locale.to_s.downcase`. You can supply your own mechanism via a Proc that takes `locale` as an argument, e.g. `->(locale) { locale.to_s.upcase }` | `false` |
 | `verify_host_path_consistency` | Forces a matching of the host associated locale with the translated path locale as part of the route definition. By default, if you use different hosts to translate your application, all translated paths will work on all hosts | `false` |
@@ -268,12 +268,12 @@ end
 
 ### Host-based Locale
 
-If you have an application serving requests from more than one domain, you might want to set `I18n.default_locale` dynamically based on which domain the request is coming from.
+If you have an application serving requests from more than one domain, you might want to set `I18n.locale` dynamically based on which domain the request is coming from.
 
 The `host_locales` option is a hash mapping hosts to locales, with full wildcard support to allow matching multiple domains/subdomains/tlds.
 Host matching is case insensitive.
 
-When a request hits your app from a domain matching one of the wild-card matchers defined in `host_locales`, the default_locale will be set to the specified locale.
+When a request hits your app from a domain matching one of the wild-card matchers defined in `host_locales`, the locale will be set to the specified locale.
 Unless you specified the `force_locale` configuration option to `true`, that locale will be hidden from routes (acting like a dynamic `hide_locale` option).
 
 Here are a few examples of possible mappings:
@@ -305,6 +305,8 @@ If `host_locales` option is set, the following options will be forced (even if y
 ```
 
 This is to avoid odd behaviour brought about by route conflicts and because `host_locales` forces and hides the host-locale dynamically.
+
+NOTE: locale from parameters has priority over the one from hosts.
 
 
 ### Translations for similar routes with different namespaces
