@@ -1,5 +1,9 @@
 # Changelog
 
+## dev / unreleased
+
+* [ENHANCEMENT] Update development dependencies
+
 ## 6.0.0 / 2019-05-16
 
 * [FEATURE] Drop Ruby 2.2 support
