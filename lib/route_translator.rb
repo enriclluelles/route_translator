@@ -20,7 +20,7 @@ module RouteTranslator
     generate_unlocalized_routes:         false,
     generate_unnamed_unlocalized_routes: false,
     hide_locale:                         false,
-    host_locales:                        ActiveSupport::OrderedHash.new,
+    host_locales:                        {},
     locale_param_key:                    :locale,
     locale_segment_proc:                 false,
     verify_host_path_consistency:        false
