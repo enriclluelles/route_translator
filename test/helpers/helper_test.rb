@@ -14,7 +14,6 @@ class TestHelperTest < ActionView::TestCase
 
   def setup
     setup_config
-    config_default_locale_settings 'en'
 
     @routes = ActionDispatch::Routing::RouteSet.new
 

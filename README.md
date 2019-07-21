@@ -298,9 +298,9 @@ RouteTranslator.config.host_locales = { '*.com'    => :en, 'russia.*' => :ru } #
 If `host_locales` option is set, the following options will be forced (even if you set to true):
 
 ```ruby
+@config.force_locale                        = false
 @config.generate_unlocalized_routes         = false
 @config.generate_unnamed_unlocalized_routes = false
-@config.force_locale                        = false
 @config.hide_locale                         = false
 ```
 
