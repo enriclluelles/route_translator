@@ -13,36 +13,40 @@ module RouteTranslator
 
   TRANSLATABLE_SEGMENT = /^([-_a-zA-Z0-9]+)(\()?/.freeze
 
-  Configuration = Struct.new(:available_locales, :disable_fallback, :force_locale,
-                             :hide_locale, :host_locales, :generate_unlocalized_routes,
-                             :generate_unnamed_unlocalized_routes, :locale_param_key,
-                             :locale_segment_proc, :verify_host_path_consistency)
+  DEFAULT_CONFIGURATION = {
+    available_locales:                   [],
+    disable_fallback:                    false,
+    force_locale:                        false,
+    generate_unlocalized_routes:         false,
+    generate_unnamed_unlocalized_routes: false,
+    hide_locale:                         false,
+    host_locales:                        ActiveSupport::OrderedHash.new,
+    locale_param_key:                    :locale,
+    locale_segment_proc:                 false,
+    verify_host_path_consistency:        false
+  }.freeze
+
+  Configuration = Struct.new(*DEFAULT_CONFIGURATION.keys)
 
   class << self
     private
 
     def resolve_host_locale_config_conflicts
       @config.force_locale                        = false
-      @config.hide_locale                         = false
       @config.generate_unlocalized_routes         = false
       @config.generate_unnamed_unlocalized_routes = false
+      @config.hide_locale                         = false
     end
   end
 
   module_function
 
   def config(&block)
-    @config                                     ||= Configuration.new
-    @config.available_locales                   ||= []
-    @config.disable_fallback                    ||= false
-    @config.force_locale                        ||= false
-    @config.hide_locale                         ||= false
-    @config.host_locales                        ||= ActiveSupport::OrderedHash.new
-    @config.generate_unlocalized_routes         ||= false
-    @config.generate_unnamed_unlocalized_routes ||= false
-    @config.locale_param_key                    ||= :locale
-    @config.locale_segment_proc                 ||= false
-    @config.verify_host_path_consistency        ||= false
+    @config ||= Configuration.new
+
+    DEFAULT_CONFIGURATION.each do |option, value|
+      @config[option] ||= value
+    end
 
     yield @config if block
 
