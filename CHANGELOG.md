@@ -1,6 +1,6 @@
 # Changelog
 
-## dev / unreleased
+## 7.0.0 / 2019-07-30
 
 * [FEATURE] Add Rails > 6.0.0.rc1 compatibility
 * [FEATURE] Do not set locale from url by default
