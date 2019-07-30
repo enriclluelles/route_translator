@@ -68,4 +68,9 @@ module RouteTranslator
   def locale_param_key
     config.locale_param_key
   end
+
+  def locale_from_params(params)
+    locale = params[config.locale_param_key]&.to_sym
+    locale if I18n.available_locales.include?(locale)
+  end
 end

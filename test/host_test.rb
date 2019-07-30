@@ -66,8 +66,8 @@ class TestHostsFromLocale < Minitest::Test
     assert_equal :en, RouteTranslator::Host.locale_from_host('russia.com')
   end
 
-  def test_default_locale_if_no_matches
-    assert_equal I18n.default_locale, RouteTranslator::Host.locale_from_host('nomatches.co.uk')
+  def test_nil_if_no_matches
+    assert_nil RouteTranslator::Host.locale_from_host('nomatches.co.uk')
   end
 
   def test_readme_examples_work

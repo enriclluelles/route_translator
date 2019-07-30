@@ -14,15 +14,15 @@ module RouteTranslator
     private
 
     def set_locale_from_url
-      tmp_locale = params[RouteTranslator.locale_param_key] || RouteTranslator::Host.locale_from_host(request.host)
-      if tmp_locale
-        current_locale = I18n.locale
-        I18n.locale    = tmp_locale
+      locale_from_url = RouteTranslator.locale_from_params(params) || RouteTranslator::Host.locale_from_host(request.host)
+      if locale_from_url
+        old_locale  = I18n.locale
+        I18n.locale = locale_from_url
       end
 
       yield
     ensure
-      I18n.locale = current_locale if tmp_locale
+      I18n.locale = old_locale if locale_from_url
     end
   end
 
