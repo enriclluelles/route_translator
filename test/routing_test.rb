@@ -125,7 +125,7 @@ class TranslateRoutesTest < ActionController::TestCase
   end
 
   def test_resources
-    config_default_locale_settings 'es'
+    I18n.default_locale = :es
 
     draw_routes do
       localized do
@@ -150,7 +150,7 @@ class TranslateRoutesTest < ActionController::TestCase
   end
 
   def test_resources_with_only
-    config_default_locale_settings 'es'
+    I18n.default_locale = :es
 
     draw_routes do
       localized do
@@ -165,7 +165,7 @@ class TranslateRoutesTest < ActionController::TestCase
   end
 
   def test_namespaced_controllers
-    config_default_locale_settings 'es'
+    I18n.default_locale = :es
 
     draw_routes do
       localized do
@@ -181,7 +181,7 @@ class TranslateRoutesTest < ActionController::TestCase
   end
 
   def test_unnamed_root_route_without_prefix
-    config_default_locale_settings 'es'
+    I18n.default_locale = :es
 
     draw_routes do
       localized do
@@ -216,7 +216,7 @@ class TranslateRoutesTest < ActionController::TestCase
   end
 
   def test_unnamed_translated_route_on_default_locale
-    config_default_locale_settings 'es'
+    I18n.default_locale = :es
 
     @routes.draw { get 'people', to: 'people#index' }
     draw_routes do
@@ -253,7 +253,7 @@ class TranslateRoutesTest < ActionController::TestCase
   end
 
   def test_named_empty_route_without_prefix
-    config_default_locale_settings 'es'
+    I18n.default_locale = :es
     draw_routes do
       localized do
         root to: 'people#index', as: 'people'
@@ -266,7 +266,7 @@ class TranslateRoutesTest < ActionController::TestCase
   end
 
   def test_named_root_route_without_prefix
-    config_default_locale_settings 'es'
+    I18n.default_locale = :es
 
     draw_routes do
       localized do
@@ -280,7 +280,7 @@ class TranslateRoutesTest < ActionController::TestCase
   end
 
   def test_named_untranslated_route_without_prefix
-    config_default_locale_settings 'es'
+    I18n.default_locale = :es
 
     draw_routes do
       localized do
@@ -295,7 +295,7 @@ class TranslateRoutesTest < ActionController::TestCase
   end
 
   def test_named_translated_route_on_default_locale_without_prefix
-    config_default_locale_settings 'es'
+    I18n.default_locale = :es
 
     draw_routes do
       localized do
@@ -418,7 +418,6 @@ class TranslateRoutesTest < ActionController::TestCase
   end
 
   def test_not_localizing_routes_outside_blocks
-    config_default_locale_settings 'en'
     draw_routes do
       localized do
         get 'people', to: 'people#index', as: 'people'
@@ -509,7 +508,7 @@ class TranslateRoutesTest < ActionController::TestCase
   end
 
   def test_path_helper_arguments
-    config_default_locale_settings 'es'
+    I18n.default_locale = :es
     I18n.with_locale :es do
       config_host_locales '*.es' => 'es', '*.com' => 'en'
 
@@ -529,7 +528,7 @@ class TranslateRoutesTest < ActionController::TestCase
   end
 
   def test_dont_add_locale_to_routes_if_local_param_present
-    config_default_locale_settings 'es'
+    I18n.default_locale = :es
     config_force_locale true
 
     draw_routes do
@@ -661,7 +660,7 @@ class ProductsControllerTest < ActionController::TestCase
 
     @routes = ActionDispatch::Routing::RouteSet.new
 
-    config_default_locale_settings 'es'
+    I18n.default_locale = :es
     config_host_locales es: 'es'
 
     draw_routes do

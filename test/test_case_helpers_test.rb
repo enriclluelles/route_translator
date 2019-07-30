@@ -11,8 +11,6 @@ class TestCaseHelpersTest < MiniTest::Test
 
     @routes = ActionDispatch::Routing::RouteSet.new
 
-    config_default_locale_settings 'en'
-
     draw_routes do
       localized do
         resources :people
@@ -65,8 +63,6 @@ class TestControllerTest < ActionController::TestCase
     setup_config
 
     @routes = ActionDispatch::Routing::RouteSet.new
-
-    config_default_locale_settings 'en'
 
     draw_routes do
       get :test, to: 'test#test'

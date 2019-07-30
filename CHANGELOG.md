@@ -1,5 +1,12 @@
 # Changelog
 
+## 7.0.0 / 2019-07-30
+
+* [FEATURE] Add Rails > 6.0.0.rc1 compatibility
+* [FEATURE] Do not set locale from url by default
+* [FEATURE] Do not raise InvalidLocale errors
+* [ENHANCEMENT] Update development dependencies
+
 ## 6.0.0 / 2019-05-16
 
 * [FEATURE] Drop Ruby 2.2 support

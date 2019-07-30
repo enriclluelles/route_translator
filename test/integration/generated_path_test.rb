@@ -35,7 +35,6 @@ class GeneratedPathTest < ActionDispatch::IntegrationTest
   end
 
   def test_path_translated_while_generate_unlocalized_routes
-    config_default_locale_settings 'en'
     config_generate_unlocalized_routes true
 
     get '/es/mostrar'

@@ -25,18 +25,19 @@ module ActionDispatch
       private
 
       def translate_mapping(locale, route_set, translated_options, translated_path_ast, scope, controller, default_action, to, formatted, via, translated_options_constraints, anchor)
-        options = scope[:options] ? scope[:options].merge(translated_options) : translated_options
-
-        defaults          = (scope[:defaults] || {}).dup
-        scope_constraints = scope[:constraints] || {}
-
-        blocks = scope[:blocks] ? scope[:blocks].dup : []
+        scope_params = {
+          blocks:      scope[:blocks] || [],
+          constraints: scope[:constraints] || {},
+          defaults:    (scope[:defaults] || {}).dup,
+          module:      scope[:module],
+          options:     scope[:options] ? scope[:options].merge(translated_options) : translated_options
+        }
 
         if RouteTranslator.config.verify_host_path_consistency
-          blocks.push RouteTranslator::HostPathConsistencyLambdas.for_locale(locale)
+          scope_params[:blocks].push RouteTranslator::HostPathConsistencyLambdas.for_locale(locale)
         end
 
-        ::ActionDispatch::Routing::Mapper::Mapping.new(route_set, translated_path_ast, defaults, controller, default_action, scope[:module], to, formatted, scope_constraints, blocks, via, translated_options_constraints, anchor, options)
+        ::ActionDispatch::Routing::Mapper::Mapping.build scope_params, route_set, translated_path_ast, controller, default_action, to, via, formatted, translated_options_constraints, anchor, translated_options
       end
 
       def add_route_to_set(mapping, path_ast, name, anchor)
