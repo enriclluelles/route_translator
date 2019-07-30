@@ -3,6 +3,7 @@
 ## dev / unreleased
 
 * [FEATURE] Add Rails > 6.0.0.rc1 compatibility
+* [FEATURE] Do not set locale from url by default
 * [FEATURE] Do not raise InvalidLocale errors
 * [ENHANCEMENT] Update development dependencies
 

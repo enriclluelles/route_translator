@@ -4,10 +4,12 @@
 en:
   routes:
     dummy: dummy
+    dummy_without_around_action: dummy_without_around_action
     show: show
 es:
   routes:
     dummy: dummy
+    dummy_without_around_action: dummy_sin_around_action
     show: mostrar
     suffix: sufijo
     slash: foo/bar

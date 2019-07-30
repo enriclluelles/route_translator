@@ -9,6 +9,8 @@ Rails.application.routes.draw do
     get 'slash',  to: 'dummy#slash'
     get 'space',  to: 'dummy#space'
 
+    get 'dummy_without_around_action', to: 'dummy_without_around_action#dummy'
+
     get 'optional(/:page)',            to: 'dummy#optional', as: :optional
     get 'prefixed_optional(/p-:page)', to: 'dummy#prefixed_optional', as: :prefixed_optional
 

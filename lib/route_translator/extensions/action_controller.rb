@@ -7,10 +7,6 @@ module RouteTranslator
   module Controller
     extend ActiveSupport::Concern
 
-    included do
-      around_action :set_locale_from_url
-    end
-
     private
 
     def set_locale_from_url
