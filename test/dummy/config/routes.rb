@@ -16,6 +16,10 @@ Rails.application.routes.draw do
 
     get ':id-suffix', to: 'dummy#suffix'
 
+    namespace :account do
+      root to: 'foo#account_root'
+    end
+
     mount Blorgh::Engine, at: '/blorgh'
   end
 

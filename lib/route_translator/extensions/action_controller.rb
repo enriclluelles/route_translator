@@ -37,6 +37,6 @@ module RouteTranslator
 end
 
 ActiveSupport.on_load(:action_controller) do
-  ActionController::Base.send :include, RouteTranslator::Controller
-  ActionController::TestCase.send :include, RouteTranslator::TestCase if ENV['RAILS_ENV'] == 'test'
+  ActionController::Base.include RouteTranslator::Controller
+  ActionController::TestCase.include RouteTranslator::TestCase if ENV['RAILS_ENV'] == 'test'
 end

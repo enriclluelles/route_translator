@@ -6,6 +6,7 @@ en:
     dummy: dummy
     dummy_without_around_action: dummy_without_around_action
     show: show
+    account: account
 es:
   routes:
     dummy: dummy
@@ -14,12 +15,15 @@ es:
     suffix: sufijo
     slash: foo/bar
     space: foo bar
+    account: cuenta
 ru:
   routes:
     dummy: манекен
     show: показывать
+    account: профиль
 
 de-AT:
   routes:
     dummy: Attrappe
     show: anzeigen
+    account: konto
