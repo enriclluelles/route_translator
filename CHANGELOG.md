@@ -1,5 +1,11 @@
 # Changelog
 
+## 7.0.1 / 2019-10-14
+
+* [BUGFIX] Fix missing dup on blocks ([#203](https://github.com/enriclluelles/route_translator/pull/203))
+* [ENHANCEMENT] Test against latest Ruby versions
+* [ENHANCEMENT] Update development dependencies
+
 ## 7.0.0 / 2019-07-30
 
 * [FEATURE] Add Rails > 6.0.0.rc1 compatibility
