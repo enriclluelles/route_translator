@@ -26,9 +26,9 @@ module ActionDispatch
 
       def translate_mapping(locale, route_set, translated_options, translated_path_ast, scope, controller, default_action, to, formatted, via, translated_options_constraints, anchor)
         scope_params = {
-          blocks:      scope[:blocks] || [],
+          blocks:      (scope[:blocks] || []).dup,
           constraints: scope[:constraints] || {},
-          defaults:    (scope[:defaults] || {}).dup,
+          defaults:    scope[:defaults] || {},
           module:      scope[:module],
           options:     scope[:options] ? scope[:options].merge(translated_options) : translated_options
         }
