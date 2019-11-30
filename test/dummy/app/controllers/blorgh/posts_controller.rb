@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Blorgh
-  class PostsController < ActionController::Base
+  class PostsController < ApplicationController
     around_action :set_locale_from_url
 
     def index

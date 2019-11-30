@@ -2,7 +2,7 @@
 
 require 'test_helper'
 
-class HelperTestController < ActionController::Base
+class HelperTestController < ApplicationController
   def test
     render plain: nil
   end
