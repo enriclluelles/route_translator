@@ -38,6 +38,6 @@ module ActionDispatch
   end
 end
 
-Dir[File.expand_path('support/*.rb', __dir__)].each do |helper|
+Dir[File.expand_path('support/*.rb', __dir__)].sort.each do |helper|
   require helper
 end
