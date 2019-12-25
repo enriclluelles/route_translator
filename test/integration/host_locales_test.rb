@@ -38,13 +38,13 @@ class HostLocalesTest < ActionDispatch::IntegrationTest
 
     # ru route on es com
     host! 'www.testapp.es'
-    get URI.escape('/ru/манекен')
+    get Addressable::URI.normalize_component('/ru/манекен')
     assert_equal 'ru', @response.body
     assert_response :success
 
     # native ru route on ru com
     host! 'ru.testapp.com'
-    get URI.escape('/манекен')
+    get Addressable::URI.normalize_component('/манекен')
     assert_equal 'ru', @response.body
     assert_response :success
 
@@ -65,7 +65,7 @@ class HostLocalesTest < ActionDispatch::IntegrationTest
     # native ru route on ru com
     host! 'ru.testapp.com'
     get '/native'
-    assert_equal URI.escape('/показывать'), @response.body
+    assert_equal Addressable::URI.normalize_component('/показывать'), @response.body
     assert_response :success
   end
 

@@ -15,9 +15,6 @@ Layout/HashAlignment:
 Layout/LineLength:
   Enabled: false
 
-Lint/UriEscapeUnescape:
-  Enabled: false
-
 Metrics/AbcSize:
   Max: 23.75 # TODO: Lower to 15
   Exclude:
