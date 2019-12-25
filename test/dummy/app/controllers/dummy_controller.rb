@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class DummyController < ActionController::Base
+class DummyController < ApplicationController
   around_action :set_locale_from_url
 
   def dummy

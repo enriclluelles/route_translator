@@ -49,7 +49,7 @@ class TestCaseHelpersTest < MiniTest::Test
   end
 end
 
-class TestController < ActionController::Base
+class TestController < ApplicationController
   def test
     render plain: nil
   end

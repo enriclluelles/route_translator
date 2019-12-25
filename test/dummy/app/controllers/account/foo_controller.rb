@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Account
-  class FooController < ActionController::Base
+  class FooController < ApplicationController
     around_action :set_locale_from_url
 
     def account_root

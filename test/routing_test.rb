@@ -2,14 +2,14 @@
 
 require 'test_helper'
 
-class PeopleController < ActionController::Base
+class PeopleController < ApplicationController
 end
 
-class ProductsController < ActionController::Base
+class ProductsController < ApplicationController
 end
 
 module People
-  class ProductsController < ActionController::Base
+  class ProductsController < ApplicationController
   end
 end
 
