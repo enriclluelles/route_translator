@@ -24,10 +24,10 @@ module RouteTranslator
             handler = proc { |exception| exception }
             opts    = { locale: locale, scope: scope }
 
-            if I18n.translate(str, opts.merge(exception_handler: handler)).is_a?(I18n::MissingTranslation)
-              I18n.translate(str, opts.merge(fallback_options(str, locale)))
+            if I18n.translate(str, **opts.merge(exception_handler: handler)).is_a?(I18n::MissingTranslation)
+              I18n.translate str, **opts.merge(fallback_options(str, locale))
             else
-              I18n.translate(str, opts)
+              I18n.translate str, **opts
             end
           end
 
