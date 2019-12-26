@@ -384,24 +384,19 @@ class TranslateRoutesTest < ActionController::TestCase
   end
 
   def test_translations_depend_on_available_locales
-    available_locales = I18n.available_locales
-    begin
-      I18n.available_locales = %i[es en fr]
+    I18n.available_locales = %i[es en fr]
 
-      draw_routes do
-        localized do
-          get 'people', to: 'people#index', as: 'people'
-        end
+    draw_routes do
+      localized do
+        get 'people', to: 'people#index', as: 'people'
       end
-
-      assert_routing '/fr/people', controller: 'people', action: 'index', locale: 'fr'
-      assert_routing '/es/gente', controller: 'people', action: 'index', locale: 'es'
-      assert_routing '/people', controller: 'people', action: 'index', locale: 'en'
-
-      assert_helpers_include :people_fr, :people_en, :people_es, :people
-    ensure
-      I18n.available_locales = available_locales
     end
+
+    assert_routing '/fr/people', controller: 'people', action: 'index', locale: 'fr'
+    assert_routing '/es/gente', controller: 'people', action: 'index', locale: 'es'
+    assert_routing '/people', controller: 'people', action: 'index', locale: 'en'
+
+    assert_helpers_include :people_fr, :people_en, :people_es, :people
   end
 
   def test_2_localized_blocks

@@ -8,13 +8,13 @@ class HostLocalePathVerifyConsistencyTest < ActionDispatch::IntegrationTest
   def setup
     config_verify_host_path_consistency true
     config_host_locales '*.es' => 'es', 'ru.*.com' => 'ru'
-    Dummy::Application.reload_routes!
+    Rails.application.reload_routes!
   end
 
   def teardown
     config_verify_host_path_consistency false
     config_host_locales
-    Dummy::Application.reload_routes!
+    Rails.application.reload_routes!
   end
 
   def test_host_path_consistency
