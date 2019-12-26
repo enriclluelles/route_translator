@@ -12,8 +12,7 @@ class HostLocalePathVerifyConsistencyTest < ActionDispatch::IntegrationTest
   end
 
   def teardown
-    config_verify_host_path_consistency false
-    config_host_locales
+    teardown_config
     Rails.application.reload_routes!
   end
 

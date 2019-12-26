@@ -11,7 +11,7 @@ class NamespaceTest < ActionDispatch::IntegrationTest
   end
 
   def teardown
-    config_host_locales
+    teardown_config
     Rails.application.reload_routes!
   end
 
