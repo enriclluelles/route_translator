@@ -40,12 +40,12 @@ class TestCaseHelpersTest < MiniTest::Test
     test_case = klass.new(nil)
 
     # Not localized
-    assert test_case.respond_to?(:people_path)
-    assert test_case.respond_to?(:new_person_path)
+    assert_respond_to test_case, :people_path
+    assert_respond_to test_case, :new_person_path
 
     # Localized
-    assert test_case.respond_to?(:people_en_path)
-    assert test_case.respond_to?(:new_person_en_path)
+    assert_respond_to test_case, :people_en_path
+    assert_respond_to test_case, :new_person_en_path
   end
 end
 
