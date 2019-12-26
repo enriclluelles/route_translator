@@ -2,14 +2,12 @@
 
 module RouteTranslator
   module ConfigurationHelper
-    def config_reset
-      RouteTranslator::DEFAULT_CONFIGURATION.each do |option, value|
-        RouteTranslator.config[option] = value
-      end
+    def reset_config
+      RouteTranslator.reset_config
     end
 
-    alias setup_config config_reset
-    alias teardown_config config_reset
+    alias setup_config reset_config
+    alias teardown_config reset_config
 
     DEFAULT_CONFIGURATION.each do |option, default_value|
       define_method :"config_#{option}" do |value = default_value|

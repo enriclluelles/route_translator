@@ -56,6 +56,12 @@ module RouteTranslator
     @config
   end
 
+  def reset_config
+    @config = nil
+
+    config
+  end
+
   def available_locales
     locales = config.available_locales
 

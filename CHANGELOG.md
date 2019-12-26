@@ -1,5 +1,9 @@
 # Changelog
 
+## 7.1.1 / 2019-12-26
+
+* [ENHANCEMENT] Minor improvements to configuration and tests
+
 ## 7.1.0 / 2019-12-26
 
 * [ENHANCEMENT] Use Addressable gem for URI parsing
