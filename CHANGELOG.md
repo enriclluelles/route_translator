@@ -1,6 +1,6 @@
 # Changelog
 
-## 7.1.0 / unreleased
+## 7.1.0 / 2019-12-26
 
 * [ENHANCEMENT] Use Addressable gem for URI parsing
 * [ENHANCEMENT] Fix Ruby 2.7 deprecations
