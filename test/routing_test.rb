@@ -679,8 +679,8 @@ class ProductsControllerTest < ActionController::TestCase
   def test_url_helpers_are_included
     controller = ProductsController.new
 
-    %w[product_path product_url product_es_path product_es_url product_native_es_path product_native_es_url].each do |method|
-      assert controller.respond_to? method
+    %i[product_path product_url product_es_path product_es_url product_native_es_path product_native_es_url].each do |method_name|
+      assert_respond_to controller, method_name
     end
   end
 end
