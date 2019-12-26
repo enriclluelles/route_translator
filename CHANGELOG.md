@@ -1,5 +1,11 @@
 # Changelog
 
+## 7.1.0 / 2019-12-26
+
+* [ENHANCEMENT] Use Addressable gem for URI parsing
+* [ENHANCEMENT] Fix Ruby 2.7 deprecations
+* [ENHANCEMENT] Update dependencies
+
 ## 7.0.1 / 2019-10-14
 
 * [BUGFIX] Fix missing dup on blocks ([#203](https://github.com/enriclluelles/route_translator/pull/203))

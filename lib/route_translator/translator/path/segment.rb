@@ -24,10 +24,10 @@ module RouteTranslator
             handler = proc { |exception| exception }
             opts    = { locale: locale, scope: scope }
 
-            if I18n.translate(str, opts.merge(exception_handler: handler)).is_a?(I18n::MissingTranslation)
-              I18n.translate(str, opts.merge(fallback_options(str, locale)))
+            if I18n.translate(str, **opts.merge(exception_handler: handler)).is_a?(I18n::MissingTranslation)
+              I18n.translate str, **opts.merge(fallback_options(str, locale))
             else
-              I18n.translate(str, opts)
+              I18n.translate str, **opts
             end
           end
 
@@ -35,7 +35,7 @@ module RouteTranslator
             sanitized_locale = RouteTranslator::LocaleSanitizer.sanitize(locale)
             translated_resource = translate_resource(str, sanitized_locale, scope)
 
-            URI.escape translated_resource
+            Addressable::URI.normalize_component translated_resource
           end
         end
 
