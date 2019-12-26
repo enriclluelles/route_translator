@@ -51,7 +51,7 @@ module RouteTranslator
 
     yield @config if block
 
-    resolve_host_locale_config_conflicts unless @config.host_locales.empty?
+    resolve_host_locale_config_conflicts if @config.host_locales.present?
 
     @config
   end
