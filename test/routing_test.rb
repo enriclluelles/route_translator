@@ -254,6 +254,7 @@ class TranslateRoutesTest < ActionController::TestCase
 
   def test_named_empty_route_without_prefix
     I18n.default_locale = :es
+
     draw_routes do
       localized do
         root to: 'people#index', as: 'people'
@@ -509,15 +510,15 @@ class TranslateRoutesTest < ActionController::TestCase
 
   def test_path_helper_arguments
     I18n.default_locale = :es
-    I18n.with_locale :es do
-      config_host_locales '*.es' => 'es', '*.com' => 'en'
+    config_host_locales '*.es' => 'es', '*.com' => 'en'
 
-      draw_routes do
-        localized do
-          resources :products
-        end
+    draw_routes do
+      localized do
+        resources :products
       end
+    end
 
+    I18n.with_locale :es do
       assert_equal '/productos',                           @routes.url_helpers.products_path
       assert_equal '/productos/some_product',              @routes.url_helpers.product_path('some_product')
       assert_equal '/productos/some_product?some=param',   @routes.url_helpers.product_path('some_product', some: 'param')
