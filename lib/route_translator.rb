@@ -42,14 +42,14 @@ module RouteTranslator
 
   module_function
 
-  def config(&block)
+  def config
     @config ||= Configuration.new
 
     DEFAULT_CONFIGURATION.each do |option, value|
       @config[option] ||= value
     end
 
-    yield @config if block
+    yield @config if block_given?
 
     resolve_host_locale_config_conflicts if @config.host_locales.present?
 
