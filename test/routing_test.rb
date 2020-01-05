@@ -658,6 +658,19 @@ class TranslateRoutesTest < ActionController::TestCase
     assert_routing '/es/tr_parametro', controller: 'people', action: 'index', locale: 'es'
     assert_unrecognized_route '/ru/tr_param', controller: 'people', action: 'index', locale: 'ru'
   end
+
+  def test_disable_fallback_does_not_raise_error
+    I18n.exception_handler  = lambda { |*args| raise I18n::MissingTranslationData.new('test', 'raise') }
+    config_disable_fallback(true)
+
+    draw_routes do
+      localized do
+        get 'tr_param', to: 'people#index', as: 'people'
+      end
+    end
+
+    assert_unrecognized_route '/ru/tr_param', controller: 'people', action: 'index', locale: 'ru'
+  end
 end
 
 class ProductsControllerTest < ActionController::TestCase
