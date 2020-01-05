@@ -660,7 +660,7 @@ class TranslateRoutesTest < ActionController::TestCase
   end
 
   def test_disable_fallback_does_not_raise_error
-    I18n.exception_handler  = lambda { |*args| raise I18n::MissingTranslationData.new('test', 'raise') }
+    I18n.exception_handler = ->(*_args) { raise I18n::MissingTranslationData.new('test', 'raise') }
     config_disable_fallback(true)
 
     draw_routes do
