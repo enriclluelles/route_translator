@@ -11,7 +11,6 @@ RuboCop::RakeTask.new
 desc 'Default: run tests.'
 task default: %i[rubocop test]
 
-desc 'Test the translate_routes plugin.'
 Rake::TestTask.new(:test) do |t|
   t.libs << 'lib' << 'test'
   t.pattern = 'test/**/*_test.rb'
