@@ -523,6 +523,22 @@ class TranslateRoutesTest < ActionController::TestCase
     end
   end
 
+  def test_path_helper_arguments_fallback
+    I18n.available_locales = %i[es en it]
+    I18n.default_locale = :it
+    config_available_locales %i[en]
+
+    draw_routes do
+      localized do
+        resources :products
+      end
+    end
+
+    I18n.with_locale :es do
+      assert_equal '/products/some_product?some=param', @routes.url_helpers.product_path('some_product', some: 'param', locale: 'it')
+    end
+  end
+
   def test_dont_add_locale_to_routes_if_local_param_present
     I18n.default_locale = :es
     config_force_locale true
@@ -640,6 +656,19 @@ class TranslateRoutesTest < ActionController::TestCase
 
     assert_routing '/tr_param', controller: 'people', action: 'index', locale: 'en'
     assert_routing '/es/tr_parametro', controller: 'people', action: 'index', locale: 'es'
+    assert_unrecognized_route '/ru/tr_param', controller: 'people', action: 'index', locale: 'ru'
+  end
+
+  def test_disable_fallback_does_not_raise_error
+    I18n.exception_handler = ->(*_args) { raise I18n::MissingTranslationData.new('test', 'raise') }
+    config_disable_fallback(true)
+
+    draw_routes do
+      localized do
+        get 'tr_param', to: 'people#index', as: 'people'
+      end
+    end
+
     assert_unrecognized_route '/ru/tr_param', controller: 'people', action: 'index', locale: 'ru'
   end
 end
