@@ -1,5 +1,10 @@
 # Changelog
 
+## 7.1.2 / 2020-03-02
+
+* [BUGFIX] Fix lazy load of action controller ([#206](https://github.com/enriclluelles/route_translator/pull/206))
+* [ENHANCEMENT] Update development dependencies
+
 ## 7.1.1 / 2019-12-26
 
 * [ENHANCEMENT] Minor improvements to configuration and tests
