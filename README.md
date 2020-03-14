@@ -358,11 +358,12 @@ end
 
 
 ## Testing
-Testing your controllers with routes-translator is easy, just add a locale parameter for your localized routes. Otherwise, an ActionController::UrlGenerationError will raise.
+Testing your controllers with routes-translator is easy, just add a locale parameter as `String` for your localized routes. Otherwise, an `ActionController::UrlGenerationError` will raise.
 
 ```ruby
 describe 'GET index' do
   it 'should respond with success' do
+    # Remember to pass the locale param as String
     get :index, locale: 'fr'
 
     expect(response).to be_success
