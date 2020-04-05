@@ -15,6 +15,12 @@ Layout/HashAlignment:
 Layout/LineLength:
   Enabled: false
 
+Lint/RaiseException:
+  Enabled: true
+
+Lint/StructNewOverride:
+  Enabled: true
+
 Metrics/AbcSize:
   Max: 23.75 # TODO: Lower to 15
   Exclude:
