@@ -22,7 +22,7 @@ module ActionDispatch
 
         default_action = options.delete(:action) || @scope[:action]
 
-        if action =~ %r{^[\w\-\/]+$}
+        if %r{^[\w\-\/]+$}.match?(action)
           default_action ||= action.tr('-', '_') unless action.include?('/')
         else
           action = nil

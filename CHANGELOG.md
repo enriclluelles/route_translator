@@ -1,5 +1,12 @@
 # Changelog
 
+## 8.0.0 / 2020-04-17
+
+* [FEATURE] Drop Ruby 2.3 support
+* [ENHANCEMENT] Add gem metadata for RubyGems.org
+* [ENHANCEMENT] Test against latest Ruby versions
+* [ENHANCEMENT] Update development dependencies
+
 ## 7.1.2 / 2020-03-02
 
 * [BUGFIX] Fix lazy load of action controller ([#206](https://github.com/enriclluelles/route_translator/pull/206))
