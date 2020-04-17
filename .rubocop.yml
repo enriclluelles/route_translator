@@ -4,7 +4,8 @@ require:
 
 AllCops:
   TargetRailsVersion: 5.0
-  TargetRubyVersion: 2.3
+  TargetRubyVersion: 2.4
+  NewCops: enable
   Exclude:
     - 'vendor/bundle/**/*'
 
@@ -14,12 +15,6 @@ Layout/HashAlignment:
 
 Layout/LineLength:
   Enabled: false
-
-Lint/RaiseException:
-  Enabled: true
-
-Lint/StructNewOverride:
-  Enabled: true
 
 Metrics/AbcSize:
   Max: 23.75 # TODO: Lower to 15
@@ -54,15 +49,6 @@ Rails/HttpPositionalArguments:
 
 Style/Documentation:
   Enabled: false
-
-Style/HashEachMethods:
-  Enabled: true
-
-Style/HashTransformKeys:
-  Enabled: true
-
-Style/HashTransformValues:
-  Enabled: true
 
 Style/IfUnlessModifier:
   Enabled: false

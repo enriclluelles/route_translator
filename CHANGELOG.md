@@ -1,5 +1,10 @@
 # Changelog
 
+## 8.0.0 / 2020-04-20
+
+* [FEATURE] Drop Ruby 2.3 support
+* [ENHANCEMENT] Update development dependencies
+
 ## 7.1.2 / 2020-03-02
 
 * [BUGFIX] Fix lazy load of action controller ([#206](https://github.com/enriclluelles/route_translator/pull/206))

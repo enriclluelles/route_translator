@@ -23,7 +23,7 @@ module RouteTranslator
 
     def locale_from_host(host)
       locales = RouteTranslator.config.host_locales.each_with_object([]) do |(pattern, locale), result|
-        result << locale.to_sym if host =~ regex_for(pattern)
+        result << locale.to_sym if host&.match?(regex_for(pattern))
       end
       locales &= I18n.available_locales
       locales.first&.to_sym
