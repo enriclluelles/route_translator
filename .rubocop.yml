@@ -52,3 +52,6 @@ Style/Documentation:
 
 Style/IfUnlessModifier:
   Enabled: false
+
+Style/RedundantRegexpEscape:
+  Enabled: false # Escaping chars helps with syntax highlighting
