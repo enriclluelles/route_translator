@@ -28,7 +28,7 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency 'activesupport', '>= 5.0.0.1', '< 6.1'
   spec.add_runtime_dependency 'addressable', '~> 2.7'
 
-  spec.add_development_dependency 'appraisal', '~> 2.2'
+  spec.add_development_dependency 'appraisal', '~> 2.3'
   spec.add_development_dependency 'byebug', '>= 10.0', '< 12'
   spec.add_development_dependency 'coveralls_reborn', '~> 0.16.0'
   spec.add_development_dependency 'minitest', '~> 5.14'
