@@ -29,7 +29,7 @@ module RouteTranslator
 
       routes = all_routes.collect do |route|
         reqs = route.requirements.dup
-        reqs[:to] = route.app unless /^ActionDispatch::Routing/.match?(route.app.class.name.to_s)
+        reqs[:to] = route.app unless route.app.class.name.to_s.start_with?('ActionDispatch::Routing')
         reqs = reqs.empty? ? '' : reqs.inspect
 
         path = route.path
