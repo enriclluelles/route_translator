@@ -51,12 +51,12 @@ module RouteTranslator
         def translate(segment, locale, scope)
           return segment if segment.empty?
 
-          if segment.starts_with?(':')
+          if segment.start_with?(':')
             named_param, hyphenized = segment.split('-', 2)
             return "#{named_param}-#{translate(hyphenized, locale, scope)}" if hyphenized
           end
 
-          return segment if segment.starts_with?('(', '*') || segment.include?(':')
+          return segment if segment.start_with?('(', '*') || segment.include?(':')
 
           appended_part = segment.slice!(/(\()$/)
           str = translatable_segment(segment)
