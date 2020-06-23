@@ -27,6 +27,8 @@ Metrics/ClassLength:
 
 Metrics/CyclomaticComplexity:
   Max: 8 # TODO: Lower to 6
+  Exclude:
+    - 'test/**/*'
 
 Metrics/MethodLength:
   Max: 19
