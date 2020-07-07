@@ -12,7 +12,7 @@ module RouteTranslator
     end
 
     def native_locale?(locale)
-      locale.to_s.match(/native_/).present?
+      locale.to_s.include?('native_')
     end
 
     def native_locales
