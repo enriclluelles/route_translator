@@ -43,7 +43,8 @@ Metrics/ParameterLists:
   Max: 13
 
 Metrics/PerceivedComplexity:
-  Max: 9 # TODO: Lower to 7
+  Exclude:
+    - 'test/**/*'
 
 Rails/HttpPositionalArguments:
   Exclude:
