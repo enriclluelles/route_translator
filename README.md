@@ -145,6 +145,21 @@ Right now it works with Rails 5.x and Rails 6.0
     Note: you might be tempted to use `before_action` instead of `around_action`: just don't. That could lead to [thread-related issues](https://github.com/enriclluelles/route_translator/issues/44).
 
 
+### Changing the Language
+
+To change the language and reload the appropriate route while staying on the same page, use the following code snippet:
+
+```ruby
+link_to url_for(locale: 'es'), hreflang: 'es', rel: 'alternate'
+```
+
+Although locales are stored by Rails as a symbol (`:es`), when linking to a page in a different locale you need to use a string (`'es'`). Otherwise, instead of a namespaced route (`/es/my-route`) you will get a parameterized route (`/my-route?locale=es`).
+
+If the page contains a localized slug, the above snippet does not work and a custom implementation is neede.
+
+More information at [Generating translated URLs](https://github.com/enriclluelles/route_translator/wiki/Generating-translated-URLs)
+
+
 ### Namespaces
 
 You can translate a namespace route by either its `name` or `path` option:
