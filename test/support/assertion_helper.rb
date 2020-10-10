@@ -2,11 +2,13 @@
 
 module RouteTranslator
   module AssertionHelper
+    SUFFIXES = %w[url path].freeze
+
     def assert_helpers_include(*helpers)
       controller = ActionController::Base.new
       view = ActionView::Base.new
       helpers.each do |helper|
-        %w[url path].each do |suffix|
+        SUFFIXES.each do |suffix|
           [controller, view].each { |obj| assert_respond_to obj, "#{helper}_#{suffix}".to_sym }
         end
       end
