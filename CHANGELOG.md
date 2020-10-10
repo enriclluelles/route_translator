@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.1.0 / 2020-08-10
+
+* [FEATURE] Allow Ruby 3.0.0
+* [ENHANCEMENT] Test against latest Ruby versions
+* [ENHANCEMENT] Update development dependencies
+
 ## 8.0.0 / 2020-04-17
 
 * [FEATURE] Drop Ruby 2.3 support
