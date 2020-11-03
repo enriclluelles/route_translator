@@ -6,7 +6,7 @@ module RouteTranslator
 
     def assert_helpers_include(*helpers)
       controller = ActionController::Base.new
-      view = ActionView::Base.new
+      view = ActionView::Base.new(nil, {}, nil)
       helpers.each do |helper|
         SUFFIXES.each do |suffix|
           [controller, view].each { |obj| assert_respond_to obj, "#{helper}_#{suffix}".to_sym }
