@@ -1,5 +1,9 @@
 # Changelog
 
+## 8.2.1 / 2020-11-03
+
+* [ENHANCEMENT] Fix deprecation with URI.parser ([#234](https://github.com/enriclluelles/route_translator/pull/234))
+
 ## 8.2.0 / 2020-11-03
 
 * [FEATURE] Add Rails 6.1 compatibility
