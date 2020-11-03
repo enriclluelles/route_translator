@@ -24,15 +24,15 @@ Gem::Specification.new do |spec|
 
   spec.required_ruby_version = '>= 2.4'
 
-  spec.add_runtime_dependency 'actionpack', '>= 5.0.0.1', '< 6.1'
-  spec.add_runtime_dependency 'activesupport', '>= 5.0.0.1', '< 6.1'
+  spec.add_runtime_dependency 'actionpack', '>= 5.0.0.1', '< 6.2'
+  spec.add_runtime_dependency 'activesupport', '>= 5.0.0.1', '< 6.2'
   spec.add_runtime_dependency 'addressable', '~> 2.7'
 
   spec.add_development_dependency 'appraisal', '~> 2.3'
   spec.add_development_dependency 'byebug', '>= 10.0', '< 12'
   spec.add_development_dependency 'coveralls_reborn', '~> 0.18.0'
   spec.add_development_dependency 'minitest', '~> 5.14'
-  spec.add_development_dependency 'rails', '>= 5.0.0.1', '< 6.1'
+  spec.add_development_dependency 'rails', '>= 5.0.0.1', '< 6.2'
   spec.add_development_dependency 'rake', '~> 13.0'
   spec.add_development_dependency 'rubocop', '~> 1.1.0'
   spec.add_development_dependency 'rubocop-performance', '~> 1.8'

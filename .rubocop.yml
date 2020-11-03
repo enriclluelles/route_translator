@@ -8,6 +8,7 @@ AllCops:
   NewCops: enable
   Exclude:
     - 'vendor/bundle/**/*'
+    - 'gemfiles/*'
 
 Layout/HashAlignment:
   EnforcedColonStyle: table

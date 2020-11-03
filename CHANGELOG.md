@@ -1,5 +1,10 @@
 # Changelog
 
+## 8.2.0 / 2020-11-03
+
+* [FEATURE] Add Rails 6.1 compatibility
+* [ENHANCEMENT] Update development dependencies
+
 ## 8.1.0 / 2020-08-10
 
 * [FEATURE] Allow Ruby 3.0.0

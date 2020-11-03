@@ -10,7 +10,7 @@ RouteTranslator is a gem to allow you to manage the translations of your app rou
 
 It started as a fork of the awesome [translate_routes](https://github.com/raul/translate_routes) plugin by [Raúl Murciano](https://github.com/raul).
 
-Right now it works with Rails 5.x and Rails 6.0
+Right now it works with Rails 5.x and Rails 6.x
 
 
 
