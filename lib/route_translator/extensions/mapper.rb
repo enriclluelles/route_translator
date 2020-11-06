@@ -28,10 +28,10 @@ module ActionDispatch
           action = nil
         end
 
-        as = if !options.fetch(:as, true) # if it's set to nil or false
-               options.delete(:as)
-             else
+        as = if options.fetch(:as, true)
                name_for_action(options.delete(:as), action)
+             else
+               options.delete(:as)
              end
 
         path = Mapping.normalize_path URI::DEFAULT_PARSER.escape(path), formatted
