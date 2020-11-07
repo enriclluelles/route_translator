@@ -1,6 +1,7 @@
 os: linux
 dist: bionic
 language: ruby
+cache: bundler
 rvm:
   - 2.4.10
   - 2.5.8
