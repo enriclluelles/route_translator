@@ -65,10 +65,10 @@ module RouteTranslator
   def available_locales
     locales = config.available_locales
 
-    if locales.any?
-      locales.map(&:to_sym)
-    else
+    if locales.empty?
       I18n.available_locales.dup
+    else
+      locales.map(&:to_sym)
     end
   end
 

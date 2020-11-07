@@ -1,5 +1,10 @@
 # Changelog
 
+## 9.0.0 / 2020-11-07
+
+* [ENHANCEMENT] Check for `empty?` instead of `any?` on available_locales array
+* [ENHANCEMENT] Update development dependencies
+
 ## 8.2.1 / 2020-11-03
 
 * [ENHANCEMENT] Fix deprecation with URI.parser ([#234](https://github.com/enriclluelles/route_translator/pull/234))
