@@ -16,7 +16,7 @@ module RouteTranslator
     end
 
     def path_string(route)
-      path = route.respond_to?(:path) ? route.path : route.to_s.split(' ')[1]
+      path = route.respond_to?(:path) ? route.path : route.to_s.split[1]
       path.respond_to?(:spec) ? path.spec.to_s : path.to_s
     end
 
