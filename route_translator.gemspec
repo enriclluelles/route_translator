@@ -29,10 +29,11 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency 'addressable', '~> 2.7'
 
   spec.add_development_dependency 'appraisal', '~> 2.3'
-  spec.add_development_dependency 'byebug', '>= 10.0', '< 12'
+  spec.add_development_dependency 'byebug', '~> 11.1'
   spec.add_development_dependency 'coveralls_reborn', '~> 0.19.0'
+  spec.add_development_dependency 'm', '~> 1.5'
   spec.add_development_dependency 'minitest', '~> 5.14'
-  spec.add_development_dependency 'rails', '>= 5.0.0.1', '< 6.2'
+  spec.add_development_dependency 'mocha', '~> 1.11'
   spec.add_development_dependency 'rake', '~> 13.0'
   spec.add_development_dependency 'rubocop', '~> 1.6'
   spec.add_development_dependency 'rubocop-minitest', '~> 0.10.1'
