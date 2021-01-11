@@ -30,7 +30,7 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency 'appraisal', '~> 2.3'
   spec.add_development_dependency 'byebug', '>= 10.0', '< 12'
-  spec.add_development_dependency 'coveralls_reborn', '~> 0.19.0'
+  spec.add_development_dependency 'coveralls_reborn', '~> 0.20.0'
   spec.add_development_dependency 'minitest', '~> 5.14'
   spec.add_development_dependency 'rails', '>= 5.0.0.1', '< 6.2'
   spec.add_development_dependency 'rake', '~> 13.0'
