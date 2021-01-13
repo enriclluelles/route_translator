@@ -36,7 +36,6 @@ module RouteTranslator
       @config.force_locale                        = false
       @config.generate_unlocalized_routes         = false
       @config.generate_unnamed_unlocalized_routes = false
-      @config.hide_locale                         = false
     end
   end
 

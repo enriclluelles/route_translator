@@ -16,6 +16,8 @@ module RouteTranslator
     end
 
     def native_locales
+      return [] if RouteTranslator.config.hide_locale
+
       config.host_locales.values.map { |locale| :"native_#{locale}" }
     end
 

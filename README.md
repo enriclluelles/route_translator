@@ -319,7 +319,6 @@ If `host_locales` option is set, the following options will be forced (even if y
 @config.force_locale                        = false
 @config.generate_unlocalized_routes         = false
 @config.generate_unnamed_unlocalized_routes = false
-@config.hide_locale                         = false
 ```
 
 This is to avoid odd behaviour brought about by route conflicts and because `host_locales` forces and hides the host-locale dynamically.
