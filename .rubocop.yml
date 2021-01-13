@@ -1,10 +1,11 @@
 require:
+  - rubocop-minitest
   - rubocop-performance
   - rubocop-rails
+  - rubocop-rake
 
 AllCops:
   TargetRailsVersion: 5.0
-  TargetRubyVersion: 2.4
   NewCops: enable
   Exclude:
     - 'gemfiles/**/*'
@@ -46,6 +47,9 @@ Metrics/ParameterLists:
 Metrics/PerceivedComplexity:
   Exclude:
     - 'test/**/*'
+
+Minitest/MultipleAssertions:
+  Enabled: false
 
 Rails/HttpPositionalArguments:
   Exclude:
