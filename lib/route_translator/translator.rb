@@ -26,7 +26,7 @@ module RouteTranslator
         translated_options = options.dup
 
         if translated_options.exclude?(RouteTranslator.locale_param_key)
-          translated_options[RouteTranslator.locale_param_key] = RouteTranslator::LocaleSanitizer.sanitize(locale)
+          translated_options[RouteTranslator.locale_param_key] = locale.to_s
         end
 
         translated_options
@@ -53,7 +53,6 @@ module RouteTranslator
 
     def available_locales
       locales = RouteTranslator.available_locales
-      locales.concat(RouteTranslator.native_locales) if RouteTranslator.native_locales.present?
       # Make sure the default locale is translated in last place to avoid
       # problems with wildcards when default locale is omitted in paths. The
       # default routes will catch all paths like wildcard if it is translated first.
@@ -82,8 +81,6 @@ module RouteTranslator
 
       locale = if args_locale
                  args_locale.to_s.underscore
-               elsif kaller.respond_to?("#{old_name}_native_#{current_locale_name}_#{suffix}")
-                 "native_#{current_locale_name}"
                elsif kaller.respond_to?("#{old_name}_#{current_locale_name}_#{suffix}")
                  current_locale_name
                else

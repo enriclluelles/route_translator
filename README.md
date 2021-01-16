@@ -281,7 +281,6 @@ end
 | `host_locales` | Sets `I18n.locale` based on `request.host`. Useful for apps accepting requests from more than one domain. See below for more details | `{}` |
 | `locale_param_key` | The param key used to set the locale to the newly generated routes | `:locale` |
 | `locale_segment_proc` | The locale segment of the url will by default be `locale.to_s.downcase`. You can supply your own mechanism via a Proc that takes `locale` as an argument, e.g. `->(locale) { locale.to_s.upcase }` | `false` |
-| `verify_host_path_consistency` | Forces a matching of the host associated locale with the translated path locale as part of the route definition. By default, if you use different hosts to translate your application, all translated paths will work on all hosts | `false` |
 
 
 ### Host-based Locale
@@ -313,13 +312,13 @@ RouteTranslator.config.host_locales = { 'russia.*' => :ru, '*.com'    => :en } #
 RouteTranslator.config.host_locales = { '*.com'    => :en, 'russia.*' => :ru } # 'russia.com' will have locale :en
 ```
 
-If `host_locales` option is set, the following options will be forced (even if you set to true):
+If `host_locales` option is set, the following options will be forced:
 
 ```ruby
 @config.force_locale                        = false
 @config.generate_unlocalized_routes         = false
 @config.generate_unnamed_unlocalized_routes = false
-@config.hide_locale                         = false
+@config.hide_locale                         = true
 ```
 
 This is to avoid odd behaviour brought about by route conflicts and because `host_locales` forces and hides the host-locale dynamically.
