@@ -1,10 +1,11 @@
 # Changelog
 
-## 10.0.0.alpha1 / unreleased
+## 10.0.0 / 2021-01-16
 
 * [BUGFIX] Verify host path consistency by default ([#91](https://github.com/enriclluelles/route_translator/issues/91), [#171](https://github.com/enriclluelles/route_translator/issues/171))
 * [FEATURE] Remove the option to verify host path consistency
 * [ENHANCEMENT] Avoid duplicate routes when using host_locales ([#87](https://github.com/enriclluelles/route_translator/issues/87), [#171](https://github.com/enriclluelles/route_translator/issues/171))
+* [ENHANCEMENT] Update development dependencies
 
 ## 9.0.0 / 2020-11-07
 
