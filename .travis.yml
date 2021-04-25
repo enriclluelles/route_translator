@@ -20,6 +20,11 @@ jobs:
   allow_failures:
     - rvm: ruby-head
     - gemfile: gemfiles/rails_edge.gemfile
+  include:
+    - rvm: 2.4.10
+      gemfile: Gemfile
+      script: bundle exec rake rubocop
+      name: RuboCop
   exclude:
     - rvm: 2.4.10
       gemfile: gemfiles/rails_edge.gemfile
@@ -50,3 +55,5 @@ jobs:
     - rvm: ruby-head
       gemfile: gemfiles/rails_5.2.gemfile
   fast_finish: true
+
+script: bundle exec rake test
