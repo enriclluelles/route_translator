@@ -1,0 +1,93 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+# This workflow will download a prebuilt Ruby version, install dependencies and run tests with Rake
+# For more information see: https://github.com/marketplace/actions/setup-ruby-jruby-and-truffleruby
+
+name: Ruby tests
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  test:
+    name: Tests
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        ruby-version: ['2.4', '2.5', '2.6', '2.7', '3.0']
+        gemfile: [ rails_5.0, rails_5.1, rails_5.2, rails_6.0, rails_6.1, rails_edge ]
+        experimental: [false]
+
+        include:
+          - ruby-version: 'head'
+            gemfile: rails_6.0
+            experimental: true
+          - ruby-version: 'head'
+            gemfile: rails_6.1
+            experimental: true
+          - ruby-version: 'head'
+            gemfile: rails_edge
+            experimental: true
+
+        exclude:
+          - ruby-version: '2.4'
+            gemfile: rails_6.0
+          - ruby-version: '2.4'
+            gemfile: rails_6.1
+          - ruby-version: '2.4'
+            gemfile: rails_edge
+          - ruby-version: '2.5'
+            gemfile: rails_edge
+          - ruby-version: '2.6'
+            gemfile: rails_edge
+          - ruby-version: '2.7'
+            gemfile: rails_5.0
+          - ruby-version: '2.7'
+            gemfile: rails_5.1
+          - ruby-version: '2.7'
+            gemfile: rails_5.2
+          - ruby-version: '3.0'
+            gemfile: rails_5.0
+          - ruby-version: '3.0'
+            gemfile: rails_5.1
+          - ruby-version: '3.0'
+            gemfile: rails_5.2
+
+    env:
+      BUNDLE_GEMFILE: gemfiles/${{ matrix.gemfile }}.gemfile
+
+    continue-on-error: ${{ matrix.experimental }}
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: ${{ matrix.ruby-version }}
+        bundler-cache: true
+    - name: Run tests
+      run: bundle exec rake test
+      env:
+        JRUBY_OPTS: "--dev --debug"
+    - name: Coveralls Parallel
+      uses: coverallsapp/github-action@master
+      with:
+        github-token: ${{ secrets.github_token }}
+        flag-name: run-${{ matrix.ruby-version }}
+        parallel: true
+
+  coverage:
+    name: Coverage
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+    - name: Coveralls Finished
+      uses: coverallsapp/github-action@master
+      with:
+        github-token: ${{ secrets.github_token }}
+        parallel-finished: true
