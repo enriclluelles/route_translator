@@ -30,9 +30,9 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency 'appraisal', '~> 2.4'
   spec.add_development_dependency 'byebug', '>= 10.0', '< 12'
-  spec.add_development_dependency 'coveralls_reborn', '>= 0.21', '< 0.23'
   spec.add_development_dependency 'minitest', '~> 5.14'
   spec.add_development_dependency 'rails', '>= 5.0.0.1', '< 6.2'
   spec.add_development_dependency 'rake', '~> 13.0'
   spec.add_development_dependency 'simplecov', '>= 0.18.5', '< 0.22'
+  spec.add_development_dependency 'simplecov-lcov', '~> 0.8.0'
 end
