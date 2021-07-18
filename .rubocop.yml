@@ -55,10 +55,6 @@ Rails/HttpPositionalArguments:
   Exclude:
     - 'test/**/*'
 
-Rails/I18nLocaleAssignment:
-  Exclude:
-    - 'test/**/*'
-
 Style/Documentation:
   Enabled: false
 
