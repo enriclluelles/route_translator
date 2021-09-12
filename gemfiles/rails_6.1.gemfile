@@ -7,6 +7,7 @@ gem "rubocop-minitest", "~> 0.11.1"
 gem "rubocop-performance", "~> 1.10.2"
 gem "rubocop-rails", "~> 2.9"
 gem "rubocop-rake", "~> 0.5.1"
-gem "rails", "~> 6.1.0.rc1"
+gem "rails", "~> 6.1.0"
+gem "net-smtp", require: false
 
 gemspec path: "../"
