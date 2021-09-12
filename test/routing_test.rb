@@ -536,6 +536,23 @@ class TranslateRoutesTest < ActionController::TestCase
     end
   end
 
+  def test_path_helper_arguments_fallback_with_hosts
+    I18n.available_locales = %i[es en it]
+    I18n.default_locale = :it
+    config_available_locales %i[en]
+    config_host_locales '*.com' => 'en', '*.it' => 'it', '*.es' => 'es'
+
+    draw_routes do
+      localized do
+        resources :products
+      end
+    end
+
+    I18n.with_locale :es do
+      assert_equal '/products/some_product?some=param', @routes.url_helpers.product_path('some_product', some: 'param', locale: 'it')
+    end
+  end
+
   def test_dont_add_locale_to_routes_if_local_param_present
     I18n.default_locale = :es
     config_force_locale true
