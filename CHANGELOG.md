@@ -1,5 +1,9 @@
 # Changelog
 
+## 11.0.0 / unreleased
+
+* [FEATURE] Drop Ruby 2.4 support
+
 ## 10.0.0 / 2021-01-16
 
 * [BUGFIX] Verify host path consistency by default ([#91](https://github.com/enriclluelles/route_translator/issues/91), [#171](https://github.com/enriclluelles/route_translator/issues/171))
