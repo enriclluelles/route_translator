@@ -10,8 +10,10 @@ module RouteTranslator
       private
 
       def locale_from_args(args)
-        args_hash = args.detect { |arg| arg.is_a?(Hash) }
-        args_hash[:locale] if RouteTranslator.config.host_locales.present? && args_hash
+        return if RouteTranslator.config.host_locales.blank?
+
+        args_hash = args.find { |arg| arg.is_a?(Hash) }
+        args_hash&.fetch(:locale, nil)
       end
 
       def translate_name(name, locale, named_routes_names)
