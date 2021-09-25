@@ -13,7 +13,7 @@ jobs:
     strategy:
       matrix:
         ruby-version: ['2.5', '2.6', '2.7', '3.0']
-        gemfile: [ rails_5.0, rails_5.1, rails_5.2, rails_6.0, rails_6.1, rails_edge ]
+        gemfile: [ rails_5.2, rails_6.0, rails_6.1, rails_edge ]
         experimental: [false]
 
         include:
@@ -33,15 +33,7 @@ jobs:
           - ruby-version: '2.6'
             gemfile: rails_edge
           - ruby-version: '2.7'
-            gemfile: rails_5.0
-          - ruby-version: '2.7'
-            gemfile: rails_5.1
-          - ruby-version: '2.7'
             gemfile: rails_5.2
-          - ruby-version: '3.0'
-            gemfile: rails_5.0
-          - ruby-version: '3.0'
-            gemfile: rails_5.1
           - ruby-version: '3.0'
             gemfile: rails_5.2
 
