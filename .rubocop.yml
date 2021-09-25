@@ -5,7 +5,7 @@ require:
   - rubocop-rake
 
 AllCops:
-  TargetRailsVersion: 5.0
+  TargetRailsVersion: 5.2
   NewCops: enable
   Exclude:
     - 'gemfiles/**/*'
@@ -19,7 +19,7 @@ Layout/LineLength:
   Enabled: false
 
 Metrics/AbcSize:
-  Max: 24.1 # TODO: Lower to 15
+  Max: 23 # TODO: Lower to 15
   Exclude:
     - 'test/**/*'
 
@@ -42,7 +42,7 @@ Metrics/ModuleLength:
     - 'test/**/*'
 
 Metrics/ParameterLists:
-  Max: 13
+  Max: 12
 
 Metrics/PerceivedComplexity:
   Exclude:
@@ -54,6 +54,10 @@ Minitest/MultipleAssertions:
 Rails/HttpPositionalArguments:
   Exclude:
     - 'test/**/*'
+
+Rails/I18nLocaleAssignment:
+  Exclude:
+    - 'test/support/i18n_helper.rb'
 
 Style/Documentation:
   Enabled: false
