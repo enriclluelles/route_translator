@@ -1,5 +1,10 @@
 # Changelog
 
+## 12.0.0 / 2021-11-28
+
+* [BUGFIX] Fix disable_fallback behavior ([#241](https://github.com/enriclluelles/route_translator/issues/241))
+* [ENHANCEMENT] Update development dependencies
+
 ## 11.0.1 / 2021-11-15
 
 * [ENHANCEMENT] Require MFA to publish gems
