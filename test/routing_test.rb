@@ -684,6 +684,18 @@ class TranslateRoutesTest < ActionController::TestCase
 
     assert_unrecognized_route '/ru/tr_param', controller: 'people', action: 'index', locale: 'ru'
   end
+
+  def test_disable_fallback_does_not_draw_untranslated_routes
+    config_disable_fallback(true)
+
+    draw_routes do
+      localized do
+        resources :products
+      end
+    end
+
+    assert_not_respond_to @routes.url_helpers, :products_ru_path
+  end
 end
 
 class ProductsControllerTest < ActionController::TestCase
