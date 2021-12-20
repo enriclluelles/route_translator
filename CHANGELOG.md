@@ -1,5 +1,10 @@
 # Changelog
 
+## 12.1.0 / 2021-12-20
+
+* [FEATURE] Add Rails 7.0 compatibility
+* [ENHANCEMENT] Update development dependencies
+
 ## 12.0.0 / 2021-11-28
 
 * [BUGFIX] Fix disable_fallback behavior ([#241](https://github.com/enriclluelles/route_translator/issues/241))
