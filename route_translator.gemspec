@@ -32,7 +32,7 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency 'appraisal', '~> 2.4'
   spec.add_development_dependency 'byebug', '>= 10.0', '< 12'
-  spec.add_development_dependency 'minitest', '~> 5.14'
+  spec.add_development_dependency 'minitest', '~> 5.15'
   spec.add_development_dependency 'rails', '>= 5.2', '< 7.1'
   spec.add_development_dependency 'rake', '~> 13.0'
   spec.add_development_dependency 'simplecov', '>= 0.18.5', '< 0.22'
