@@ -24,7 +24,7 @@ end
 
 ActiveSupport.on_load(:action_controller) do
   include RouteTranslator::Controller
-  if ENV['RAILS_ENV'] == 'test'
+  if ENV.fetch('RAILS_ENV', nil) == 'test'
     require 'route_translator/extensions/test_case'
     ActionController::TestCase.include RouteTranslator::TestCase
   end
