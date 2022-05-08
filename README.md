@@ -354,6 +354,23 @@ people_products_favourites_es GET  /people/products/fans(.:format)       people/
        products_favourites_es GET  /products/favoritos(.:format)         products#favourites {:locale=>"es"}
 ```
 
+It is also possible to translated resources scoped into a namespace. Example:
+
+```yml
+es:
+  routes:
+    controllers:
+      people:
+        products:
+          products: productos_favoritos
+```
+
+Routes will be translated as in:
+
+```
+people_products_es GET  /people/productos_favoritos(.:format)       people/products#index {:locale=>"es"}
+```
+
 The gem will lookup translations under `controllers` scope first and then lookup translations under `routes` scope.
 
 
