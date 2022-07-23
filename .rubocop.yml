@@ -52,6 +52,10 @@ Metrics/PerceivedComplexity:
 Minitest/MultipleAssertions:
   Enabled: false
 
+Rails/Delegate:
+  Exclude:
+    - lib/route_translator.rb
+
 Rails/HttpPositionalArguments:
   Exclude:
     - 'test/**/*'
