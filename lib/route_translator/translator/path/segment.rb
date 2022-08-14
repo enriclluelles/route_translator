@@ -34,7 +34,7 @@ module RouteTranslator
           def translate_string(str, locale, scope)
             translated_resource = translate_resource(str, locale.to_s, scope)
 
-            Addressable::URI.normalize_component translated_resource
+            URI::DEFAULT_PARSER.escape translated_resource
           end
         end
 
