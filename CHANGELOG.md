@@ -3,6 +3,7 @@
 ## 13.0.0 / unreleased
 
 * [FEATURE] Replace Addressable gem with `URI::DEFAULT_PARSER` ([#268](https://github.com/enriclluelles/route_translator/pull/234))
+* [FEATURE] Drop Ruby 2.5 support ([#270](https://github.com/enriclluelles/route_translator/pull/270))
 * [ENHANCEMENT] Update development dependencies
 
 ## 12.1.0 / 2021-12-20
