@@ -163,7 +163,7 @@ class TranslateRoutesTest < ActionController::TestCase
       end
     end
 
-    assert_routing Addressable::URI.normalize_component('/ru/люди'), controller: 'people', action: 'index', locale: 'ru'
+    assert_routing URI::DEFAULT_PARSER.escape('/ru/люди'), controller: 'people', action: 'index', locale: 'ru'
   end
 
   def test_resources_with_only
@@ -193,8 +193,8 @@ class TranslateRoutesTest < ActionController::TestCase
 
     assert_routing '/gente/fans', controller: 'people/products', action: 'favourites', locale: 'es'
     assert_routing '/favoritos', controller: 'products', action: 'favourites', locale: 'es'
-    assert_routing Addressable::URI.normalize_component('/ru/люди/кандидаты'), controller: 'people/products', action: 'favourites', locale: 'ru'
-    assert_routing Addressable::URI.normalize_component('/ru/избранное'), controller: 'products', action: 'favourites', locale: 'ru'
+    assert_routing URI::DEFAULT_PARSER.escape('/ru/люди/кандидаты'), controller: 'people/products', action: 'favourites', locale: 'ru'
+    assert_routing URI::DEFAULT_PARSER.escape('/ru/избранное'), controller: 'products', action: 'favourites', locale: 'ru'
   end
 
   def test_unnamed_root_route_without_prefix
@@ -656,7 +656,7 @@ class TranslateRoutesTest < ActionController::TestCase
       end
     end
 
-    assert_routing Addressable::URI.normalize_component('/ru/люди'), controller: 'people', action: 'index', locale: 'ru'
+    assert_routing URI::DEFAULT_PARSER.escape('/ru/люди'), controller: 'people', action: 'index', locale: 'ru'
     assert_routing '/people', controller: 'people', action: 'index', locale: 'en'
     assert_unrecognized_route '/es/gente', controller: 'people', action: 'index', locale: 'es'
   end
@@ -670,7 +670,7 @@ class TranslateRoutesTest < ActionController::TestCase
       end
     end
 
-    assert_routing Addressable::URI.normalize_component('/ru/люди'), controller: 'people', action: 'index', locale: 'ru'
+    assert_routing URI::DEFAULT_PARSER.escape('/ru/люди'), controller: 'people', action: 'index', locale: 'ru'
     assert_routing '/people', controller: 'people', action: 'index', locale: 'en'
     assert_unrecognized_route '/es/gente', controller: 'people', action: 'index', locale: 'es'
   end
