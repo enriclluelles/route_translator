@@ -38,11 +38,11 @@ Take a look at [git-flow, A successful Git branching model](https://nvie.com/pos
 
 ### Ruby
 
-- [Ruby Styleguide](https://github.com/bbatsov/ruby-style-guide)
+- [Ruby Styleguide](https://github.com/rubocop/ruby-style-guide)
 
 ### Commits
 
-- [How to Write a Git Commit Message](https://chris.beams.io/posts/git-commit/#seven-rules)
+- [How to Write a Git Commit Message](https://cbea.ms/git-commit/#seven-rules)
 
 
 
