@@ -52,6 +52,9 @@ Metrics/PerceivedComplexity:
 Minitest/MultipleAssertions:
   Enabled: false
 
+Rails/ActionControllerTestCase:
+  Enabled: false
+
 Rails/Delegate:
   Exclude:
     - lib/route_translator.rb
