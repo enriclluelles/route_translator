@@ -13,11 +13,13 @@ class LocaleSegmentProcTest < ActionDispatch::IntegrationTest
   def test_recognize_without_locale_segment_proc
     # downcase is default
     get '/de-at/Attrappe' # dummy
+
     assert_response :success
   end
 
   def test_generate_without_locale_segment_proc
     get '/de-at/anzeigen' # show
+
     assert_response :success
     assert_select 'a[href="/de-at/anzeigen"]', 1
   end
@@ -27,6 +29,7 @@ class LocaleSegmentProcTest < ActionDispatch::IntegrationTest
     Rails.application.reload_routes!
 
     get '/DE-AT/Attrappe' # dummy
+
     assert_response :success
   end
 
@@ -36,6 +39,7 @@ class LocaleSegmentProcTest < ActionDispatch::IntegrationTest
 
     # not the default downcase
     get '/de-AT/anzeigen' # show
+
     assert_response :success
     assert_select 'a[href="/de-AT/anzeigen"]', 1
   end
