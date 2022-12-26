@@ -1,5 +1,10 @@
 # Changelog
 
+## 13.1.0 / 2022-12-26
+
+* [ENHANCEMENT] Test against Ruby 3.1 and Ruby 3.2
+* [ENHANCEMENT] Better integration with ActionController::TestCase
+
 ## 13.0.0 / 2022-09-01
 
 * [FEATURE] Replace Addressable gem with `URI::DEFAULT_PARSER` ([#268](https://github.com/enriclluelles/route_translator/pull/234))
