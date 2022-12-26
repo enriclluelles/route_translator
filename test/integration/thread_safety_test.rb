@@ -15,6 +15,7 @@ class ThreadSafetyTest < ActionDispatch::IntegrationTest
 
   def test_i18n_locale_thread_safe
     get '/es/dummy'
+
     assert_equal 'es', @response.body
 
     assert_equal :en, I18n.locale

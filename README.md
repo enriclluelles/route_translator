@@ -9,7 +9,7 @@ RouteTranslator is a gem to allow you to manage the translations of your app rou
 
 It started as a fork of the awesome [translate_routes](https://github.com/raul/translate_routes) plugin by [Raúl Murciano](https://github.com/raul).
 
-Right now it works with Rails 5.2 and Rails 6.x
+Right now it works with Rails 5.2, 6.x, and 7.x
 
 
 
@@ -352,6 +352,23 @@ Routes will be translated as in:
 ```
 people_products_favourites_es GET  /people/products/fans(.:format)       people/products#favourites {:locale=>"es"}
        products_favourites_es GET  /products/favoritos(.:format)         products#favourites {:locale=>"es"}
+```
+
+It is also possible to translated resources scoped into a namespace. Example:
+
+```yml
+es:
+  routes:
+    controllers:
+      people:
+        products:
+          products: productos_favoritos
+```
+
+Routes will be translated as in:
+
+```
+people_products_es GET  /people/productos_favoritos(.:format)       people/products#index {:locale=>"es"}
 ```
 
 The gem will lookup translations under `controllers` scope first and then lookup translations under `routes` scope.

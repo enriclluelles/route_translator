@@ -19,12 +19,14 @@ class HostLocalesTest < ActionDispatch::IntegrationTest
     # root of es com
     host! 'www.testapp.es'
     get '/'
+
     assert_equal 'es', @response.body
     assert_response :success
 
     # root of ru com
     host! 'ru.testapp.com'
     get '/'
+
     assert_equal 'ru', @response.body
     assert_response :success
   end
@@ -33,12 +35,14 @@ class HostLocalesTest < ActionDispatch::IntegrationTest
     # native es route on es com
     host! 'www.testapp.es'
     get '/dummy'
+
     assert_equal 'es', @response.body
     assert_response :success
 
     # native ru route on ru com
     host! 'ru.testapp.com'
-    get Addressable::URI.normalize_component('/манекен')
+    get URI::DEFAULT_PARSER.escape('/манекен')
+
     assert_equal 'ru', @response.body
     assert_response :success
   end
@@ -47,13 +51,15 @@ class HostLocalesTest < ActionDispatch::IntegrationTest
     # native es route on es com
     host! 'www.testapp.es'
     get '/native'
+
     assert_equal '/mostrar', @response.body
     assert_response :success
 
     # native ru route on ru com
     host! 'ru.testapp.com'
     get '/native'
-    assert_equal Addressable::URI.normalize_component('/показывать'), @response.body
+
+    assert_equal URI::DEFAULT_PARSER.escape('/показывать'), @response.body
     assert_response :success
   end
 
@@ -68,33 +74,39 @@ class HostLocalesTest < ActionDispatch::IntegrationTest
     # prefixed es route on es com
     host! 'www.testapp.es'
     get '/es/native'
+
     assert_response :not_found
 
     # prefixed ru route on ru com
     host! 'ru.testapp.com'
     get '/ru/native'
+
     assert_response :not_found
   end
 
   def test_non_native_path
     # ru route on es com
     host! 'www.testapp.es'
-    get Addressable::URI.normalize_component('/ru/манекен')
+    get URI::DEFAULT_PARSER.escape('/ru/манекен')
+
     assert_response :not_found
 
     # es route on ru com
     host! 'ru.testapp.com'
     get '/es/dummy'
+
     assert_response :not_found
 
     # unprefixed es route on ru com
     host! 'ru.testapp.com'
     get '/dummy'
+
     assert_response :not_found
 
     # unprefixed ru route on es com
     host! 'www.testapp.es'
-    get Addressable::URI.normalize_component('/манекен')
+    get URI::DEFAULT_PARSER.escape('/манекен')
+
     assert_response :not_found
   end
 end

@@ -91,6 +91,7 @@ class TranslateRoutesTest < ActionController::TestCase
         get 'products/:tr_param', to: 'products#index', constraints: { tr_param: /\w/ }
       end
     end
+
     assert_routing '/es/productos/a', controller: 'products', action: 'index', locale: 'es', tr_param: 'a'
   end
 
@@ -121,6 +122,7 @@ class TranslateRoutesTest < ActionController::TestCase
         get 'products/*tr_param', to: 'products#index'
       end
     end
+
     assert_routing '/es/productos/a/b', controller: 'products', action: 'index', locale: 'es', tr_param: 'a/b'
   end
 
@@ -139,6 +141,23 @@ class TranslateRoutesTest < ActionController::TestCase
     assert_routing({ path: '/productos/1', method: 'PUT' }, controller: 'products', action: 'update', id: '1', locale: 'es')
   end
 
+  def test_namespaced_resources
+    I18n.default_locale = :es
+
+    draw_routes do
+      localized do
+        resources :products
+
+        namespace :people do
+          resources :products
+        end
+      end
+    end
+
+    assert_routing '/productos', controller: 'products', action: 'index', locale: 'es'
+    assert_routing '/gente/productos_favoritos', controller: 'people/products', action: 'index', locale: 'es'
+  end
+
   def test_utf8_characters
     draw_routes do
       localized do
@@ -146,7 +165,7 @@ class TranslateRoutesTest < ActionController::TestCase
       end
     end
 
-    assert_routing Addressable::URI.normalize_component('/ru/люди'), controller: 'people', action: 'index', locale: 'ru'
+    assert_routing URI::DEFAULT_PARSER.escape('/ru/люди'), controller: 'people', action: 'index', locale: 'ru'
   end
 
   def test_resources_with_only
@@ -176,8 +195,8 @@ class TranslateRoutesTest < ActionController::TestCase
 
     assert_routing '/gente/fans', controller: 'people/products', action: 'favourites', locale: 'es'
     assert_routing '/favoritos', controller: 'products', action: 'favourites', locale: 'es'
-    assert_routing Addressable::URI.normalize_component('/ru/люди/кандидаты'), controller: 'people/products', action: 'favourites', locale: 'ru'
-    assert_routing Addressable::URI.normalize_component('/ru/избранное'), controller: 'products', action: 'favourites', locale: 'ru'
+    assert_routing URI::DEFAULT_PARSER.escape('/ru/люди/кандидаты'), controller: 'people/products', action: 'favourites', locale: 'ru'
+    assert_routing URI::DEFAULT_PARSER.escape('/ru/избранное'), controller: 'products', action: 'favourites', locale: 'ru'
   end
 
   def test_unnamed_root_route_without_prefix
@@ -639,7 +658,7 @@ class TranslateRoutesTest < ActionController::TestCase
       end
     end
 
-    assert_routing Addressable::URI.normalize_component('/ru/люди'), controller: 'people', action: 'index', locale: 'ru'
+    assert_routing URI::DEFAULT_PARSER.escape('/ru/люди'), controller: 'people', action: 'index', locale: 'ru'
     assert_routing '/people', controller: 'people', action: 'index', locale: 'en'
     assert_unrecognized_route '/es/gente', controller: 'people', action: 'index', locale: 'es'
   end
@@ -653,7 +672,7 @@ class TranslateRoutesTest < ActionController::TestCase
       end
     end
 
-    assert_routing Addressable::URI.normalize_component('/ru/люди'), controller: 'people', action: 'index', locale: 'ru'
+    assert_routing URI::DEFAULT_PARSER.escape('/ru/люди'), controller: 'people', action: 'index', locale: 'ru'
     assert_routing '/people', controller: 'people', action: 'index', locale: 'en'
     assert_unrecognized_route '/es/gente', controller: 'people', action: 'index', locale: 'es'
   end

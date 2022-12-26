@@ -60,9 +60,11 @@ class TestHostsFromLocale < Minitest::Test
 
   def test_precedence_if_more_than_one_match
     config_host_locales 'russia.*' => :ru, '*.com' => :en
+
     assert_equal :ru, RouteTranslator::Host.locale_from_host('russia.com')
 
     config_host_locales '*.com' => :en, 'russia.*' => :ru
+
     assert_equal :en, RouteTranslator::Host.locale_from_host('russia.com')
   end
 

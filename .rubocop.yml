@@ -6,6 +6,7 @@ require:
 
 AllCops:
   TargetRailsVersion: 5.2
+  TargetRubyVersion: 2.6
   NewCops: enable
   Exclude:
     - 'gemfiles/**/*'
@@ -50,6 +51,13 @@ Metrics/PerceivedComplexity:
 
 Minitest/MultipleAssertions:
   Enabled: false
+
+Rails/ActionControllerTestCase:
+  Enabled: false
+
+Rails/Delegate:
+  Exclude:
+    - lib/route_translator.rb
 
 Rails/HttpPositionalArguments:
   Exclude:

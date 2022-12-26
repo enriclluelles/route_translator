@@ -24,17 +24,16 @@ Gem::Specification.new do |spec|
   spec.files         = `git ls-files -z -- {CHANGELOG.md,LICENSE,README.md,lib}`.split("\x0")
   spec.require_paths = ['lib']
 
-  spec.required_ruby_version = '>= 2.5'
+  spec.required_ruby_version = '>= 2.6'
 
   spec.add_runtime_dependency 'actionpack', '>= 5.2', '< 7.1'
   spec.add_runtime_dependency 'activesupport', '>= 5.2', '< 7.1'
-  spec.add_runtime_dependency 'addressable', '~> 2.7'
 
   spec.add_development_dependency 'appraisal', '~> 2.4'
-  spec.add_development_dependency 'byebug', '>= 10.0', '< 12'
-  spec.add_development_dependency 'minitest', '~> 5.15'
+  spec.add_development_dependency 'byebug', '~> 11.1'
+  spec.add_development_dependency 'minitest', '~> 5.16'
   spec.add_development_dependency 'rails', '>= 5.2', '< 7.1'
   spec.add_development_dependency 'rake', '~> 13.0'
-  spec.add_development_dependency 'simplecov', '>= 0.18.5', '< 0.22'
+  spec.add_development_dependency 'simplecov', '~> 0.22.0'
   spec.add_development_dependency 'simplecov-lcov', '~> 0.8.0'
 end

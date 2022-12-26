@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'active_support'
-require 'addressable/uri'
 
 require 'route_translator/extensions'
 require 'route_translator/translator'
