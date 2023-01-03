@@ -4,7 +4,7 @@ source 'https://rubygems.org'
 
 gemspec
 
-gem 'rubocop', '~> 1.41'
+gem 'rubocop', '~> 1.42'
 gem 'rubocop-minitest', '~> 0.25.1'
 gem 'rubocop-performance', '~> 1.15'
 gem 'rubocop-rails', '~> 2.17'
