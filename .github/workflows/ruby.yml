@@ -6,6 +6,9 @@ on:
   pull_request:
     branches: [ master, develop ]
 
+permissions:
+  contents: read
+
 jobs:
   test:
     name: Tests
@@ -69,6 +72,7 @@ jobs:
       with:
         ruby-version: ${{ matrix.ruby-version }}
         bundler-cache: true
+        rubygems: latest
     - name: Run tests
       run: bundle exec rake test
     - name: Coveralls Parallel
