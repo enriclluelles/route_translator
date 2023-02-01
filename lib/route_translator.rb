@@ -20,7 +20,8 @@ module RouteTranslator
     hide_locale:                         false,
     host_locales:                        {},
     locale_param_key:                    :locale,
-    locale_segment_proc:                 false
+    locale_segment_proc:                 false,
+    generate_raw_named_localized_route:  false
   }.freeze
 
   Configuration = Struct.new(*DEFAULT_CONFIGURATION.keys)
@@ -33,6 +34,7 @@ module RouteTranslator
       @config.generate_unlocalized_routes         = false
       @config.generate_unnamed_unlocalized_routes = false
       @config.hide_locale                         = true
+      @config.generate_raw_named_localized_route  = false
     end
   end
 
@@ -75,5 +77,11 @@ module RouteTranslator
   def locale_from_params(params)
     locale = params[config.locale_param_key]&.to_sym
     locale if I18n.available_locales.include?(locale)
+  end
+
+  def generate_raw_named_localized_route
+    return if config.available_locales.many?
+
+    config.generate_raw_named_localized_route
   end
 end

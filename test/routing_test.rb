@@ -715,6 +715,34 @@ class TranslateRoutesTest < ActionController::TestCase
 
     assert_not_respond_to @routes.url_helpers, :products_ru_path
   end
+
+  def test_generate_raw_named_localized_route_does_draw_raw_localized_routes
+    config_available_locales([:en])
+    config_generate_raw_named_localized_route(true)
+
+    draw_routes do
+      localized do
+        resources :products
+      end
+    end
+
+    assert_not_respond_to @routes.url_helpers, :products_en_path
+    assert_respond_to @routes.url_helpers, :products_path
+  end
+
+  def test_generate_raw_named_localized_route_does_not_draw_raw_localized_routes_for_many_available_locales
+    config_available_locales([:en, :es])
+    config_generate_raw_named_localized_route(true)
+
+    draw_routes do
+      localized do
+        resources :products
+      end
+    end
+
+    assert_respond_to @routes.url_helpers, :products_en_path
+    assert_respond_to @routes.url_helpers, :products_es_path
+  end
 end
 
 class ProductsControllerTest < ActionController::TestCase

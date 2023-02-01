@@ -69,7 +69,11 @@ module RouteTranslator
         translated_path = translate_path(route.path, locale, route.scope)
         next unless translated_path
 
-        translated_name                = translate_name(route.name, locale, route.route_set.named_routes.names)
+        translated_name                = if RouteTranslator.generate_raw_named_localized_route
+                                           route.name
+                                         else
+                                           translate_name(route.name, locale, route.route_set.named_routes.names)
+                                         end
         translated_options_constraints = translate_options_constraints(route.options_constraints, locale)
         translated_options             = translate_options(route.options, locale)
 
