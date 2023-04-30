@@ -8,6 +8,8 @@ AllCops:
   TargetRailsVersion: 5.2
   TargetRubyVersion: 2.6
   NewCops: enable
+  DisplayStyleGuide: true
+  ExtraDetails: true
   Exclude:
     - 'gemfiles/**/*'
     - 'vendor/bundle/**/*'
