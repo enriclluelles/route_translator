@@ -61,10 +61,6 @@ Rails/Delegate:
   Exclude:
     - lib/route_translator.rb
 
-Rails/HttpPositionalArguments:
-  Exclude:
-    - 'test/**/*'
-
 Rails/I18nLocaleAssignment:
   Exclude:
     - 'test/support/i18n_helper.rb'
