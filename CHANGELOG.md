@@ -1,5 +1,11 @@
 # Changelog
 
+## 13.1.1 / 2023-07-01
+
+* [ENHANCEMENT] Better integration with ActionController::TestCase
+* [ENHANCEMENT] Remove Rails 5.1 code
+* [ENHANCEMENT] Update development dependencies
+
 ## 13.1.0 / 2022-12-26
 
 * [ENHANCEMENT] Test against Ruby 3.1 and Ruby 3.2
