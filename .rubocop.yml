@@ -8,6 +8,8 @@ AllCops:
   TargetRailsVersion: 5.2
   TargetRubyVersion: 2.6
   NewCops: enable
+  DisplayStyleGuide: true
+  ExtraDetails: true
   Exclude:
     - 'gemfiles/**/*'
     - 'vendor/bundle/**/*'
@@ -58,10 +60,6 @@ Rails/ActionControllerTestCase:
 Rails/Delegate:
   Exclude:
     - lib/route_translator.rb
-
-Rails/HttpPositionalArguments:
-  Exclude:
-    - 'test/**/*'
 
 Rails/I18nLocaleAssignment:
   Exclude:

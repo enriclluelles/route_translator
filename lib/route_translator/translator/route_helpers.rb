@@ -3,17 +3,9 @@
 module RouteTranslator
   module Translator
     module RouteHelpers
-      class << self
-        private
-
-        def add_helpers_to_test_cases(helper_container)
-          %w[ActionController ActionMailer ActionView].each do |klass_name|
-            next unless Module.const_defined?(klass_name)
-
-            klass_name.constantize::TestCase.__send__(:include, helper_container)
-          end
-        end
-      end
+      TEST_CASE_HOOKS = %i[
+        action_controller_test_case action_mailer_test_case action_view_test_case
+      ].freeze
 
       module_function
 
@@ -27,15 +19,19 @@ module RouteTranslator
 
         %w[path url].each do |suffix|
           helper_container = named_route_collection.send(:"#{suffix}_helpers_module")
-          new_helper_name = "#{old_name}_#{suffix}"
+          new_helper_name = :"#{old_name}_#{suffix}"
 
-          helper_list.push(new_helper_name.to_sym) unless helper_list.include?(new_helper_name.to_sym)
+          helper_list.push(new_helper_name) unless helper_list.include?(new_helper_name)
 
           helper_container.__send__(:define_method, new_helper_name) do |*args|
             __send__(Translator.route_name_for(args, old_name, suffix, self), *args)
           end
 
-          add_helpers_to_test_cases(helper_container) if ENV.fetch('RAILS_ENV', nil) == 'test'
+          TEST_CASE_HOOKS.each do |test_case_hook|
+            ActiveSupport.on_load(test_case_hook) do
+              include helper_container
+            end
+          end
         end
       end
     end
