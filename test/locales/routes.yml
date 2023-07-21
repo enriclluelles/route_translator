@@ -12,7 +12,9 @@ es:
         products:
           products: productos_favoritos
           favourites: fans
-
+      people/products:
+        products: productos_new_favoritos
+        favourites: fans
 ru:
   routes:
     people: люди

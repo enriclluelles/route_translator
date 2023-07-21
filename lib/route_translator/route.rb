@@ -16,7 +16,11 @@ module RouteTranslator
     def scope
       @scope ||=
         if mapping.defaults[:controller]
-          %i[routes controllers].concat mapping.defaults[:controller].split('/').map(&:to_sym)
+          if RouteTranslator.config.i18n_use_controller_path
+            %i[routes controllers].push mapping.defaults[:controller]
+          else
+            %i[routes controllers].concat mapping.defaults[:controller].split('/').map(&:to_sym)
+          end
         else
           %i[routes controllers]
         end

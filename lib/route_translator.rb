@@ -20,7 +20,8 @@ module RouteTranslator
     hide_locale:                         false,
     host_locales:                        {},
     locale_param_key:                    :locale,
-    locale_segment_proc:                 false
+    locale_segment_proc:                 false,
+    i18n_use_controller_path:            false
   }.freeze
 
   Configuration = Struct.new(*DEFAULT_CONFIGURATION.keys)

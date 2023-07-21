@@ -158,6 +158,25 @@ class TranslateRoutesTest < ActionController::TestCase
     assert_routing '/gente/productos_favoritos', controller: 'people/products', action: 'index', locale: 'es'
   end
 
+  def test_controller_namespaced_resources
+    config_i18n_use_controller_path(true)
+    I18n.default_locale = :es
+
+    draw_routes do
+      localized do
+        resources :products
+
+        namespace :people do
+          resources :products
+        end
+      end
+    end
+
+    assert_routing '/productos', controller: 'products', action: 'index', locale: 'es'
+    assert_routing '/gente/productos_new_favoritos', controller: 'people/products', action: 'index', locale: 'es'
+    assert_unrecognized_route '/gente/productos_favoritos', controller: 'people/products', action: 'index', locale: 'es'
+  end
+
   def test_utf8_characters
     draw_routes do
       localized do
