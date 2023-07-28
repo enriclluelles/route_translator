@@ -5,6 +5,7 @@ require 'active_support'
 require 'route_translator/extensions'
 require 'route_translator/translator'
 require 'route_translator/host'
+require 'route_translator/version'
 
 module RouteTranslator
   extend RouteTranslator::Host
@@ -39,7 +40,7 @@ module RouteTranslator
     def check_deprecations
       return if @config.i18n_use_slash_separator
 
-      ActiveSupport::Deprecation.warn <<~MSG
+      deprecator.warn <<~MSG
         `i18n_use_slash_separator` set to `false` is deprecated and will be
         removed in the next major release of Route Translator to match
         Rails' ActiveRecord nested model syntax.
@@ -89,5 +90,9 @@ module RouteTranslator
   def locale_from_params(params)
     locale = params[config.locale_param_key]&.to_sym
     locale if I18n.available_locales.include?(locale)
+  end
+
+  def deprecator
+    @deprecator ||= ActiveSupport::Deprecation.new(RouteTranslator::VERSION, 'RouteTranslator')
   end
 end
