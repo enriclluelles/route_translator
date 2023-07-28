@@ -20,7 +20,8 @@ module RouteTranslator
     hide_locale:                         false,
     host_locales:                        {},
     locale_param_key:                    :locale,
-    locale_segment_proc:                 false
+    locale_segment_proc:                 false,
+    i18n_use_slash_separator:            false
   }.freeze
 
   Configuration = Struct.new(*DEFAULT_CONFIGURATION.keys)
@@ -33,6 +34,18 @@ module RouteTranslator
       @config.generate_unlocalized_routes         = false
       @config.generate_unnamed_unlocalized_routes = false
       @config.hide_locale                         = true
+    end
+
+    def check_deprecations
+      return if @config.i18n_use_slash_separator
+
+      ActiveSupport::Deprecation.warn <<~MSG
+        `i18n_use_slash_separator` set to `false` is deprecated and will be
+        removed in the next major release of Route Translator to match
+        Rails' ActiveRecord nested model syntax.
+
+        More information at https://github.com/enriclluelles/route_translator/pull/285
+      MSG
     end
   end
 
@@ -48,6 +61,7 @@ module RouteTranslator
     yield @config if block_given?
 
     resolve_host_locale_config_conflicts if @config.host_locales.present?
+    check_deprecations
 
     @config
   end
