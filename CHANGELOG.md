@@ -1,5 +1,10 @@
 # Changelog
 
+## 13.2.0 / 2023-07-28
+
+* [FEATURE] Add option for standard nested separator ([#285](https://github.com/enriclluelles/route_translator/pull/285))
+* [ENHANCEMENT] Update development dependencies
+
 ## 13.1.1 / 2023-07-01
 
 * [ENHANCEMENT] Better integration with ActionController::TestCase
