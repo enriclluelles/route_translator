@@ -2,7 +2,7 @@
 
 require 'test_helper'
 
-class TestCaseHelpersTest < MiniTest::Test
+class TestCaseHelpersTest < Minitest::Test
   include RouteTranslator::ConfigurationHelper
   include RouteTranslator::RoutesHelper
 

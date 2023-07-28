@@ -6,7 +6,7 @@ gemspec
 
 gem 'appraisal', '~> 2.4'
 gem 'byebug', '~> 11.1'
-gem 'minitest', '~> 5.18'
+gem 'minitest', '~> 5.19'
 gem 'rails', '>= 5.2', '< 7.1'
 gem 'rake', '~> 13.0'
 gem 'rubocop', '~> 1.50'
