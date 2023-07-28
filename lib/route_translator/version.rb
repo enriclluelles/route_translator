@@ -1,5 +1,5 @@
 # frozen_string_literal: true
 
 module RouteTranslator
-  VERSION = '13.1.1'
+  VERSION = '13.2.0'
 end
