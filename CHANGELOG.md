@@ -1,5 +1,9 @@
 # Changelog
 
+## 13.2.1 / 2023-07-28
+
+* [BUGFIX] Fix deprecation on Rails Edge
+
 ## 13.2.0 / 2023-07-28
 
 * [FEATURE] Add option for standard nested separator ([#285](https://github.com/enriclluelles/route_translator/pull/285))
