@@ -159,7 +159,7 @@ class TranslateRoutesTest < ActionController::TestCase
   end
 
   def test_controller_namespaced_resources
-    config_i18n_use_controller_path(true)
+    config_i18n_use_slash_separator(true)
     I18n.default_locale = :es
 
     draw_routes do
