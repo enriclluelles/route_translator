@@ -6,11 +6,13 @@ class I18nSlashSeparatorTest < ActionDispatch::IntegrationTest
   include RouteTranslator::ConfigurationHelper
 
   def teardown
+    RouteTranslator.deprecator.silenced = true
     teardown_config
   end
 
   def test_deprecation_when_default
     assert_deprecated('i18n_use_slash_separator', RouteTranslator.deprecator) do
+      RouteTranslator.deprecator.silenced = false
       RouteTranslator.config
     end
   end
@@ -19,6 +21,7 @@ class I18nSlashSeparatorTest < ActionDispatch::IntegrationTest
     config_i18n_use_slash_separator false
 
     assert_deprecated('i18n_use_slash_separator', RouteTranslator.deprecator) do
+      RouteTranslator.deprecator.silenced = false
       RouteTranslator.config
     end
   end

@@ -33,6 +33,8 @@ require 'route_translator'
 
 require 'byebug'
 
+RouteTranslator.deprecator.silenced = true
+
 module ActionDispatch
   class TestRequest < Request
     def initialize(env = {})
