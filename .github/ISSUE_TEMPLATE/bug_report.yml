@@ -1,0 +1,159 @@
+name: Bug report
+description: Report a bug
+title: "Bug: "
+labels: ["bug", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for taking the time to report a bug in Route Translator. We appreciate your help in improving the software.
+
+        To help us understand and fix the issue, please provide as much information as possible. A reduced, reproducible test case would be especially helpful.
+
+        Please fill out the form below with as much detail as possible. Thank you again for your help.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Bug description
+      description: Please describe the bug you encountered. What happened? What did you see? How did you arrive at the issue?
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps-to-reproduce
+    attributes:
+      label: Steps to reproduce
+      description: Please provide a numbered list of steps to reproduce the issue.
+      placeholder: |
+        1. Clone the repository hosted at `example.org/user/route-translator-test-case`
+        2. Launch `rails s`
+        3. Open `http://localhost:3000`
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected-behavior
+    attributes:
+      label: Expected behavior
+      description: Please describe what you expected to happen.
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual-behavior
+    attributes:
+      label: Actual behavior
+      description: Please describe what actually happened instead.
+    validations:
+      required: true
+
+  - type: input
+    id: reproducible-test-case
+    attributes:
+      label: Reproducible reduced test case
+      description: If possible, please provide a URL to a reproducible reduced test case. Please use the minimum amount of dependencies and services possible. Host your source code on platforms like GitHub, GitLab, or Bitbucket.
+
+  - type: input
+    id: ruby-version
+    attributes:
+      label: Ruby version
+    validations:
+      required: true
+
+  - type: input
+    id: rails-version
+    attributes:
+      label: Ruby on Rails version
+    validations:
+      required: true
+
+  - type: input
+    id: route-translator-version
+    attributes:
+      label: Route Translator version
+    validations:
+      required: true
+
+  - type: textarea
+    id: i18n-configuration
+    attributes:
+      label: I18n configuration
+      description: Please provide the I18n configuration taken from `config/application.rb` and any environment-specific overrides.
+      placeholder: |
+        ```rb
+        config.i18n.default_locale = :en
+        config.i18n.available_locales = %i[en it]
+        ```
+    validations:
+      required: true
+
+  - type: textarea
+    id: route-translator-configuration
+    attributes:
+      label: Route Translator configuration
+      description: Please provide any relevant content of `config/initializers/route_translator.rb` or any changes made to the default Route Translator configuration.
+      placeholder: |
+        ```rb
+        RouteTranslator.config do |config|
+          config.disable_fallback = true
+        end
+        ```
+
+  - type: textarea
+    id: rails-routes-source
+    attributes:
+      label: Rails routes source
+      description: Please provide any relevant content of `config/routes.rb`.
+      placeholder: |
+        ```rb
+        Rails.application.routes.draw do
+          resources :users
+
+          localized do
+            resources :posts
+          end
+        end
+        ```
+    validations:
+      required: true
+
+  - type: textarea
+    id: rails-locales
+    attributes:
+      label: Rails locales
+      description: Please provide any relevant content of `config/locales/*.yml`.
+      placeholder: |
+        ```yml
+        it:
+          routes:
+            posts: Articoli
+        ```
+    validations:
+      required: true
+
+  - type: textarea
+    id: rails-routes-output
+    attributes:
+      label: Rails routes
+      description: Please provide any relevant output from `bundle exec rails routes`.
+      placeholder: |
+        ```
+           Prefix Verb   URI Pattern           Controller#Action
+            users GET    /users(.:format)      users#index
+                  POST   /users(.:format)      users#create
+         posts_it GET    /articoli(.:format)   posts#index {:locale=>"it"}
+         posts_en GET    /posts(.:format)      posts#index {:locale=>"en"}
+        ```
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: bug-report-checklist
+    attributes:
+      label: Bug report checklist
+      options:
+        - label: 'I have [searched for existing issues](https://github.com/enriclluelles/route_translator/issues) and to the best of my knowledge this is not a duplicate'
+          required: true
+        - label: 'I understand that debugging Route Translator is a time consuming task, and I have carefully provided all the information requested'
+          required: true
