@@ -54,7 +54,13 @@ Right now it works with Rails 5.2, 6.x, and 7.x
 
     And execute `bundle install`
 
-3.  Wrap the groups of routes that you want to translate inside a `localized` block:
+3.  Generate the default initializer:
+
+    ```sh
+    bundle exec rails g route_translator:install
+    ```
+
+4.  Wrap the groups of routes that you want to translate inside a `localized` block:
 
     ```ruby
     Rails.application.routes.draw do
@@ -85,7 +91,7 @@ Right now it works with Rails 5.2, 6.x, and 7.x
         pricing: prix
     ```
 
-4.  Your routes are translated! Here's the output of your `rake routes` now:
+5.  Your routes are translated! Here's the output of your `rake routes` now:
 
     ```
             Prefix Verb   URI Pattern                     Controller#Action
@@ -133,7 +139,7 @@ Right now it works with Rails 5.2, 6.x, and 7.x
 
     In :production environment, you should either set `config.i18n.fallbacks = false` or set up translations for your routes in every languages.
 
-5.  If you want to set `I18n.locale` from the url parameter locale, add
+6.  If you want to set `I18n.locale` from the url parameter locale, add
     the following line in your `ApplicationController` or in the controllers
     that have translated content:
 
@@ -271,13 +277,13 @@ end
 
 | Option | Description | Default |
 | ------ | ----------- |-------- |
-| `available_locales` | Limits the locales for which URLs should be generated for. Accepts an array of strings or symbols. When empty, translations will be generated for all `I18n.available_locales` | `[]` |
-| `disable_fallback` | Creates routes only for locales that have translations. For example, if we have `/examples` and a translation is not provided for `es`, the route helper of `examples_es` will not be created. Useful when one uses this with a locale route constraint, so non-`es` routes can return a `404` on a Spanish website | `false` |
-| `force_locale` |  Forces the locale to be added to all generated route paths, even for the default locale |  `false` |
-| `generate_unlocalized_routes` | Adds translated routes without deleting original unlocalized versions. **Note:** Autosets `force_locale` to `true` | `false` |
-| `generate_unnamed_unlocalized_routes` | Adds the behavior of `force_locale`, but with a named default route which behaves as if `generate_unlocalized_routes` was `true`. `root_path` will redirect to `/en` or `/es`, depending on the value of `I18n.locale` | `false` |
-| `hide_locale` | Forces the locale to be hidden on generated route paths | `false` |
-| `host_locales` | Sets `I18n.locale` based on `request.host`. Useful for apps accepting requests from more than one domain. See below for more details | `{}` |
+| `available_locales` | Limit the locales for which URLs should be generated for. Accepts an array of strings or symbols. When empty, translations will be generated for all `I18n.available_locales` | `[]` |
+| `disable_fallback` | Create routes only for locales that have translations. For example, if we have `/examples` and a translation is not provided for `es`, the route helper of `examples_es` will not be created. Useful when one uses this with a locale route constraint, so non-`es` routes can return a `404` on a Spanish website | `false` |
+| `force_locale` |  Force the locale to be added to all generated route paths, even for the default locale |  `false` |
+| `generate_unlocalized_routes` | Add translated routes without deleting original unlocalized versions. **Note:** Autosets `force_locale` to `true` | `false` |
+| `generate_unnamed_unlocalized_routes` | Add the behavior of `force_locale`, but with a named default route which behaves as if `generate_unlocalized_routes` was `true`. `root_path` will redirect to `/en` or `/es`, depending on the value of `I18n.locale` | `false` |
+| `hide_locale` | Force the locale to be hidden on generated route paths | `false` |
+| `host_locales` | Set `I18n.locale` based on `request.host`. Useful for apps accepting requests from more than one domain. See below for more details | `{}` |
 | `locale_param_key` | The param key used to set the locale to the newly generated routes | `:locale` |
 | `locale_segment_proc` | The locale segment of the url will by default be `locale.to_s.downcase`. You can supply your own mechanism via a Proc that takes `locale` as an argument, e.g. `->(locale) { locale.to_s.upcase }` | `false` |
 | `i18n_use_slash_separator` | Use the exact controller path `account/foo` for looking up translations instead of nested keys `account.foo` | `false` |

@@ -17,7 +17,7 @@ SimpleCov.start 'rails' do
     formatter SimpleCov::Formatter::LcovFormatter
   end
 
-  add_filter %w[version.rb]
+  add_filter %w[version.rb lib/generators/route_translator/templates]
 end
 
 require 'minitest/autorun'
