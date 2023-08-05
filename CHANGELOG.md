@@ -1,5 +1,9 @@
 # Changelog
 
+## 13.3.0 / unreleased
+
+* [FEATURE] Add initializer generator
+
 ## 13.2.1 / 2023-07-28
 
 * [BUGFIX] Fix deprecation on Rails Edge
