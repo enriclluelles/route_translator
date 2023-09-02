@@ -24,8 +24,8 @@ Gem::Specification.new do |spec|
   spec.files         = Dir.glob('{CHANGELOG.md,LICENSE,README.md,lib/**/*.rb}', File::FNM_DOTMATCH)
   spec.require_paths = ['lib']
 
-  spec.required_ruby_version = '>= 2.6'
+  spec.required_ruby_version = '>= 2.7'
 
-  spec.add_runtime_dependency 'actionpack', '>= 5.2', '< 7.1'
-  spec.add_runtime_dependency 'activesupport', '>= 5.2', '< 7.1'
+  spec.add_runtime_dependency 'actionpack', '>= 6.1', '< 7.1'
+  spec.add_runtime_dependency 'activesupport', '>= 6.1', '< 7.1'
 end

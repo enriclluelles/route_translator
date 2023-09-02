@@ -20,9 +20,8 @@ ru:
     people: люди
     favourites: избранное
     controllers:
-      people:
-        products:
-          favourites: кандидаты
+      people/products:
+        favourites: кандидаты
 
 de-AT:
   routes:

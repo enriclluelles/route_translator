@@ -9,7 +9,7 @@ RouteTranslator is a gem to allow you to manage the translations of your app rou
 
 It started as a fork of the awesome [translate_routes](https://github.com/raul/translate_routes) plugin by [Raúl Murciano](https://github.com/raul).
 
-Right now it works with Rails 5.2, 6.x, and 7.x
+Right now it works with Rails 6.1 and 7.x
 
 
 
@@ -286,13 +286,6 @@ end
 | `host_locales` | Set `I18n.locale` based on `request.host`. Useful for apps accepting requests from more than one domain. See below for more details | `{}` |
 | `locale_param_key` | The param key used to set the locale to the newly generated routes | `:locale` |
 | `locale_segment_proc` | The locale segment of the url will by default be `locale.to_s.downcase`. You can supply your own mechanism via a Proc that takes `locale` as an argument, e.g. `->(locale) { locale.to_s.upcase }` | `false` |
-| `i18n_use_slash_separator` | Use the exact controller path `account/foo` for looking up translations instead of nested keys `account.foo` | `false` |
-
-#### Deprecated options
-
-- `i18n_use_slash_separator` is deprecated and will be forced to `true` in the next major release of Route Translator. This only
-  affects application with nested routes. Please set this option to `true` to remove the deprecation message and ensure
-  to convert nested routes like `people.products` to the new `people/products`.
 
 ### Host-based Locale
 
@@ -354,9 +347,8 @@ es:
   routes:
     favourites: favoritos
     controllers:
-      people:
-        products:
-          favourites: fans
+      people/products:
+        favourites: fans
 ```
 
 Routes will be translated as in:
@@ -368,13 +360,18 @@ people_products_favourites_es GET  /people/products/fans(.:format)       people/
 
 It is also possible to translated resources scoped into a namespace. Example:
 
+```ruby
+namespace :people do
+  resources :products, only: :index
+end
+```
+
 ```yml
 es:
   routes:
     controllers:
-      people:
-        products:
-          products: productos_favoritos
+      people/products:
+        products: productos_favoritos
 ```
 
 Routes will be translated as in:

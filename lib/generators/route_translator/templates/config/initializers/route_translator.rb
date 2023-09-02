@@ -41,10 +41,4 @@ RouteTranslator.config do |config|
   # You can supply your own mechanism via a Proc that takes `locale`
   # as an argument, e.g. `->(locale) { locale.to_s.upcase }`
   # config.locale_segment_proc = false
-
-  # Use the exact controller path `account/foo` for looking up translations
-  # instead of nested keys `account.foo`
-  # @deprecated Will default to `true` and be removed to ensure uniformity
-  # with Rails' nested model translations
-  # config.i18n_use_slash_separator = false
 end
