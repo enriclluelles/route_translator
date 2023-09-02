@@ -1,8 +1,11 @@
 # Changelog
 
-## 13.3.0 / unreleased
+## 14.0.0 / unreleased
 
+* [FEATURE] Drop Ruby 2.6 compatibility
+* [FEATURE] Drop Rails < 6.1 compatibility
 * [FEATURE] Add initializer generator
+* [ENHANCEMENT] Update development dependencies
 
 ## 13.2.1 / 2023-07-28
 
