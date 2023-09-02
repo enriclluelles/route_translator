@@ -1,6 +1,6 @@
 # Changelog
 
-## 14.0.0 / unreleased
+## 14.0.0 / 2023-09-02
 
 * [FEATURE] BREAKING CHANGE: Force standard nested separator (Upgrade guide at [#285](https://github.com/enriclluelles/route_translator/pull/285))
 * [FEATURE] Drop Ruby 2.6 compatibility
