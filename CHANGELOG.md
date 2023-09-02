@@ -2,6 +2,7 @@
 
 ## 14.0.0 / unreleased
 
+* [FEATURE] BREAKING CHANGE: Force standard nested separator (Upgrade guide at [#285](https://github.com/enriclluelles/route_translator/pull/285))
 * [FEATURE] Drop Ruby 2.6 compatibility
 * [FEATURE] Drop Rails < 6.1 compatibility
 * [FEATURE] Add initializer generator
