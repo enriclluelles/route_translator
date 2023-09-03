@@ -85,5 +85,3 @@ module RouteTranslator
     @deprecator ||= ActiveSupport::Deprecation.new(RouteTranslator::VERSION, 'RouteTranslator')
   end
 end
-
-require 'route_translator/railtie' if defined?(Rails)
