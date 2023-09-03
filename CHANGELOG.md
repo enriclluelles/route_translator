@@ -1,5 +1,9 @@
 # Changelog
 
+## 14.0.1 / 2023-09-03
+
+* [BUGFIX] Fix eager load on booting ([#296](https://github.com/enriclluelles/route_translator/issues/296))
+
 ## 14.0.0 / 2023-09-02
 
 * [FEATURE] BREAKING CHANGE: Force standard nested separator (Upgrade guide at [#285](https://github.com/enriclluelles/route_translator/pull/285))
