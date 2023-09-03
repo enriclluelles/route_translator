@@ -11,8 +11,6 @@ It started as a fork of the awesome [translate_routes](https://github.com/raul/t
 
 Right now it works with Rails 6.1 and 7.x
 
-
-
 ## Quick Start
 
 1.  If you have this `routes.rb` file originally:
@@ -27,7 +25,7 @@ Right now it works with Rails 6.1 and 7.x
     end
     ```
 
-    The output of `rake routes.rb` would be:
+    The output of `bundle exec rails routes` would be:
 
     ```
         admin_cars GET    /admin/cars(.:format)          admin/cars#index
@@ -91,7 +89,7 @@ Right now it works with Rails 6.1 and 7.x
         pricing: prix
     ```
 
-5.  Your routes are translated! Here's the output of your `rake routes` now:
+5.  Your routes are translated! Here's the output of your `bundle exec rails routes` now:
 
     ```
             Prefix Verb   URI Pattern                     Controller#Action
@@ -149,7 +147,6 @@ Right now it works with Rails 6.1 and 7.x
 
     Note: you might be tempted to use `before_action` instead of `around_action`: just don't. That could lead to [thread-related issues](https://github.com/enriclluelles/route_translator/issues/44).
 
-
 ### Changing the Language
 
 To change the language and reload the appropriate route while staying on the same page, use the following code snippet:
@@ -163,7 +160,6 @@ Although locales are stored by Rails as a symbol (`:es`), when linking to a page
 If the page contains a localized slug, the above snippet does not work and a custom implementation is neede.
 
 More information at [Generating translated URLs](https://github.com/enriclluelles/route_translator/wiki/Generating-translated-URLs)
-
 
 ### Namespaces
 
@@ -204,7 +200,7 @@ You can translate a namespace route by either its `name` or `path` option:
         sold: vendues
     ```
 
-4.  Your namespaces are translated! Here's the output of your `rake routes` now:
+4.  Your namespaces are translated! Here's the output of your `bundle exec rails routes` now:
 
     ```
                Prefix Verb URI Pattern                           Controller#Action
@@ -215,7 +211,6 @@ You can translate a namespace route by either its `name` or `path` option:
     sold_cars_cars_es GET  /es/vendidos/coches(.:format)         sold_cars/cars#index {:locale=>"es"}
     sold_cars_cars_en GET  /sold/cars(.:format)                  sold_cars/cars#index {:locale=>"en"}
     ```
-
 
 ### Inflections
 
@@ -259,8 +254,6 @@ edit_category_en GET    /categories/:id/edit(.:format)    categories#edit {:loca
                  DELETE /categories/:id(.:format)         categories#destroy {:locale=>"en"}
 ```
 
-
-
 ## Configuration
 
 You can configure RouteTranslator via an initializer or using the different environment config files.
@@ -271,7 +264,6 @@ RouteTranslator.config do |config|
   config.locale_param_key = :my_locale
 end
 ```
-
 
 ### Available Configurations
 
@@ -329,7 +321,6 @@ This is to avoid odd behaviour brought about by route conflicts and because `hos
 
 NOTE: locale from parameters has priority over the one from hosts.
 
-
 ### Translations for similar routes with different namespaces
 
 If you have routes that (partially) share names in one locale, but must be translated differently in another locale, for example:
@@ -382,7 +373,6 @@ people_products_es GET  /people/productos_favoritos(.:format)       people/produ
 
 The gem will lookup translations under `controllers` scope first and then lookup translations under `routes` scope.
 
-
 ### Change locale parameter position in the path
 
 If you need complex routing as `/:country/:locale/path/to/some/pages`, you can specify the position of your locale parameter in the following way:
@@ -394,8 +384,6 @@ scope ':country/:locale' do
   end
 end
 ```
-
-
 
 ## Testing
 Testing your controllers with routes-translator is easy, just add a locale parameter as `String` for your localized routes. Otherwise, an `ActionController::UrlGenerationError` will raise.
@@ -410,8 +398,6 @@ describe 'GET index' do
   end
 end
 ```
-
-
 
 ## Contributing
 
