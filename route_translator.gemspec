@@ -26,6 +26,6 @@ Gem::Specification.new do |spec|
 
   spec.required_ruby_version = '>= 2.7'
 
-  spec.add_runtime_dependency 'actionpack', '>= 6.1', '< 7.1'
-  spec.add_runtime_dependency 'activesupport', '>= 6.1', '< 7.1'
+  spec.add_runtime_dependency 'actionpack', '>= 6.1', '< 7.2'
+  spec.add_runtime_dependency 'activesupport', '>= 6.1', '< 7.2'
 end
