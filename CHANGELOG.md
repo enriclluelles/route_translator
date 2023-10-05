@@ -1,5 +1,9 @@
 # Changelog
 
+## 14.1.0 / 2023-10-05
+
+* [FEATURE] Rails 7.1 compatibility
+
 ## 14.0.1 / 2023-09-03
 
 * [BUGFIX] Fix eager load on booting ([#296](https://github.com/enriclluelles/route_translator/issues/296))
