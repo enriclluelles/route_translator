@@ -9,7 +9,7 @@ module RouteTranslator
       view = ActionView::Base.new(nil, {}, nil)
       helpers.each do |helper|
         SUFFIXES.each do |suffix|
-          [controller, view].each { |obj| assert_respond_to obj, "#{helper}_#{suffix}".to_sym }
+          [controller, view].each { |obj| assert_respond_to obj, :"#{helper}_#{suffix}" }
         end
       end
     end
