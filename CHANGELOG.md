@@ -1,5 +1,10 @@
 # Changelog
 
+## 14.1.1 / 2023-12-19
+
+* [BUGFIX] Fix memory leak in development mode ([#301](https://github.com/enriclluelles/route_translator/pull/301))
+* [ENHANCEMENT] Update development dependencies
+
 ## 14.1.0 / 2023-10-05
 
 * [FEATURE] Rails 7.1 compatibility
