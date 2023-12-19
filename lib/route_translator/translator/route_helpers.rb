@@ -27,6 +27,8 @@ module RouteTranslator
             __send__(Translator.route_name_for(args, old_name, suffix, self), *args)
           end
 
+          next unless ENV.fetch('RAILS_ENV', nil) == 'test'
+
           TEST_CASE_HOOKS.each do |test_case_hook|
             ActiveSupport.on_load(test_case_hook) do
               include helper_container
