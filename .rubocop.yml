@@ -66,6 +66,9 @@ Rails/I18nLocaleAssignment:
   Exclude:
     - 'test/support/i18n_helper.rb'
 
+Style/ArgumentsForwarding:
+  Enabled: false
+
 Style/Documentation:
   Enabled: false
 
