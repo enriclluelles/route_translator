@@ -315,6 +315,6 @@
 
 ## 4.2.0 / 2015-12-15
 
-* [ENHANCEMENT] Style update to match RuboCop recommandations
+* [ENHANCEMENT] Style update to match RuboCop recommendations
 * [BUGFIX] Permit named_params with suffix (#116)
 * [BUGFIX] Fix optional parameters with prefix (#118)
