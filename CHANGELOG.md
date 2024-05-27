@@ -1,5 +1,10 @@
 # Changelog
 
+## 14.1.2 / 2024-05-27
+
+* [ENHANCEMENT] Test against Ruby 3.3
+* [ENHANCEMENT] Allow Rails 8.0 (pre)
+
 ## 14.1.1 / 2023-12-19
 
 * [BUGFIX] Fix memory leak in development mode ([#301](https://github.com/enriclluelles/route_translator/pull/301))
