@@ -620,15 +620,7 @@ class TranslateRoutesTest < ActionController::TestCase
   end
 
   def test_action_controller_gets_locale_setter
-    ActionController::Base.instance_methods.include?('set_locale_from_url')
-  end
-
-  def test_action_controller_gets_locale_suffix_helper
-    ActionController::Base.instance_methods.include?('locale_suffix')
-  end
-
-  def test_action_view_gets_locale_suffix_helper
-    ActionView::Base.instance_methods.include?('locale_suffix')
+    assert_includes ActionController::Base.private_instance_methods, :set_locale_from_url
   end
 
   # See https://github.com/enriclluelles/route_translator/issues/69
