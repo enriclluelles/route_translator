@@ -2,10 +2,10 @@
 
 require 'active_support'
 
-require 'route_translator/extensions'
-require 'route_translator/translator'
-require 'route_translator/host'
-require 'route_translator/version'
+require_relative 'route_translator/extensions'
+require_relative 'route_translator/translator'
+require_relative 'route_translator/host'
+require_relative 'route_translator/version'
 
 module RouteTranslator
   extend RouteTranslator::Host

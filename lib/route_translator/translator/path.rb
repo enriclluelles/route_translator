@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'route_translator/translator/path/segment'
+require_relative 'path/segment'
 
 module RouteTranslator
   module Translator
