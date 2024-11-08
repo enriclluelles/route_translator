@@ -1,5 +1,9 @@
 # Changelog
 
+## 14.2.0 / 2024-11-08
+
+* [FEATURE] Rails 8.0 compatibility
+
 ## 14.1.2 / 2024-05-27
 
 * [ENHANCEMENT] Test against Ruby 3.3
