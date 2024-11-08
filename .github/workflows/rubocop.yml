@@ -19,7 +19,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        ruby-version: ['3.2']
+        ruby-version: ['3.3']
 
     steps:
     - uses: actions/checkout@v4
@@ -29,4 +29,4 @@ jobs:
         ruby-version: ${{ matrix.ruby-version }}
         bundler-cache: true
     - name: Ruby linter
-      run: bundle exec rubocop
+      run: bundle exec rubocop --format github

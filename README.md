@@ -9,7 +9,7 @@ RouteTranslator is a gem to allow you to manage the translations of your app rou
 
 It started as a fork of the awesome [translate_routes](https://github.com/raul/translate_routes) plugin by [Raúl Murciano](https://github.com/raul).
 
-Right now it works with Rails 6.1 and 7.x
+Right now it works with Rails 6.1, 7.x, and 8.0
 
 ## Quick Start
 
@@ -157,7 +157,7 @@ link_to url_for(locale: 'es'), hreflang: 'es', rel: 'alternate'
 
 Although locales are stored by Rails as a symbol (`:es`), when linking to a page in a different locale you need to use a string (`'es'`). Otherwise, instead of a namespaced route (`/es/my-route`) you will get a parameterized route (`/my-route?locale=es`).
 
-If the page contains a localized slug, the above snippet does not work and a custom implementation is neede.
+If the page contains a localized slug, the above snippet does not work and a custom implementation is needed.
 
 More information at [Generating translated URLs](https://github.com/enriclluelles/route_translator/wiki/Generating-translated-URLs)
 

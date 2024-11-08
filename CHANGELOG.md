@@ -1,5 +1,14 @@
 # Changelog
 
+## 14.2.0 / 2024-11-08
+
+* [FEATURE] Rails 8.0 compatibility
+
+## 14.1.2 / 2024-05-27
+
+* [ENHANCEMENT] Test against Ruby 3.3
+* [ENHANCEMENT] Allow Rails 8.0 (pre)
+
 ## 14.1.1 / 2023-12-19
 
 * [BUGFIX] Fix memory leak in development mode ([#301](https://github.com/enriclluelles/route_translator/pull/301))
@@ -315,6 +324,6 @@
 
 ## 4.2.0 / 2015-12-15
 
-* [ENHANCEMENT] Style update to match RuboCop recommandations
+* [ENHANCEMENT] Style update to match RuboCop recommendations
 * [BUGFIX] Permit named_params with suffix (#116)
 * [BUGFIX] Fix optional parameters with prefix (#118)

@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require 'route_translator/translator/route_helpers'
-require 'route_translator/translator/path'
-require 'route_translator/route'
+require_relative 'translator/route_helpers'
+require_relative 'translator/path'
+require_relative 'route'
 
 module RouteTranslator
   module Translator
