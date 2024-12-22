@@ -23,7 +23,7 @@ Layout/LineLength:
   Enabled: false
 
 Metrics/AbcSize:
-  Max: 23 # TODO: Lower to 15
+  Max: 20 # TODO: Lower to 17
   Exclude:
     - 'test/**/*'
 
@@ -37,7 +37,7 @@ Metrics/CyclomaticComplexity:
     - 'test/**/*'
 
 Metrics/MethodLength:
-  Max: 19
+  Max: 15
   Exclude:
     - 'test/**/*'
 
@@ -46,7 +46,7 @@ Metrics/ModuleLength:
     - 'test/**/*'
 
 Metrics/ParameterLists:
-  Max: 12
+  Max: 13
 
 Metrics/PerceivedComplexity:
   Exclude:
