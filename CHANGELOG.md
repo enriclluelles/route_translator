@@ -1,5 +1,9 @@
 # Changelog
 
+## 15.0.0 / unreleased
+
+* [FEATURE] Drop Ruby < 3.1 support
+
 ## 14.2.0 / 2024-11-08
 
 * [FEATURE] Rails 8.0 compatibility
