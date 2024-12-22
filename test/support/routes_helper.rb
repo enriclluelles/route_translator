@@ -2,8 +2,8 @@
 
 module RouteTranslator
   module RoutesHelper
-    def draw_routes(&block)
-      @routes.draw(&block)
+    def draw_routes(&)
+      @routes.draw(&)
       if @routes.respond_to?(:install_helpers)
         @routes.install_helpers
       else

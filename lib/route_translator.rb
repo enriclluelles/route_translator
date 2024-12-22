@@ -10,7 +10,7 @@ require_relative 'route_translator/version'
 module RouteTranslator
   extend RouteTranslator::Host
 
-  TRANSLATABLE_SEGMENT = /^([-_a-zA-Z0-9]+)(\()?/.freeze
+  TRANSLATABLE_SEGMENT = /^([-_a-zA-Z0-9]+)(\()?/
 
   DEFAULT_CONFIGURATION = {
     available_locales:                   [],
