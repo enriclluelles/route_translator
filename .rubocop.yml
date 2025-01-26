@@ -12,8 +12,10 @@ AllCops:
   DisplayStyleGuide: true
   ExtraDetails: true
   Exclude:
-    - 'gemfiles/**/*'
-    - 'vendor/bundle/**/*'
+    - .git/**/*
+    - gemfiles/**/*
+    - tmp/**/*
+    - vendor/**/*
 
 Layout/HashAlignment:
   EnforcedColonStyle: table
