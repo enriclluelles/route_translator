@@ -1,4 +1,4 @@
-require:
+plugins:
   - rubocop-minitest
   - rubocop-packaging
   - rubocop-performance
@@ -63,6 +63,7 @@ Rails/ActionControllerTestCase:
 Rails/Delegate:
   Exclude:
     - lib/route_translator.rb
+    - test/support/configuration_helper.rb
 
 Rails/I18nLocaleAssignment:
   Exclude:
