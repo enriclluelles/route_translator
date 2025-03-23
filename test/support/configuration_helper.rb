@@ -2,9 +2,7 @@
 
 module RouteTranslator
   module ConfigurationHelper
-    def reset_config
-      RouteTranslator.reset_config
-    end
+    delegate :reset_config, to: :RouteTranslator
 
     alias setup_config reset_config
     alias teardown_config reset_config
