@@ -540,6 +540,30 @@ class TranslateRoutesTest < ActionController::TestCase
     end
   end
 
+  def test_unlocalized_path_helper_with_locale_behave_same_with_or_without_host_locales
+    I18n.default_locale = :es
+    config_host_locales '*.es' => 'es', '*.com' => 'en'
+
+    draw_routes do
+      localized do
+        resources :products
+      end
+    end
+
+    I18n.with_locale(:es) do
+      url_with_locale = @routes.url_helpers.products_path(locale: 'en')
+      url_with_i18n = I18n.with_locale(:en) { @routes.url_helpers.products_path }
+      assert_equal url_with_i18n, url_with_locale
+    end
+
+    I18n.with_locale(:es) do
+      config_host_locales {}
+      url_with_locale = @routes.url_helpers.products_path(locale: 'en')
+      url_with_i18n = I18n.with_locale(:en) { @routes.url_helpers.products_path }
+      assert_equal url_with_i18n, url_with_locale
+    end
+  end
+
   def test_path_helper_arguments_fallback
     I18n.available_locales = %i[es en it]
     I18n.default_locale = :it
