@@ -3,13 +3,7 @@
 ## 15.0.0 / unreleased
 
 * [FEATURE] Drop Ruby < 3.1 support
-* [ENHANCEMENT] Route helper locale parameters now work without host_locales configuration ([#329](https://github.com/enriclluelles/route_translator/pull/329))
-
-  Route helpers now respect locale parameters (e.g., `posts_path(locale: "en")`) regardless
-  of host_locales configuration. Previously these were silently ignored.
-
-  Workarounds like `I18n.with_locale(:en) { posts_path }` can be replaced with 
-  the now-working `posts_path(locale: "en")` syntax.
+* [BUGFIX] POTENTIAL BREAKING CHANGE: Route helper locale parameters now work without host_locales configuration ([#329](https://github.com/enriclluelles/route_translator/pull/329))
 
 ## 14.2.0 / 2024-11-08
 
