@@ -31,7 +31,10 @@ RouteTranslator.config do |config|
   # config.hide_locale = false
 
   # Set `I18n.locale` based on `request.host`. Useful for apps accepting
-  # requests from more than one domain. See Readme for more details
+  # requests from more than one domain. This option expects a hash where each
+  # key is a host pattern (as a String, supporting `*` wildcards for subdomains
+  # or TLDs), and each value is a locale (as a Symbol or String).
+  # See the README for more details.
   # config.host_locales = {}
 
   # The param key used to set the locale to the newly generated routes

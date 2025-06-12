@@ -275,7 +275,7 @@ end
 | `generate_unlocalized_routes` | Add translated routes without deleting original unlocalized versions. **Note:** Autosets `force_locale` to `true` | `false` |
 | `generate_unnamed_unlocalized_routes` | Add the behavior of `force_locale`, but with a named default route which behaves as if `generate_unlocalized_routes` was `true`. `root_path` will redirect to `/en` or `/es`, depending on the value of `I18n.locale` | `false` |
 | `hide_locale` | Force the locale to be hidden on generated route paths | `false` |
-| `host_locales` | Set `I18n.locale` based on `request.host`. Useful for apps accepting requests from more than one domain. See below for more details | `{}` |
+| `host_locales` | Set `I18n.locale` based on `request.host`. Useful for apps accepting requests from more than one domain. The key is a host pattern (supports wildcards for domains, subdomains, and TLDs), and the value is the locale symbol or string to use. See below for more details and examples. | `{}` |
 | `locale_param_key` | The param key used to set the locale to the newly generated routes | `:locale` |
 | `locale_segment_proc` | The locale segment of the url will by default be `locale.to_s.downcase`. You can supply your own mechanism via a Proc that takes `locale` as an argument, e.g. `->(locale) { locale.to_s.upcase }` | `false` |
 
