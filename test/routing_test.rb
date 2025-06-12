@@ -553,13 +553,15 @@ class TranslateRoutesTest < ActionController::TestCase
     I18n.with_locale(:es) do
       url_with_locale = @routes.url_helpers.products_path(locale: 'en')
       url_with_i18n = I18n.with_locale(:en) { @routes.url_helpers.products_path }
+
       assert_equal url_with_i18n, url_with_locale
     end
 
     I18n.with_locale(:es) do
-      config_host_locales {}
+      config_host_locales { nil }
       url_with_locale = @routes.url_helpers.products_path(locale: 'en')
       url_with_i18n = I18n.with_locale(:en) { @routes.url_helpers.products_path }
+
       assert_equal url_with_i18n, url_with_locale
     end
   end
