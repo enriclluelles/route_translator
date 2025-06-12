@@ -4,7 +4,7 @@ See the [CHANGELOG.md](./CHANGELOG.md) for detailed information about what has c
 
 This guide is useful to figure out what you need to do between breaking changes.
 
-## 14.0.0 to 15.0.0 (unreleased)
+## 14.0.0 to 15.0.0
 
 Route helpers now respect locale parameters (e.g., `posts_path(locale: "en")`) regardless
 of host_locales configuration. Previously these were silently ignored.

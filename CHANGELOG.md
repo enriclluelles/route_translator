@@ -1,6 +1,6 @@
 # Changelog
 
-## 15.0.0 / unreleased
+## 15.0.0 / 2025-06-12
 
 * [FEATURE] Drop Ruby < 3.1 support
 * [BUGFIX] POTENTIAL BREAKING CHANGE: Route helper locale parameters now work without host_locales configuration ([#329](https://github.com/enriclluelles/route_translator/pull/329))
