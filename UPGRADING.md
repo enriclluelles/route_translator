@@ -4,6 +4,14 @@ See the [CHANGELOG.md](./CHANGELOG.md) for detailed information about what has c
 
 This guide is useful to figure out what you need to do between breaking changes.
 
+## 14.0.0 to 15.0.0 (unreleased)
+
+Route helpers now respect locale parameters (e.g., `posts_path(locale: "en")`) regardless
+of host_locales configuration. Previously these were silently ignored.
+
+Workarounds like `I18n.with_locale(:en) { posts_path }` can be replaced with
+the now-working `posts_path(locale: "en")` syntax.
+
 ## 9.0.0 to 10.0.0
 
 ### Restrict host languages
