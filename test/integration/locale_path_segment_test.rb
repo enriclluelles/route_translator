@@ -6,7 +6,7 @@ class LocaleSegmentProcTest < ActionDispatch::IntegrationTest
   include RouteTranslator::ConfigurationHelper
 
   def teardown
-    config_locale_segment_proc false
+    teardown_config
     Rails.application.reload_routes!
   end
 
