@@ -12,6 +12,7 @@ class GeneratedPathTest < ActionDispatch::IntegrationTest
 
   def teardown
     teardown_config
+    Rails.application.reload_routes!
   end
 
   def test_path_generated
