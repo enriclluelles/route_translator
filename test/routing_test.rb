@@ -446,6 +446,17 @@ class TranslateRoutesTest < ActionController::TestCase
     assert_unrecognized_route '/es/productos', controller: 'products', action: 'index', locale: 'es'
   end
 
+  def test_url_for_and_locales_as_symbols
+    draw_routes do
+      localized do
+        get 'people', to: 'people#index', as: 'people'
+      end
+    end
+
+    assert_equal '/people', @routes.url_helpers.url_for(controller: 'people', action: 'index', locale: :en, only_path: true)
+    assert_equal '/es/gente', @routes.url_helpers.url_for(controller: 'people', action: 'index', locale: :es, only_path: true)
+  end
+
   def test_force_locale
     config force_locale: true
 

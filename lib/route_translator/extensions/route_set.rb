@@ -24,6 +24,12 @@ module ActionDispatch
 
       private
 
+      def generate(route_name, options, recall = {}, _method_name = nil)
+        options[:locale] = options[:locale].to_s if options[:locale].present?
+
+        Generator.new(route_name, options, recall, self).generate
+      end
+
       def translate_mapping(locale, route_set, translated_options, translated_path_ast, scope, controller, default_action, to, formatted, via, translated_options_constraints, anchor)
         scope_params = {
           blocks:      (scope[:blocks] || []).dup,

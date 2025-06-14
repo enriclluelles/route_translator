@@ -152,10 +152,8 @@ Right now it works with Rails 6.1, 7.x, and 8.0
 To change the language and reload the appropriate route while staying on the same page, use the following code snippet:
 
 ```ruby
-link_to url_for(locale: 'es'), hreflang: 'es', rel: 'alternate'
+link_to url_for(locale: :es), hreflang: 'es', rel: 'alternate'
 ```
-
-Although locales are stored by Rails as a symbol (`:es`), when linking to a page in a different locale you need to use a string (`'es'`). Otherwise, instead of a namespaced route (`/es/my-route`) you will get a parameterized route (`/my-route?locale=es`).
 
 If the page contains a localized slug, the above snippet does not work and a custom implementation is needed.
 
