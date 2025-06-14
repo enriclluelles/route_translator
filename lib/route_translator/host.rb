@@ -18,11 +18,11 @@ module RouteTranslator
     module_function
 
     def locale_from_host(host)
-      locales = RouteTranslator.config.host_locales.each_with_object([]) do |(pattern, locale), result|
-        result << locale.to_sym if host&.match?(regex_for(pattern))
-      end
-      locales &= I18n.available_locales
-      locales.first&.to_sym
+      available_locales = I18n.available_locales
+
+      RouteTranslator.config.host_locales.find do |pattern, locale|
+        host&.match?(regex_for(pattern)) && available_locales.include?(locale&.to_sym)
+      end&.last&.to_sym
     end
 
     def lambdas_for_locale(locale)
