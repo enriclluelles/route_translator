@@ -3,8 +3,6 @@
 require 'test_helper'
 
 class RoutingTest < ActionDispatch::IntegrationTest
-  include RouteTranslator::ConfigurationHelper
-
   def test_with_engine_inside_localized_block
     get '/engine_es'
 

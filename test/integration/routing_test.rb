@@ -3,8 +3,6 @@
 require 'test_helper'
 
 class RoutingTest < ActionDispatch::IntegrationTest
-  include RouteTranslator::ConfigurationHelper
-
   def test_set_locale_from_params_with_around_action
     get '/es/dummy'
 

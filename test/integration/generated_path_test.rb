@@ -30,7 +30,7 @@ class GeneratedPathTest < ActionDispatch::IntegrationTest
   end
 
   def test_path_translated_after_force
-    config_force_locale true
+    config force_locale: true
 
     get '/es/mostrar'
 
@@ -39,7 +39,7 @@ class GeneratedPathTest < ActionDispatch::IntegrationTest
   end
 
   def test_path_translated_while_generate_unlocalized_routes
-    config_generate_unlocalized_routes true
+    config generate_unlocalized_routes: true
 
     get '/es/mostrar'
 

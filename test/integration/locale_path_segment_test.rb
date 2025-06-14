@@ -25,7 +25,7 @@ class LocaleSegmentProcTest < ActionDispatch::IntegrationTest
   end
 
   def test_recognize_with_locale_segment_proc
-    config_locale_segment_proc(->(locale) { locale.to_s.upcase })
+    config locale_segment_proc: ->(locale) { locale.to_s.upcase }
     Rails.application.reload_routes!
 
     get '/DE-AT/Attrappe' # dummy
@@ -34,7 +34,7 @@ class LocaleSegmentProcTest < ActionDispatch::IntegrationTest
   end
 
   def test_generate_with_locale_segment_proc
-    config_locale_segment_proc(->(locale) { locale.to_s })
+    config locale_segment_proc: ->(locale) { locale.to_s }
     Rails.application.reload_routes!
 
     # not the default downcase
@@ -46,7 +46,7 @@ class LocaleSegmentProcTest < ActionDispatch::IntegrationTest
 
   # IKEA style "www.ikea.com/gb/en"
   def test_helper_with_locale_segment_proc
-    config_locale_segment_proc(->(locale) { locale.to_s.downcase.split('-').reverse.join('/') })
+    config locale_segment_proc: ->(locale) { locale.to_s.downcase.split('-').reverse.join('/') }
     Rails.application.reload_routes!
 
     I18n.with_locale(:'de-AT') do
