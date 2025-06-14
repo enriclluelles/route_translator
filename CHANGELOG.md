@@ -1,5 +1,9 @@
 # Changelog
 
+## master / unreleased
+
+* [BUGFIX] Ensure `@localized` is always reset after yield ([#333](https://github.com/enriclluelles/route_translator/issues/333))
+
 ## 15.0.0 / 2025-06-12
 
 * [FEATURE] Drop Ruby < 3.1 support
