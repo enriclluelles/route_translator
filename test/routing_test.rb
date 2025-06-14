@@ -447,7 +447,7 @@ class TranslateRoutesTest < ActionController::TestCase
   end
 
   def test_force_locale
-    config_force_locale true
+    config force_locale: true
 
     draw_routes do
       localized do
@@ -466,7 +466,7 @@ class TranslateRoutesTest < ActionController::TestCase
   end
 
   def test_generate_unlocalized_routes
-    config_generate_unlocalized_routes true
+    config generate_unlocalized_routes: true
 
     draw_routes do
       localized do
@@ -486,7 +486,7 @@ class TranslateRoutesTest < ActionController::TestCase
   end
 
   def test_generate_unnamed_unlocalized_routes
-    config_generate_unnamed_unlocalized_routes true
+    config generate_unnamed_unlocalized_routes: true
 
     draw_routes do
       localized do
@@ -525,7 +525,7 @@ class TranslateRoutesTest < ActionController::TestCase
 
   def test_path_helper_arguments_with_host_locales
     I18n.default_locale = :es
-    config_host_locales '*.es' => 'es', '*.com' => 'en'
+    config host_locales: { '*.es' => 'es', '*.com' => 'en' }
 
     draw_routes do
       localized do
@@ -542,7 +542,7 @@ class TranslateRoutesTest < ActionController::TestCase
 
   def test_unlocalized_path_helper_with_locale_behave_same_with_or_without_host_locales
     I18n.default_locale = :es
-    config_host_locales '*.es' => 'es', '*.com' => 'en'
+    config host_locales: { '*.es' => 'es', '*.com' => 'en' }
 
     draw_routes do
       localized do
@@ -558,7 +558,7 @@ class TranslateRoutesTest < ActionController::TestCase
     end
 
     I18n.with_locale(:es) do
-      config_host_locales { nil }
+      config host_locales: nil
       url_with_locale = @routes.url_helpers.products_path(locale: 'en')
       url_with_i18n = I18n.with_locale(:en) { @routes.url_helpers.products_path }
 
@@ -569,7 +569,7 @@ class TranslateRoutesTest < ActionController::TestCase
   def test_path_helper_arguments_fallback
     I18n.available_locales = %i[es en it]
     I18n.default_locale = :it
-    config_available_locales %i[en]
+    config available_locales: %i[en]
 
     draw_routes do
       localized do
@@ -585,8 +585,8 @@ class TranslateRoutesTest < ActionController::TestCase
   def test_path_helper_arguments_fallback_with_hosts
     I18n.available_locales = %i[es en it]
     I18n.default_locale = :it
-    config_available_locales %i[en]
-    config_host_locales '*.com' => 'en', '*.it' => 'it', '*.es' => 'es'
+    config available_locales: %i[en],
+           host_locales:      { '*.com' => 'en', '*.it' => 'it', '*.es' => 'es' }
 
     draw_routes do
       localized do
@@ -601,7 +601,7 @@ class TranslateRoutesTest < ActionController::TestCase
 
   def test_dont_add_locale_to_routes_if_local_param_present
     I18n.default_locale = :es
-    config_force_locale true
+    config force_locale: true
 
     draw_routes do
       scope 'segment/:locale' do
@@ -616,7 +616,7 @@ class TranslateRoutesTest < ActionController::TestCase
   end
 
   def test_config_hide_locale
-    config_hide_locale true
+    config hide_locale: true
 
     draw_routes do
       localized do
@@ -629,7 +629,7 @@ class TranslateRoutesTest < ActionController::TestCase
   end
 
   def test_host_locales
-    config_host_locales '*.es' => 'es', '*.com' => 'en'
+    config host_locales: { '*.es' => 'es', '*.com' => 'en' }
 
     draw_routes do
       localized do
@@ -669,7 +669,7 @@ class TranslateRoutesTest < ActionController::TestCase
   end
 
   def test_config_available_locales
-    config_available_locales %i[en ru]
+    config available_locales: %i[en ru]
 
     draw_routes do
       localized do
@@ -683,7 +683,7 @@ class TranslateRoutesTest < ActionController::TestCase
   end
 
   def test_config_available_locales_handles_strings
-    config_available_locales %w[en ru]
+    config available_locales: %w[en ru]
 
     draw_routes do
       localized do
@@ -697,7 +697,7 @@ class TranslateRoutesTest < ActionController::TestCase
   end
 
   def test_disable_fallback_does_not_draw_non_default_routes
-    config_disable_fallback(true)
+    config disable_fallback: true
 
     draw_routes do
       localized do
@@ -712,7 +712,7 @@ class TranslateRoutesTest < ActionController::TestCase
 
   def test_disable_fallback_does_not_raise_error
     I18n.exception_handler = ->(*_args) { raise I18n::MissingTranslationData.new('test', 'raise') }
-    config_disable_fallback(true)
+    config disable_fallback: true
 
     draw_routes do
       localized do
@@ -724,7 +724,7 @@ class TranslateRoutesTest < ActionController::TestCase
   end
 
   def test_disable_fallback_does_not_draw_untranslated_routes
-    config_disable_fallback(true)
+    config disable_fallback: true
 
     draw_routes do
       localized do
@@ -749,7 +749,7 @@ class ProductsControllerTest < ActionController::TestCase
     @routes = ActionDispatch::Routing::RouteSet.new
 
     I18n.default_locale = :es
-    config_host_locales es: 'es'
+    config host_locales: { es: 'es' }
 
     draw_routes do
       localized do
