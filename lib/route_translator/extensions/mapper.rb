@@ -8,6 +8,7 @@ module ActionDispatch
       def localized
         @localized = true
         yield
+      ensure
         @localized = false
       end
 

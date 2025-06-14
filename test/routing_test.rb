@@ -734,6 +734,22 @@ class TranslateRoutesTest < ActionController::TestCase
 
     assert_not_respond_to @routes.url_helpers, :products_ru_path
   end
+
+  def test_raise_in_localized_block
+    draw_routes do
+      begin
+        localized do
+          raise StandardError, 'Error'
+        end
+      rescue StandardError
+        nil
+      end
+
+      resources :products
+    end
+
+    assert_not_respond_to @routes.url_helpers, :products_ru_path
+  end
 end
 
 class ProductsControllerTest < ActionController::TestCase
