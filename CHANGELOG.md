@@ -4,7 +4,7 @@
 
 * [BUGFIX] Ensure `@localized` is always reset after yield ([#333](https://github.com/enriclluelles/route_translator/issues/333))
 * [ENHANCEMENT] Optimize host locale detection ([#337](https://github.com/enriclluelles/route_translator/pull/337))
-* [ENHANCEMENT] Add `locale_from_request` method ([#337](https://github.com/enriclluelles/route_translator/pull/337))
+* [ENHANCEMENT] Add `locale_from_request` method ([#340](https://github.com/enriclluelles/route_translator/pull/340))
 
 ## 15.0.0 / 2025-06-12
 
