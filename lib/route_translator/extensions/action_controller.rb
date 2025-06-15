@@ -9,7 +9,8 @@ module RouteTranslator
     private
 
     def set_locale_from_url
-      locale_from_url = RouteTranslator.locale_from_params(params) || RouteTranslator::Host.locale_from_host(request.host)
+      locale_from_url = RouteTranslator.locale_from_request(request)
+
       if locale_from_url
         old_locale  = I18n.locale
         I18n.locale = locale_from_url
