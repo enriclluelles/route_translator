@@ -1,8 +1,25 @@
 # Upgrading Guide
 
-See the [CHANGELOG.md](./CHANGELOG.md) for detailed information about what has changed between versions.
+See the [CHANGELOG.md](./CHANGELOG.md) for detailed information about what has
+changed between versions.
 
 This guide is useful to figure out what you need to do between breaking changes.
+
+## 15.0.0 to 16.0.0
+
+### Respect `RouteTranslator.available_locales` for uniformity and clarity
+
+Route Translator now consistently respects the `RouteTranslator.available_locales`
+setting. This change ensures that only the specified locales are used throughout
+the library, providing greater uniformity and clarity in locale handling.
+
+Additionally:
+- Both `config.available_locales` and `config.host_locales` are now validated
+  against `I18n.available_locales`, so any invalid values are ignored.
+- `available_locales` is now determined once during configuration, rather than
+  being recalculated each time. This means changes to `I18n.available_locales`
+  after initialization will not affect Route Translator's behavior until the next
+  configuration.
 
 ## 14.0.0 to 15.0.0
 

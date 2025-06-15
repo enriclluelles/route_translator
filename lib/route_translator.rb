@@ -34,9 +34,27 @@ module RouteTranslator
       @config.generate_unlocalized_routes         = false
       @config.generate_unnamed_unlocalized_routes = false
       @config.hide_locale                         = true
+
+      @config.host_locales.delete_if { |_, locale| @config.available_locales.exclude?(locale.to_sym) }
     end
 
     def check_deprecations; end
+
+    def set_available_locales
+      locales = I18n.available_locales.dup
+
+      if @config.available_locales.present?
+        locales &= @config.available_locales.map(&:to_sym)
+      end
+
+      # Make sure the default locale is translated in last place to avoid
+      # problems with wildcards when default locale is omitted in paths. The
+      # default routes will catch all paths like wildcard if it is translated first.
+      locales.delete I18n.default_locale
+      locales.push I18n.default_locale
+
+      @config.available_locales = locales
+    end
   end
 
   module_function
@@ -50,6 +68,7 @@ module RouteTranslator
 
     yield @config if block_given?
 
+    set_available_locales
     resolve_host_locale_config_conflicts if @config.host_locales.present?
     check_deprecations
 
@@ -63,13 +82,7 @@ module RouteTranslator
   end
 
   def available_locales
-    locales = config.available_locales
-
-    if locales.empty?
-      I18n.available_locales.dup
-    else
-      locales.map(&:to_sym)
-    end
+    config.available_locales
   end
 
   def locale_param_key
@@ -78,7 +91,7 @@ module RouteTranslator
 
   def locale_from_params(params)
     locale = params[config.locale_param_key]&.to_sym
-    locale if I18n.available_locales.include?(locale)
+    locale if available_locales.include?(locale)
   end
 
   def deprecator

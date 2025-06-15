@@ -4,7 +4,6 @@ require 'test_helper'
 
 class TestHostsFromLocale < Minitest::Test
   include RouteTranslator::ConfigurationHelper
-  include RouteTranslator::I18nHelper
   include RouteTranslator::RoutesHelper
 
   def setup
@@ -68,6 +67,15 @@ class TestHostsFromLocale < Minitest::Test
 
   def test_nil_if_no_matches
     assert_nil RouteTranslator::Host.locale_from_host('nomatches.co.uk')
+  end
+
+  def test_ignore_unavailable_locales
+    config host_locales: {
+      '*.es'             => :es,
+      'nope.wikipedia.*' => :nope
+    }
+
+    refute_includes RouteTranslator.config.host_locales.values, :nope
   end
 
   def test_readme_examples_work

@@ -17,7 +17,6 @@ class TranslateRoutesTest < ActionController::TestCase
   include ActionDispatch::Assertions::RoutingAssertions
   include RouteTranslator::AssertionHelper
   include RouteTranslator::ConfigurationHelper
-  include RouteTranslator::I18nHelper
   include RouteTranslator::RoutesHelper
 
   def setup
@@ -127,7 +126,7 @@ class TranslateRoutesTest < ActionController::TestCase
   end
 
   def test_resources
-    I18n.default_locale = :es
+    i18n_default_locale :es
 
     draw_routes do
       localized do
@@ -142,7 +141,7 @@ class TranslateRoutesTest < ActionController::TestCase
   end
 
   def test_namespaced_resources
-    I18n.default_locale = :es
+    i18n_default_locale :es
 
     draw_routes do
       localized do
@@ -170,7 +169,7 @@ class TranslateRoutesTest < ActionController::TestCase
   end
 
   def test_resources_with_only
-    I18n.default_locale = :es
+    i18n_default_locale :es
 
     draw_routes do
       localized do
@@ -185,7 +184,7 @@ class TranslateRoutesTest < ActionController::TestCase
   end
 
   def test_namespaced_controllers
-    I18n.default_locale = :es
+    i18n_default_locale :es
 
     draw_routes do
       localized do
@@ -201,7 +200,7 @@ class TranslateRoutesTest < ActionController::TestCase
   end
 
   def test_unnamed_root_route_without_prefix
-    I18n.default_locale = :es
+    i18n_default_locale :es
 
     draw_routes do
       localized do
@@ -236,7 +235,7 @@ class TranslateRoutesTest < ActionController::TestCase
   end
 
   def test_unnamed_translated_route_on_default_locale
-    I18n.default_locale = :es
+    i18n_default_locale :es
 
     @routes.draw { get 'people', to: 'people#index' }
     draw_routes do
@@ -273,7 +272,7 @@ class TranslateRoutesTest < ActionController::TestCase
   end
 
   def test_named_empty_route_without_prefix
-    I18n.default_locale = :es
+    i18n_default_locale :es
 
     draw_routes do
       localized do
@@ -287,7 +286,7 @@ class TranslateRoutesTest < ActionController::TestCase
   end
 
   def test_named_root_route_without_prefix
-    I18n.default_locale = :es
+    i18n_default_locale :es
 
     draw_routes do
       localized do
@@ -301,7 +300,7 @@ class TranslateRoutesTest < ActionController::TestCase
   end
 
   def test_named_untranslated_route_without_prefix
-    I18n.default_locale = :es
+    i18n_default_locale :es
 
     draw_routes do
       localized do
@@ -316,7 +315,7 @@ class TranslateRoutesTest < ActionController::TestCase
   end
 
   def test_named_translated_route_on_default_locale_without_prefix
-    I18n.default_locale = :es
+    i18n_default_locale :es
 
     draw_routes do
       localized do
@@ -404,7 +403,7 @@ class TranslateRoutesTest < ActionController::TestCase
   end
 
   def test_translations_depend_on_available_locales
-    I18n.available_locales = %i[es en fr]
+    i18n_available_locales %i[es en fr]
 
     draw_routes do
       localized do
@@ -524,7 +523,7 @@ class TranslateRoutesTest < ActionController::TestCase
   end
 
   def test_path_helper_arguments_with_host_locales
-    I18n.default_locale = :es
+    i18n_default_locale :es
     config host_locales: { '*.es' => 'es', '*.com' => 'en' }
 
     draw_routes do
@@ -541,7 +540,7 @@ class TranslateRoutesTest < ActionController::TestCase
   end
 
   def test_unlocalized_path_helper_with_locale_behave_same_with_or_without_host_locales
-    I18n.default_locale = :es
+    i18n_default_locale :es
     config host_locales: { '*.es' => 'es', '*.com' => 'en' }
 
     draw_routes do
@@ -567,8 +566,8 @@ class TranslateRoutesTest < ActionController::TestCase
   end
 
   def test_path_helper_arguments_fallback
-    I18n.available_locales = %i[es en it]
-    I18n.default_locale = :it
+    i18n_available_locales %i[es en it]
+    i18n_default_locale :it
     config available_locales: %i[en]
 
     draw_routes do
@@ -583,8 +582,8 @@ class TranslateRoutesTest < ActionController::TestCase
   end
 
   def test_path_helper_arguments_fallback_with_hosts
-    I18n.available_locales = %i[es en it]
-    I18n.default_locale = :it
+    i18n_available_locales %i[es en it]
+    i18n_default_locale :it
     config available_locales: %i[en],
            host_locales:      { '*.com' => 'en', '*.it' => 'it', '*.es' => 'es' }
 
@@ -600,7 +599,7 @@ class TranslateRoutesTest < ActionController::TestCase
   end
 
   def test_dont_add_locale_to_routes_if_local_param_present
-    I18n.default_locale = :es
+    i18n_default_locale :es
     config force_locale: true
 
     draw_routes do
@@ -682,6 +681,18 @@ class TranslateRoutesTest < ActionController::TestCase
     assert_unrecognized_route '/es/gente', controller: 'people', action: 'index', locale: 'es'
   end
 
+  def test_config_available_locales_ignore_unavailable_locales
+    config available_locales: %i[en ru nope]
+
+    refute_includes RouteTranslator.config.available_locales, :nope
+  end
+
+  def test_config_available_locales_default_locale_last
+    config available_locales: %w[en ru]
+
+    assert_equal :en, RouteTranslator.config.available_locales.last
+  end
+
   def test_config_available_locales_handles_strings
     config available_locales: %w[en ru]
 
@@ -754,7 +765,6 @@ end
 
 class ProductsControllerTest < ActionController::TestCase
   include RouteTranslator::ConfigurationHelper
-  include RouteTranslator::I18nHelper
   include ActionDispatch::Assertions::RoutingAssertions
   include RouteTranslator::RoutesHelper
 
@@ -764,7 +774,7 @@ class ProductsControllerTest < ActionController::TestCase
 
     @routes = ActionDispatch::Routing::RouteSet.new
 
-    I18n.default_locale = :es
+    i18n_default_locale :es
     config host_locales: { es: 'es' }
 
     draw_routes do

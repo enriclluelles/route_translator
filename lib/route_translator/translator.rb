@@ -51,19 +51,10 @@ module RouteTranslator
 
     module_function
 
-    def available_locales
-      locales = RouteTranslator.available_locales
-      # Make sure the default locale is translated in last place to avoid
-      # problems with wildcards when default locale is omitted in paths. The
-      # default routes will catch all paths like wildcard if it is translated first.
-      locales.delete I18n.default_locale
-      locales.push I18n.default_locale
-    end
-
     def translations_for(route)
       RouteTranslator::Translator::RouteHelpers.add route.name, route.route_set.named_routes
 
-      available_locales.each do |locale|
+      RouteTranslator.available_locales.each do |locale|
         translated_path = translate_path(route.path, locale, route.scope)
         next unless translated_path
 

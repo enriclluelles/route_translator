@@ -269,7 +269,7 @@ end
 
 | Option | Description | Default |
 | ------ | ----------- |-------- |
-| `available_locales` | Limit the locales for which URLs should be generated for. Accepts an array of strings or symbols. When empty, translations will be generated for all `I18n.available_locales` | `[]` |
+| `available_locales` | Restricts URL generation to the specified locales only. Accepts an array of strings or symbols. Any locale not included in `I18n.available_locales` will be ignored | `I18n.available_locales` |
 | `disable_fallback` | Create routes only for locales that have translations. For example, if we have `/examples` and a translation is not provided for `es`, the route helper of `examples_es` will not be created. Useful when one uses this with a locale route constraint, so non-`es` routes can return a `404` on a Spanish website | `false` |
 | `force_locale` |  Force the locale to be added to all generated route paths, even for the default locale |  `false` |
 | `generate_unlocalized_routes` | Add translated routes without deleting original unlocalized versions. **Note:** Autosets `force_locale` to `true` | `false` |
