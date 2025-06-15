@@ -385,6 +385,39 @@ scope ':country/:locale' do
 end
 ```
 
+## Using RouteTranslator with Devise
+
+When using RouteTranslator with Devise, you may notice that some authentication-related flash messages (such as errors after failed logins) are shown in the wrong language. This happens because Devise builds some messages in middleware, after your controller’s actions have completed. If you use RouteTranslator’s `around_action` (or legacy `around_filter`) to set the locale, the locale is reset after the controller yields, and middleware like Devise will see the default locale.
+
+This only affects you if Devise is mounted inside a localized block (for example, `localized { devise_for :users }`). If you do not use localized Devise routes, you do not need to change anything.
+
+To ensure Devise’s middleware uses the correct locale, some users suggest replacing RouteTranslator’s `around_action` with a `before_action`. However, this is discouraged, as it can leave your application in the wrong locale after the request and may cause subtle bugs.
+
+A better approach is to explicitly set the locale for Devise’s failure responses. Starting from Devise version 4.9.4, you can customize how Devise determines the locale for error messages, thanks to the ability to override the `i18n_locale` method in the failure app. This allows you to set the locale for Devise’s middleware without changing RouteTranslator’s recommended usage.
+
+Here’s an example:
+
+```rb
+# config/initializers/devise.rb
+
+Devise.setup do |config|
+  # ...
+
+  ActiveSupport.on_load(:devise_failure_app) do
+    def i18n_locale
+      RouteTranslator.locale_from_params(params) || RouteTranslator::Host.locale_from_host(request.host)
+    end
+  end
+end
+```
+
+### Summary
+
+- You only need this workaround if Devise is mounted in a localized block.
+- Do not replace RouteTranslator’s `around_action` with a `before_action`.
+- Instead, set the locale for Devise failure responses as shown above.
+- The solution above requires Devise version 4.9.4 or higher, which allows customizing the `i18n_locale` method in the failure app.
+
 ## Testing
 Testing your controllers with routes-translator is easy, just add a locale parameter as `String` for your localized routes. Otherwise, an `ActionController::UrlGenerationError` will raise.
 
