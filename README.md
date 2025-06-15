@@ -405,7 +405,7 @@ Devise.setup do |config|
 
   ActiveSupport.on_load(:devise_failure_app) do
     def i18n_locale
-      RouteTranslator.locale_from_params(params) || RouteTranslator::Host.locale_from_host(request.host)
+      RouteTranslator.locale_from_request(request)
     end
   end
 end
