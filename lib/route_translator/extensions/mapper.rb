@@ -2,6 +2,13 @@
 
 require 'action_dispatch'
 
+# TODO: Remove `else` branch when dropping Rails < 8.1 support
+if ActionDispatch::Routing::Mapper.instance_method(:add_route).arity == 12
+  require_relative 'mapper/add_route'
+else
+  require_relative 'mapper/add_route_legacy'
+end
+
 module ActionDispatch
   module Routing
     class Mapper
@@ -11,37 +18,6 @@ module ActionDispatch
       ensure
         @localized = false
       end
-
-      # rubocop:disable Lint/UnderscorePrefixedVariableName, Metrics/PerceivedComplexity
-      def add_route(action, controller, options, _path, to, via, formatted, anchor, options_constraints) # :nodoc:
-        return super unless @localized
-
-        path = path_for_action(action, _path)
-        raise ArgumentError, 'path is required' if path.blank?
-
-        action = action.to_s
-
-        default_action = options.delete(:action) || @scope[:action]
-
-        if %r{^[\w\-\/]+$}.match?(action)
-          default_action ||= action.tr('-', '_') unless action.include?('/')
-        else
-          action = nil
-        end
-
-        as = if options.fetch(:as, true)
-               name_for_action(options.delete(:as), action)
-             else
-               options.delete(:as)
-             end
-
-        path = Mapping.normalize_path URI::DEFAULT_PARSER.escape(path), formatted
-        ast = Journey::Parser.parse path
-
-        mapping = Mapping.build(@scope, @set, ast, controller, default_action, to, via, formatted, options_constraints, anchor, options)
-        @set.add_localized_route(mapping, as, anchor, @scope, path, controller, default_action, to, via, formatted, options_constraints, options)
-      end
-      # rubocop:enable Lint/UnderscorePrefixedVariableName, Metrics/PerceivedComplexity
 
       private
 
