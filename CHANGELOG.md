@@ -1,5 +1,9 @@
 # Changelog
 
+## 15.2.0 / 2025-07-06
+
+* [FEATURE] Rails 8.1 edge support ([#344](https://github.com/enriclluelles/route_translator/pull/344))
+
 ## 15.1.0 / 2025-06-15
 
 * [BUGFIX] Ensure `@localized` is always reset after yield ([#333](https://github.com/enriclluelles/route_translator/issues/333))
