@@ -17,6 +17,11 @@ SimpleCov.start 'rails' do
     formatter SimpleCov::Formatter::LcovFormatter
   end
 
+  # TODO: Remove this exclusion when dropping Ruby 3.1 support
+  if RUBY_VERSION.start_with?('3.1')
+    add_filter %w[lib/route_translator/extensions/mapper.rb lib/route_translator/extensions/route_set.rb]
+  end
+
   add_filter %w[version.rb lib/generators/route_translator/templates]
 end
 
