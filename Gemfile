@@ -7,6 +7,7 @@ gemspec
 gem 'appraisal'
 gem 'byebug'
 gem 'minitest'
+gem 'minitest-mock'
 gem 'rails'
 gem 'rake'
 
