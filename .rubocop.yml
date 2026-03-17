@@ -77,5 +77,9 @@ Style/Documentation:
 Style/IfUnlessModifier:
   Enabled: false
 
+Style/OneClassPerFile:
+  Exclude:
+    - 'test/**/*'
+
 Style/RedundantRegexpEscape:
   Enabled: false # Escaping chars helps with syntax highlighting
