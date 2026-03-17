@@ -1,5 +1,10 @@
 # Changelog
 
+## 16.0.0 / 2026-03-18
+
+* [FEATURE] Drop Ruby < 3.2 support
+* [FEATURE] Drop Rails < 7.2 support
+
 ## 15.2.0 / 2025-07-06
 
 * [FEATURE] Rails 8.1 edge support ([#344](https://github.com/enriclluelles/route_translator/pull/344))
