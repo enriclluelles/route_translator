@@ -81,6 +81,10 @@ module RouteTranslator
     locale if I18n.available_locales.include?(locale)
   end
 
+  def locale_from_request(request)
+    locale_from_params(request.params) || Host.locale_from_host(request.host)
+  end
+
   def deprecator
     @deprecator ||= ActiveSupport::Deprecation.new(RouteTranslator::VERSION, 'RouteTranslator')
   end

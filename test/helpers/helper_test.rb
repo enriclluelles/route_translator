@@ -26,6 +26,7 @@ class TestHelperTest < ActionView::TestCase
 
   def teardown
     teardown_config
+    Rails.application.reload_routes!
   end
 
   def test_no_private_method_call

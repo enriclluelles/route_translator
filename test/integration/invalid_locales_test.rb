@@ -3,8 +3,6 @@
 require 'test_helper'
 
 class RoutingTest < ActionDispatch::IntegrationTest
-  include RouteTranslator::ConfigurationHelper
-
   def test_do_not_raise_invalid_locale_error_for_invalid_locales
     get '/unlocalized?locale=xx'
 

@@ -1,6 +1,21 @@
 # Changelog
 
-## 15.0.0 / unreleased
+## 16.0.0 / 2026-03-18
+
+* [FEATURE] Drop Ruby < 3.2 support
+* [FEATURE] Drop Rails < 7.2 support
+
+## 15.2.0 / 2025-07-06
+
+* [FEATURE] Rails 8.1 edge support ([#344](https://github.com/enriclluelles/route_translator/pull/344))
+
+## 15.1.0 / 2025-06-15
+
+* [BUGFIX] Ensure `@localized` is always reset after yield ([#333](https://github.com/enriclluelles/route_translator/issues/333))
+* [ENHANCEMENT] Optimize host locale detection ([#337](https://github.com/enriclluelles/route_translator/pull/337))
+* [ENHANCEMENT] Add `locale_from_request` method ([#340](https://github.com/enriclluelles/route_translator/pull/340))
+
+## 15.0.0 / 2025-06-12
 
 * [FEATURE] Drop Ruby < 3.1 support
 * [BUGFIX] POTENTIAL BREAKING CHANGE: Route helper locale parameters now work without host_locales configuration ([#329](https://github.com/enriclluelles/route_translator/pull/329))

@@ -6,8 +6,8 @@ plugins:
   - rubocop-rake
 
 AllCops:
-  TargetRailsVersion: 6.1
-  TargetRubyVersion: 3.1
+  TargetRailsVersion: 7.2
+  TargetRubyVersion: 3.2
   NewCops: enable
   DisplayStyleGuide: true
   ExtraDetails: true
@@ -48,7 +48,7 @@ Metrics/ModuleLength:
     - 'test/**/*'
 
 Metrics/ParameterLists:
-  Max: 12
+  Max: 13
 
 Metrics/PerceivedComplexity:
   Exclude:
@@ -76,6 +76,10 @@ Style/Documentation:
 
 Style/IfUnlessModifier:
   Enabled: false
+
+Style/OneClassPerFile:
+  Exclude:
+    - 'test/**/*'
 
 Style/RedundantRegexpEscape:
   Enabled: false # Escaping chars helps with syntax highlighting

@@ -6,7 +6,7 @@ class HostLocalesTest < ActionDispatch::IntegrationTest
   include RouteTranslator::ConfigurationHelper
 
   def setup
-    config_host_locales '*.es' => 'es', 'ru.*.com' => 'ru'
+    config host_locales: { '*.es' => 'es', 'ru.*.com' => 'ru' }
     Rails.application.reload_routes!
   end
 

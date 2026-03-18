@@ -3,12 +3,12 @@
 module ActionDispatch
   module Routing
     class RouteSet
-      def add_localized_route(mapping, name, anchor, scope, path, controller, default_action, to, via, formatted, options_constraints, internal, options_mapping)
-        route = RouteTranslator::Route.new(self, path, name, options_constraints, options_mapping, mapping)
+      def add_localized_route(mapping, name, anchor, scope, path, controller, default_action, to, via, formatted, options_constraints, options)
+        route = RouteTranslator::Route.new(self, path, name, options_constraints, options, mapping)
 
         RouteTranslator::Translator.translations_for(route) do |locale, translated_name, translated_path, translated_options_constraints, translated_options|
           translated_path_ast = ::ActionDispatch::Journey::Parser.parse(translated_path)
-          translated_mapping  = translate_mapping(locale, self, translated_options, translated_path_ast, scope, controller, default_action, to, formatted, via, translated_options_constraints, anchor, internal)
+          translated_mapping  = translate_mapping(locale, self, translated_options, translated_path_ast, scope, controller, default_action, to, formatted, via, translated_options_constraints, anchor)
 
           add_route translated_mapping, translated_name
         end
@@ -22,7 +22,7 @@ module ActionDispatch
 
       private
 
-      def translate_mapping(locale, route_set, translated_options, translated_path_ast, scope, controller, default_action, to, formatted, via, translated_options_constraints, anchor, internal)
+      def translate_mapping(locale, route_set, translated_options, translated_path_ast, scope, controller, default_action, to, formatted, via, translated_options_constraints, anchor)
         scope_params = {
           blocks:      (scope[:blocks] || []).dup,
           constraints: scope[:constraints] || {},
@@ -35,7 +35,7 @@ module ActionDispatch
           scope_params[:blocks].push RouteTranslator::Host.lambdas_for_locale(locale)
         end
 
-        ::ActionDispatch::Routing::Mapper::Mapping.build scope_params, route_set, translated_path_ast, controller, default_action, to, via, formatted, translated_options_constraints, anchor, internal, translated_options
+        ::ActionDispatch::Routing::Mapper::Mapping.build scope_params, route_set, translated_path_ast, controller, default_action, to, via, formatted, translated_options_constraints, anchor, translated_options
       end
     end
   end

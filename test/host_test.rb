@@ -11,14 +11,12 @@ class TestHostsFromLocale < Minitest::Test
     setup_config
     setup_i18n
 
-    config = {
+    config host_locales: {
       '*.something.es'          => :es,
       '*.ru.subdomain.domain.*' => :ru,
       'russia.something.net'    => :ru,
       '*.com'                   => :en
     }
-
-    config_host_locales config
   end
 
   def teardown
@@ -59,11 +57,11 @@ class TestHostsFromLocale < Minitest::Test
   end
 
   def test_precedence_if_more_than_one_match
-    config_host_locales 'russia.*' => :ru, '*.com' => :en
+    config host_locales: { 'russia.*' => :ru, '*.com' => :en }
 
     assert_equal :ru, RouteTranslator::Host.locale_from_host('russia.com')
 
-    config_host_locales '*.com' => :en, 'russia.*' => :ru
+    config host_locales: { '*.com' => :en, 'russia.*' => :ru }
 
     assert_equal :en, RouteTranslator::Host.locale_from_host('russia.com')
   end
@@ -73,14 +71,12 @@ class TestHostsFromLocale < Minitest::Test
   end
 
   def test_readme_examples_work
-    config = {
+    config host_locales: {
       '*.es'                 => :es, # matches ['domain.es', 'subdomain.domain.es', 'www.long.string.of.subdomains.es'] etc.
       'ru.wikipedia.*'       => :ru, # matches ['ru.wikipedia.org', 'ru.wikipedia.net', 'ru.wikipedia.com'] etc.
       '*.subdomain.domain.*' => :ru, # matches ['subdomain.domain.org', 'www.subdomain.domain.net'] etc.
       'news.bbc.co.uk'       => :en # matches ['news.bbc.co.uk'] only
     }
-
-    config_host_locales config
 
     examples_es = ['domain.es', 'subdomain.domain.es', 'www.long.string.of.subdomains.es']
     examples_ru = ['ru.wikipedia.org', 'ru.wikipedia.net', 'ru.wikipedia.com']
