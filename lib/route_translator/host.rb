@@ -10,7 +10,7 @@ module RouteTranslator
       end
 
       def regex_for(host_string)
-        escaped = Regexp.escape(host_string).gsub('\*', '.*?').gsub('\.', '\.?')
+        escaped = Regexp.escape(host_string).gsub(/\\\*|\\\./, '\\*' => '.*?', '\\.' => '\.?')
         Regexp.new("^#{escaped}$", Regexp::IGNORECASE)
       end
     end
