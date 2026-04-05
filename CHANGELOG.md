@@ -1,5 +1,9 @@
 # Changelog
 
+## 16.0.1 / 2026-04-05
+
+* [ENHANCEMENT] Optimize host locale detection ([#354](https://github.com/enriclluelles/route_translator/pull/354))
+
 ## 16.0.0 / 2026-03-18
 
 * [FEATURE] Drop Ruby < 3.2 support
