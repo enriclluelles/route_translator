@@ -21,7 +21,6 @@ SimpleCov.start 'rails' do
 end
 
 require 'minitest/autorun'
-require 'minitest/mock'
 
 require 'i18n'
 
