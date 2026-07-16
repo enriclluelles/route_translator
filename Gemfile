@@ -18,4 +18,3 @@ gem 'rubocop-rails', require: false
 gem 'rubocop-rake', require: false
 
 gem 'simplecov', require: false
-gem 'simplecov-lcov', require: false
