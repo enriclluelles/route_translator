@@ -3,6 +3,7 @@
 ## Unreleased
 
 * [ENHANCEMENT] Speed up drawing localized routes. `Translator.translate_name` asked the route set for `named_routes.names` (a freshly allocated array of every name defined so far) and scanned it linearly, once per route per locale. It now uses the `NamedRouteCollection#key?` hash lookup.
+* [ENHANCEMENT] Speed up drawing localized routes. `Translator::RouteHelpers.add` fetched `named_route_collection.helper_names` on every route, allocating an array of every helper defined so far and scanning it, to guard a `push` that could not take effect. `helper_names` builds a fresh array on every call, so the push was discarded, and it returns Strings while the pushed value is a Symbol, so the `include?` guard never matched either. Removing both leaves behavior unchanged.
 
 ## 16.0.1 / 2026-04-05
 
