@@ -9,6 +9,10 @@ module RouteTranslator
         @lambdas ||= {}
       end
 
+      # Host patterns come from configuration, not user input.
+      # Treating them as trusted avoids a ReDoS vector — the
+      # gsub introduces non-greedy `.*?` wildcards, which are
+      # safe against backtracking only under that assumption.
       def regex_for(host_string)
         escaped = Regexp.escape(host_string).gsub(/\\\*|\\\./, '\\*' => '.*?', '\\.' => '\.?')
         Regexp.new("^#{escaped}$", Regexp::IGNORECASE)
