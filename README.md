@@ -321,6 +321,11 @@ This is to avoid odd behaviour brought about by route conflicts and because `hos
 
 NOTE: locale from parameters has priority over the one from hosts.
 
+**Security note:** Host patterns are treated as trusted configuration.
+Never pass user input into `host_locales` keys — the wildcard `*` is
+translated to a non-greedy `.*?` regex, which can expose your application
+to ReDoS if an attacker controls the pattern.
+
 ### Translations for similar routes with different namespaces
 
 If you have routes that (partially) share names in one locale, but must be translated differently in another locale, for example:
