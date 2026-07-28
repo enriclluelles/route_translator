@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+* [ENHANCEMENT] Speed up drawing localized routes. `Translator.translate_name` asked the route set for `named_routes.names` (a freshly allocated array of every name defined so far) and scanned it linearly, once per route per locale. It now uses the `NamedRouteCollection#key?` hash lookup.
+
 ## 16.0.1 / 2026-04-05
 
 * [ENHANCEMENT] Optimize host locale detection ([#354](https://github.com/enriclluelles/route_translator/pull/354))

@@ -14,12 +14,12 @@ module RouteTranslator
         args_hash&.fetch(:locale, nil)
       end
 
-      def translate_name(name, locale, named_routes_names)
+      def translate_name(name, locale, named_routes)
         return if name.blank?
 
         translated_name = "#{name}_#{locale.to_s.underscore}"
 
-        translated_name if named_routes_names.exclude?(translated_name.to_sym)
+        translated_name unless named_routes.key?(translated_name)
       end
 
       def translate_options(options, locale)
@@ -67,7 +67,7 @@ module RouteTranslator
         translated_path = translate_path(route.path, locale, route.scope)
         next unless translated_path
 
-        translated_name                = translate_name(route.name, locale, route.route_set.named_routes.names)
+        translated_name                = translate_name(route.name, locale, route.route_set.named_routes)
         translated_options_constraints = translate_options_constraints(route.options_constraints, locale)
         translated_options             = translate_options(route.options, locale)
 
