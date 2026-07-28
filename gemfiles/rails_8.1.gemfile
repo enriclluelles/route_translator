@@ -4,7 +4,7 @@ source "https://rubygems.org"
 
 gem "appraisal2"
 gem "byebug"
-gem "minitest", "~> 5.27"
+gem "minitest"
 gem "rails", "~> 8.1.0"
 gem "rake"
 gem "rubocop", :require => false
@@ -14,6 +14,5 @@ gem "rubocop-performance", :require => false
 gem "rubocop-rails", :require => false
 gem "rubocop-rake", :require => false
 gem "simplecov", :require => false
-gem "simplecov-lcov", :require => false
 
 gemspec :path => "../"

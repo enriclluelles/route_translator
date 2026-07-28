@@ -14,6 +14,5 @@ gem "rubocop-performance", :require => false
 gem "rubocop-rails", :require => false
 gem "rubocop-rake", :require => false
 gem "simplecov", :require => false
-gem "simplecov-lcov", :require => false
 
 gemspec :path => "../"
