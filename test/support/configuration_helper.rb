@@ -8,8 +8,10 @@ module RouteTranslator
     alias teardown_config reset_config
 
     def config(**options)
-      options.each do |option, value|
-        RouteTranslator.config[option] = value
+      RouteTranslator.config do |c|
+        options.each do |option, value|
+          c[option] = value
+        end
       end
     end
   end

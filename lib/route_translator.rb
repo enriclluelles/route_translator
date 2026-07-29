@@ -2,7 +2,6 @@
 
 require 'active_support'
 
-require_relative 'route_translator/available_locales'
 require_relative 'route_translator/extensions'
 require_relative 'route_translator/translator'
 require_relative 'route_translator/host'
@@ -25,16 +24,7 @@ module RouteTranslator
     locale_segment_proc:                 false
   }.freeze
 
-  Configuration = Struct.new(*DEFAULT_CONFIGURATION.keys) do
-    def []=(*args)
-      AvailableLocales.clear if args.first&.to_sym == :available_locales
-      super
-    end
-
-    def available_locales=(value)
-      self[:available_locales] = value
-    end
-  end
+  Configuration = Struct.new(*DEFAULT_CONFIGURATION.keys)
 
   class << self
     private
@@ -44,6 +34,18 @@ module RouteTranslator
       @config.generate_unlocalized_routes         = false
       @config.generate_unnamed_unlocalized_routes = false
       @config.hide_locale                         = true
+    end
+
+    def compute_available_locales
+      locales = config.available_locales.map(&:to_sym)
+      i18n_locales = I18n.available_locales.map(&:to_sym)
+      result = locales.empty? ? i18n_locales : (locales & i18n_locales)
+
+      default_locale = I18n.default_locale&.to_sym
+      result.delete(default_locale)
+      result.push(default_locale)
+
+      result.freeze
     end
 
     def check_deprecations; end
@@ -62,7 +64,7 @@ module RouteTranslator
 
     if block_given?
       yield @config
-      AvailableLocales.clear
+      @available_locales = nil
     end
 
     resolve_host_locale_config_conflicts if @config.host_locales.present?
@@ -73,17 +75,17 @@ module RouteTranslator
 
   def reset_config
     @config = nil
-    AvailableLocales.clear
+    @available_locales = nil
 
     config
   end
 
   def available_locales
-    AvailableLocales.locales
+    @available_locales ||= compute_available_locales
   end
 
   def available_locale?(locale)
-    AvailableLocales.include?(locale)
+    available_locales.include?(locale&.to_sym)
   end
 
   def locale_param_key

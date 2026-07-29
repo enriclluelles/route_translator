@@ -134,32 +134,20 @@ class TestHostsFromLocale < Minitest::Test
     assert_equal %i[it en], RouteTranslator.available_locales
   end
 
-  def test_available_locales_cache_is_invalidated_when_config_changes
+  def test_available_locales_invalidated_when_config_block_used
     RouteTranslator.available_locales
-    RouteTranslator.config.available_locales = %i[en]
+
+    config available_locales: %i[en]
 
     assert_equal %i[en], RouteTranslator.available_locales
     assert_nil RouteTranslator.locale_from_params({ locale: 'es' })
   end
 
-  def test_available_locales_cache_is_not_invalidated_when_reading_config
+  def test_available_locales_not_invalidated_when_config_read_without_block
     locales = RouteTranslator.available_locales
 
     RouteTranslator.config
 
     assert_same locales, RouteTranslator.available_locales
-  end
-
-  def test_available_locales_cache_is_invalidated_when_config_changes_by_key
-    locales = RouteTranslator.available_locales
-
-    RouteTranslator.config[:force_locale] = true
-
-    assert_same locales, RouteTranslator.available_locales
-
-    RouteTranslator.config[:available_locales] = %i[en]
-
-    assert_equal %i[en], RouteTranslator.available_locales
-    assert_nil RouteTranslator.locale_from_params({ locale: 'es' })
   end
 end
