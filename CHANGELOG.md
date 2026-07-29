@@ -1,5 +1,9 @@
 # Changelog
 
+## 17.0.0 / 2026-07-28
+
+* [BUGFIX] POTENTIAL BREAKING CHANGE: `locale_from_params` and `locale_from_host` now use `RouteTranslator.available_locales` instead of `I18n.available_locales` for validation. Configured locales are sanitized against `I18n.available_locales`, locales absent from `config.available_locales` are rejected even if present in `I18n.available_locales`, and the default locale remains part of the generated route set.
+
 ## 16.2.0 / 2026-07-29
 
 * [ENHANCEMENT] Short-circuit host locale detection by checking `available_locales.include?` before the regex match, avoiding unnecessary regex compilation and matching for unavailable locales.

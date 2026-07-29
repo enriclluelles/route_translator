@@ -46,7 +46,7 @@ module ActionDispatch
       def define_generate_prefix(app, name)
         return super unless @localized
 
-        RouteTranslator::Translator.available_locales.each do |locale|
+        RouteTranslator.available_locales.each do |locale|
           super(app, "#{name}_#{locale.to_s.underscore}")
         end
       end
