@@ -1,5 +1,9 @@
 # Changelog
 
+## 16.2.0 / 2026-07-29
+
+* [ENHANCEMENT] Short-circuit host locale detection by checking `available_locales.include?` before the regex match, avoiding unnecessary regex compilation and matching for unavailable locales.
+
 ## 16.1.0 / 2026-07-28
 
 * [ENHANCEMENT] Speed up drawing localized routes. `Translator.translate_name` asked the route set for `named_routes.names` (a freshly allocated array of every name defined so far) and scanned it linearly, once per route per locale. It now uses the `NamedRouteCollection#key?` hash lookup.

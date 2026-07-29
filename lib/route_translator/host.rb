@@ -25,7 +25,7 @@ module RouteTranslator
       available_locales = I18n.available_locales
 
       RouteTranslator.config.host_locales.find do |pattern, locale|
-        host&.match?(regex_for(pattern)) && available_locales.include?(locale&.to_sym)
+        available_locales.include?(locale&.to_sym) && host&.match?(regex_for(pattern))
       end&.last&.to_sym
     end
 
