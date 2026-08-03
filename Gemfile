@@ -9,6 +9,7 @@ gem 'byebug'
 gem 'minitest'
 gem 'rails'
 gem 'rake'
+gem 'yard'
 
 gem 'rubocop', require: false
 gem 'rubocop-minitest', require: false

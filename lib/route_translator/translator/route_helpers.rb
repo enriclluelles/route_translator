@@ -19,6 +19,8 @@ module RouteTranslator
           helper_container = named_route_collection.send(:"#{suffix}_helpers_module")
           new_helper_name = :"#{old_name}_#{suffix}"
 
+          # Helper modules are shared, so resolve the locale when a helper is
+          # called rather than when routes are drawn.
           helper_container.__send__(:define_method, new_helper_name) do |*args|
             __send__(Translator.route_name_for(args, old_name, suffix, self), *args)
           end

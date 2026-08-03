@@ -30,6 +30,7 @@ module RouteTranslator
     end
 
     def lambdas_for_locale(locale)
+      # Rails reuses this constraint across generated routes for the locale.
       lambdas[locale] ||= ->(req) { locale == RouteTranslator::Host.locale_from_host(req.host) }
     end
   end

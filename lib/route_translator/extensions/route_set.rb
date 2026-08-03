@@ -4,6 +4,8 @@ module ActionDispatch
   module Routing
     class RouteSet
       def add_localized_route(mapping, name, anchor, scope, path, controller, default_action, to, via, formatted, options_constraints, internal, options_mapping)
+        # The mapper provides Rails's original mapping; each locale receives a
+        # separate mapping derived from it below.
         route = RouteTranslator::Route.new(self, path, name, options_constraints, options_mapping, mapping)
 
         RouteTranslator::Translator.translations_for(route) do |locale, translated_name, translated_path, translated_options_constraints, translated_options|
