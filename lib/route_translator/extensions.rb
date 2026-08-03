@@ -2,6 +2,8 @@
 
 require 'action_dispatch'
 
+# Rails 8.1 changed `Mapper#add_route`'s arity. Load the matching extension
+# pair because both override that private Rails method.
 # TODO: Remove `else` branch when dropping Rails < 8.1 support
 if ActionDispatch::Routing::Mapper.instance_method(:add_route).arity == 12
   require_relative 'extensions/mapper'

@@ -3,7 +3,11 @@
 module ActionDispatch
   module Routing
     class Mapper
+      # Translates every route declared in the block for each available locale.
+      #
+      # @yield the routes to translate
       def localized
+        # `add_route` checks this flag while Rails evaluates the block.
         @localized = true
         yield
       ensure

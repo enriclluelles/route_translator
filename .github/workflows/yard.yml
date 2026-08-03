@@ -1,0 +1,29 @@
+name: YARD Lint
+
+on:
+  push:
+    branches: [ master, develop ]
+  pull_request:
+    branches: [ master, develop ]
+
+permissions:
+  contents: read
+
+jobs:
+  yard:
+    name: YARD Lint
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v7
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1.321.0
+        with:
+          # Ruby 4.0 emits an `irb/notifier` warning due to a Ruby bug that does
+          # not respect the `Warning` module rules. Ref: lsegal/yard#1643.
+          # FIXME: Remove this comment once the warning stops appearing.
+          ruby-version: '4.0'
+          bundler-cache: true
+          rubygems: latest
+      - name: Lint YARD documentation
+        run: bundle exec yard doc --fail-on-warning --no-output --no-progress

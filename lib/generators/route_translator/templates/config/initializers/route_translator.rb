@@ -22,9 +22,8 @@ RouteTranslator.config do |config|
   # Note: Autosets `force_locale` to `true`
   # config.generate_unlocalized_routes = false
 
-  # Add the behavior of `force_locale`, but with a named default route which
-  # behaves as if `generate_unlocalized_routes` was `true`. `root_path` will
-  # redirect to `/en` or `/es`, depending on the value of `I18n.locale`
+  # Add per-locale named routes plus the original unlocalized mapping as an
+  # unnamed action route. It does not redirect.
   # config.generate_unnamed_unlocalized_routes = false
 
   # Force the locale to be hidden on generated route paths
