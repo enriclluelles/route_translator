@@ -52,7 +52,10 @@ module RouteTranslator
       @config[option] ||= value
     end
 
-    yield @config if block_given?
+    if block_given?
+      yield @config
+      @available_locales = nil
+    end
 
     resolve_host_locale_config_conflicts if @config.host_locales.present?
     check_deprecations
@@ -65,20 +68,32 @@ module RouteTranslator
   # @return [Configuration] the reset configuration
   def reset_config
     @config = nil
+    @available_locales = nil
 
     config
   end
 
   # Returns the locales for which translated routes are generated.
   #
-  # @return [Array<Symbol>] the configured locales, or all I18n locales
+  # @return [Set<Symbol>] the configured locales, or all I18n locales
   def available_locales
-    locales = config.available_locales
+    @available_locales ||= begin
+      i18n_locales = I18n.available_locales.to_set(&:to_sym)
+      configured_locales = config.available_locales
 
-    if locales.empty?
-      I18n.available_locales.dup
-    else
-      locales.map(&:to_sym)
+      locales = if configured_locales.empty?
+                  i18n_locales
+                else
+                  configured_locales.to_set(&:to_sym) & i18n_locales
+                end
+
+      default_locale = I18n.default_locale.to_sym
+
+      # Make sure the default locale is translated in last place to avoid
+      # problems with wildcards when the default locale is omitted in paths.
+      locales.delete(default_locale)
+      locales.add(default_locale)
+      locales.freeze
     end
   end
 
@@ -95,7 +110,7 @@ module RouteTranslator
   # @return [Symbol, nil] the requested available locale
   def locale_from_params(params)
     locale = params[config.locale_param_key]&.to_sym
-    locale if I18n.available_locales.include?(locale)
+    locale if available_locales.include?(locale)
   end
 
   # Extracts an available locale from request parameters or its host.

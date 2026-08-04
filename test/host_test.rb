@@ -99,4 +99,75 @@ class TestHostsFromLocale < Minitest::Test
       assert_equal :en, RouteTranslator::Host.locale_from_host(domain)
     end
   end
+
+  def test_available_locales_are_a_cached_frozen_set_of_symbols
+    I18n.available_locales = %i[es en]
+    config available_locales: %w[es en]
+
+    locales = RouteTranslator.available_locales
+
+    assert_instance_of Set, locales
+    assert_equal Set[:es, :en], locales
+    assert_predicate locales, :frozen?
+    assert_same locales, RouteTranslator.available_locales
+  end
+
+  def test_available_locales_are_sanitized_against_i18n_available_locales
+    I18n.available_locales = %i[es en]
+    config available_locales: %i[en fr]
+
+    assert_equal Set[:en], RouteTranslator.available_locales
+    assert_nil RouteTranslator.locale_from_params({ locale: 'fr' })
+  end
+
+  def test_default_locale_is_always_last_available_locale
+    I18n.available_locales = %i[es en it]
+    I18n.default_locale = :en
+    config available_locales: %i[en it]
+
+    assert_equal %i[it en], RouteTranslator.available_locales.to_a
+
+    config available_locales: %i[it]
+
+    assert_equal %i[it en], RouteTranslator.available_locales.to_a
+  end
+
+  def test_available_locales_cache_is_invalidated_by_config_block
+    locales = RouteTranslator.available_locales
+
+    config available_locales: %i[en]
+
+    refute_same locales, RouteTranslator.available_locales # rubocop:disable Rails/RefuteMethods
+    assert_equal Set[:en], RouteTranslator.available_locales
+  end
+
+  def test_available_locales_cache_is_invalidated_by_reset_config
+    locales = RouteTranslator.available_locales
+
+    RouteTranslator.reset_config
+
+    refute_same locales, RouteTranslator.available_locales # rubocop:disable Rails/RefuteMethods
+  end
+
+  def test_available_locales_cache_is_preserved_when_config_is_read
+    locales = RouteTranslator.available_locales
+
+    RouteTranslator.config
+
+    assert_same locales, RouteTranslator.available_locales
+  end
+
+  def test_locale_from_params_respects_available_locales_config
+    config available_locales: %i[en]
+
+    assert_nil RouteTranslator.locale_from_params({ locale: 'es' })
+    assert_equal :en, RouteTranslator.locale_from_params({ locale: 'en' })
+  end
+
+  def test_locale_from_host_respects_available_locales_config
+    config available_locales: %i[en]
+
+    assert_nil RouteTranslator::Host.locale_from_host('www.something.es')
+    assert_equal :en, RouteTranslator::Host.locale_from_host('www.something.com')
+  end
 end

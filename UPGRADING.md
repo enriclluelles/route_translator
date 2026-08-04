@@ -4,6 +4,26 @@ See the [CHANGELOG.md](./CHANGELOG.md) for detailed information about what has c
 
 This guide is useful to figure out what you need to do between breaking changes.
 
+## 16.2.0 to 17.0.0
+
+`config.available_locales` now controls locale selection from request
+parameters and hosts, not only route generation. Add every locale that must
+be selectable to this configuration; values absent from
+`I18n.available_locales` are ignored, while the default locale remains
+included.
+
+`RouteTranslator.available_locales` now returns a cached, frozen
+`Set<Symbol>` rather than a newly allocated array. Update callers that mutate
+the result to work with a copy instead. When changing locale configuration at
+runtime, use block-form `RouteTranslator.config` or call `reset_config` to
+rebuild the cache.
+
+## 15.2.0 to 16.0.0
+
+RouteTranslator 16 requires Ruby 3.2 or later and Rails 7.2 or later. Upgrade
+both dependencies before upgrading the gem, or remain on RouteTranslator 15.2.0
+if your application must support older versions.
+
 ## 14.0.0 to 15.0.0
 
 Route helpers now respect locale parameters (e.g., `posts_path(locale: "en")`) regardless

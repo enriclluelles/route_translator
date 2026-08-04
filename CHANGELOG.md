@@ -1,5 +1,10 @@
 # Changelog
 
+## 17.0.0 / 2026-08-04
+
+* [BUGFIX] POTENTIAL BREAKING CHANGE: Locale validation now respects `RouteTranslator.available_locales`, so request parameters and hosts cannot select locales excluded by `config.available_locales`. Configured locales are sanitized against `I18n.available_locales`, and the default locale is always included last.
+* [ENHANCEMENT] POTENTIAL BREAKING CHANGE: `RouteTranslator.available_locales` now returns a memoized, frozen `Set<Symbol>` instead of a newly allocated array. The cache is cleared by block-form configuration and `reset_config`.
+
 ## 16.2.0 / 2026-07-29
 
 * [ENHANCEMENT] Short-circuit host locale detection by checking `available_locales.include?` before the regex match, avoiding unnecessary regex compilation and matching for unavailable locales.
