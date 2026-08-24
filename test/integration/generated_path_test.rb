@@ -38,8 +38,19 @@ class GeneratedPathTest < ActionDispatch::IntegrationTest
     assert_select 'a[href="/es/mostrar"]'
   end
 
-  def test_path_translated_while_generate_unlocalized_routes
+  def test_path_unlocalized_while_generate_unlocalized_routes
     config generate_unlocalized_routes: true
+    Rails.application.reload_routes!
+
+    get '/es/mostrar'
+
+    assert_response :success
+    assert_select 'a[href="/show"]'
+  end
+
+  def test_path_translated_while_generate_unnamed_unlocalized_routes
+    config generate_unnamed_unlocalized_routes: true
+    Rails.application.reload_routes!
 
     get '/es/mostrar'
 
