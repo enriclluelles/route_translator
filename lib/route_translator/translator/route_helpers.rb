@@ -17,13 +17,7 @@ module RouteTranslator
       def add(old_name, named_route_collection)
         %w[path url].each do |suffix|
           helper_container = named_route_collection.send(:"#{suffix}_helpers_module")
-          new_helper_name = :"#{old_name}_#{suffix}"
-
-          # Helper modules are shared, so resolve the locale when a helper is
-          # called rather than when routes are drawn.
-          helper_container.__send__(:define_method, new_helper_name) do |*args|
-            __send__(Translator.route_name_for(args, old_name, suffix, self), *args)
-          end
+          define_helper helper_container, old_name, suffix
 
           next unless ENV.fetch('RAILS_ENV', nil) == 'test'
 
@@ -31,6 +25,25 @@ module RouteTranslator
             ActiveSupport.on_load(test_case_hook) do
               include helper_container
             end
+          end
+        end
+      end
+
+      def define_helper(helper_container, old_name, suffix)
+        new_helper_name = :"#{old_name}_#{suffix}"
+        original_helper_name = :"__route_translator_original_#{new_helper_name}"
+
+        if helper_container.method_defined?(new_helper_name) && !helper_container.method_defined?(original_helper_name)
+          helper_container.alias_method original_helper_name, new_helper_name
+        end
+
+        # Helper modules are shared, so resolve the locale when a helper is
+        # called rather than when routes are drawn.
+        helper_container.__send__(:define_method, new_helper_name) do |*args|
+          if RouteTranslator.config.generate_unlocalized_routes && is_a?(Module)
+            __send__(original_helper_name, *args)
+          else
+            __send__(Translator.route_name_for(args, old_name, suffix, self), *args)
           end
         end
       end

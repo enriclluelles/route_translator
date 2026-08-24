@@ -20,6 +20,8 @@ module ActionDispatch
         elsif RouteTranslator.config.generate_unlocalized_routes
           add_route mapping, name
         end
+
+        RouteTranslator::Translator::RouteHelpers.add name, named_routes
       end
 
       private
