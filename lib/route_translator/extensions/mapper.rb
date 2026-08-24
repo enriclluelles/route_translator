@@ -14,7 +14,7 @@ module ActionDispatch
         @localized = false
       end
 
-      # rubocop:disable Lint/UnderscorePrefixedVariableName, Metrics/PerceivedComplexity
+      # rubocop:disable-next Lint/UnderscorePrefixedVariableName, Metrics/PerceivedComplexity
       def add_route(action, controller, as, options_action, _path, to, via, formatted, anchor, options_constraints, internal, options_mapping) # :nodoc:
         return super unless @localized
 
@@ -38,7 +38,6 @@ module ActionDispatch
         mapping = Mapping.build(@scope, @set, ast, controller, default_action, to, via, formatted, options_constraints, anchor, internal, options_mapping)
         @set.add_localized_route(mapping, as, anchor, @scope, path, controller, default_action, to, via, formatted, options_constraints, internal, options_mapping)
       end
-      # rubocop:enable Lint/UnderscorePrefixedVariableName, Metrics/PerceivedComplexity
 
       private
 
