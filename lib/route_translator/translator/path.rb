@@ -49,6 +49,8 @@ module RouteTranslator
 
         if display_locale?(locale) && !locale_param_present?(new_path)
           translated_segments.unshift(locale_segment(locale))
+          # An optional root parameter needs its own slash once the locale occupies the root segment.
+          final_optional_segments&.sub!(/\A(\(+)(?=[:*])/, '\1/') if new_path == '/'
         end
 
         joined_segments = translated_segments.join('/')

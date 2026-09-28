@@ -1,5 +1,9 @@
 # Changelog
 
+## 16.2.1 / 2026-09-29
+
+* [BUGFIX] Preserve the separator between the locale prefix and an optional scoped root parameter, including mixed-case locales such as `pt-BR`. Recognition and URL helpers now use `/en/2` instead of `/en2`; the previously accepted `/en2` no longer matches this route ([#372](https://github.com/enriclluelles/route_translator/issues/372), [#373](https://github.com/enriclluelles/route_translator/pull/373)).
+
 ## 16.2.0 / 2026-07-29
 
 * [ENHANCEMENT] Short-circuit host locale detection by checking `available_locales.include?` before the regex match, avoiding unnecessary regex compilation and matching for unavailable locales.
