@@ -85,6 +85,38 @@ class TranslateRoutesTest < ActionController::TestCase
     assert_routing '/es/a/productos', controller: 'products', action: 'index', locale: 'es', optional_param: 'a'
   end
 
+  def test_root_with_optional_scope_segment_keeps_optional_segment_after_locale
+    I18n.available_locales = %i[fr en]
+    I18n.default_locale = :fr
+    I18n.enforce_available_locales = false
+
+    draw_routes do
+      localized do
+        constraints subdomain: 'workspace' do
+          scope '(:scoped_partner_id)', constraints: { scoped_partner_id: /\d+/ } do
+            root to: 'people#index'
+          end
+        end
+      end
+    end
+
+    assert_equal '/en(/:scoped_partner_id)(.:format)', path_string(named_route('root_en'))
+    assert_recognizes({ controller: 'people', action: 'index', locale: 'fr', subdomain: 'workspace' }, path: 'http://workspace.example.com/', method: :get)
+    assert_recognizes({ controller: 'people', action: 'index', locale: 'fr', subdomain: 'workspace', scoped_partner_id: '2' }, path: 'http://workspace.example.com/2', method: :get)
+    assert_recognizes({ controller: 'people', action: 'index', locale: 'en', subdomain: 'workspace' }, path: 'http://workspace.example.com/en', method: :get)
+    assert_recognizes({ controller: 'people', action: 'index', locale: 'en', subdomain: 'workspace', scoped_partner_id: '2' }, path: 'http://workspace.example.com/en/2', method: :get)
+
+    assert_raises(ActionController::RoutingError) do
+      @routes.recognize_path('http://workspace.example.com/en2', method: :get)
+    end
+
+    assert_equal '/', @routes.url_helpers.root_fr_path
+    assert_equal '/2', @routes.url_helpers.root_fr_path(scoped_partner_id: 2)
+    assert_equal '/en', @routes.url_helpers.root_en_path
+    assert_equal '/en/2', @routes.url_helpers.root_en_path(scoped_partner_id: 2)
+    assert_equal '/en/2', @routes.url_helpers.root_path(scoped_partner_id: 2)
+  end
+
   def test_dynamic_segments_dont_get_translated
     draw_routes do
       localized do

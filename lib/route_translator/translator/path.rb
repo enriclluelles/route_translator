@@ -34,6 +34,17 @@ module RouteTranslator
             locale.to_s.downcase
           end
         end
+
+        def prepare_optional_segments_for_locale_prefix(new_path, final_optional_segments, locale)
+          add_locale_segment = display_locale?(locale) && !locale_param_present?(new_path)
+
+          if add_locale_segment && final_optional_segments&.start_with?('(:') && new_path.end_with?('/')
+            new_path = new_path.delete_suffix('/')
+            final_optional_segments = final_optional_segments.sub(/\A\(/, '(/')
+          end
+
+          [new_path, final_optional_segments, add_locale_segment]
+        end
       end
 
       module_function
@@ -42,12 +53,14 @@ module RouteTranslator
       def translate(path, locale, scope)
         new_path = path.dup
         final_optional_segments = new_path.slice!(%r{(\([^\/]+\))$})
+        new_path, final_optional_segments, add_locale_segment = prepare_optional_segments_for_locale_prefix(new_path, final_optional_segments, locale)
+
         translated_segments = new_path.split('/').map do |seg|
           seg.split('.').map { |phrase| Segment.translate(phrase, locale, scope) }.join('.')
         end
         translated_segments.reject!(&:empty?)
 
-        if display_locale?(locale) && !locale_param_present?(new_path)
+        if add_locale_segment
           translated_segments.unshift(locale_segment(locale))
         end
 
